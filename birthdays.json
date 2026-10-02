@@ -1,6 +1,6 @@
 [
-    { "nombre": "Mamá", "fecha": "05-10" },
-    { "nombre": "Papá", "fecha": "20-12" },
+    { "nombre": "Jorge Cuenca", "fecha": "04-09" },
+    { "nombre": "nombre Apellido", "fecha": "02-10" },
     { "nombre": "Hermana", "fecha": "15-03" },
     { "nombre": "Abuela", "fecha": "22-07" },
     { "nombre": "Primo Juan", "fecha": "01-09", "anio": 1990 }
