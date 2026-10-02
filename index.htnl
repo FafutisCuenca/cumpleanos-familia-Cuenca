@@ -1,50 +1,133 @@
 <!DOCTYPE html>
+
 <html lang="es">
-<head>
-<meta charset="UTF-8">
+
+<head> <meta charset="UTF-8">
+
+<!-- Permite que la página se adapte correctamente a celulares -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>🎂 Calendario de Cumpleaños - Familia Cuenca</title>
+
 <style>
-    body { font-family: Arial, sans-serif; background: #f8f9fa; text-align: center; }
-    h1 { color: #ff4081; }
-    table { margin: auto; border-collapse: collapse; }
-    th, td { padding: 10px; border: 1px solid #ccc; }
-    th { background: #ff4081; color: white; }
-    td { background: #fff; }
-    .hoy { background: #ffe082; font-weight: bold; }
-    .btn { background: #25D366; color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px; }
-    .btn:hover { background: #1ebe5d; }
+    body {
+        font-family: Arial, sans-serif;
+        background: #f8f9fa;
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        color: #ff4081;
+    }
+
+    p {
+        color: #555;
+    }
+
+    table {
+        margin: 20px auto;
+        border-collapse: collapse;
+        width: 90%;
+        max-width: 800px;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    th {
+        background: #ff4081;
+        color: white;
+    }
+
+    td {
+        background: #fff;
+    }
+
+    /* Resalta el cumpleaños de hoy */
+    .hoy {
+        background: #ffe082 !important;
+        font-weight: bold;
+    }
+
+    /* Botón de WhatsApp */
+    .btn {
+        display: inline-block;
+        background: #25D366;
+        color: white;
+        padding: 8px 12px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .btn:hover {
+        background: #1ebe5d;
+    }
+
+    /* Adaptación para celulares */
+    @media (max-width: 600px) {
+
+        body {
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            padding: 8px 5px;
+        }
+
+        .btn {
+            padding: 7px 8px;
+            font-size: 12px;
+        }
+    }
 </style>
+
 </head>
+
 <body>
+
 <h1>🎂 Calendario de Cumpleaños - Familia Cuenca</h1>
-<p>Este calendario muestra las fechas de cumpleaños y permite enviar felicitaciones por WhatsApp.</p>
+
+<p>
+    Este calendario muestra las fechas de cumpleaños
+    y permite enviar felicitaciones por WhatsApp.
+</p>
+
 <table id="calendario">
-    <tr><th>Nombre</th><th>Fecha</th><th>Acción</th></tr>
+
+    <tr>
+        <th>Nombre</th>
+        <th>Fecha</th>
+        <th>Acción</th>
+    </tr>
+
 </table>
-<script>
-fetch('birthdays.json')
-    .then(response => response.json())
-    .then(data => {
-        const hoy = new Date().toISOString().slice(5,10); // MM-DD
-        const tabla = document.getElementById('calendario');
-        data.forEach(c => {
-            const fecha = c.fecha; // DD-MM
-            const fechaInvertida = fecha.slice(3,5) + "-" + fecha.slice(0,2); // MM-DD
-            let textoFecha = fecha;
-            if (c.anio) {
-                textoFecha += " (" + c.anio + ")";
-            }
-            let accion = "";
-            if (fechaInvertida === hoy) {
-                const mensaje = encodeURIComponent(`🎉 ¡Hoy celebramos a ${c.nombre}! 🎂 Que tengas un día lleno de alegría ❤️ - Familia Cuenca`);
-                const enlaceGrupo = `https://wa.me/?text=${mensaje}`;
-                accion = `<a class="btn" href="${enlaceGrupo}" target="_blank">Enviar Felicitación</a>`;
-            }
-            const fila = document.createElement('tr');
-            fila.innerHTML = `<td>${c.nombre}</td><td class="${fechaInvertida === hoy ? 'hoy' : ''}">${textoFecha}</td><td>${accion}</td>`;
-            tabla.appendChild(fila);
-        });
-    });
-</script>
+
+<!--
+    El funcionamiento del calendario está ahora
+    en el archivo script.js
+-->
+<script src="script.js"></script>
+
 </body>
+
 </html>
