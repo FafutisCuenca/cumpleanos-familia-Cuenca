@@ -6,17 +6,22 @@
     },
     {
         "nombre": "Teresita",
-        "fecha": "15-07",
+        "fecha": "19-07",
         "anio": 1970
     },
     {
         "nombre": "Alexandra",
-        "fecha": "20-03",
+        "fecha": "05-01",
         "anio": 2000
     },
     {
         "nombre": "Yorgi",
-        "fecha": "12-11",
-        "anio": 2005
+        "fecha": "11-10",
+        "anio": 2008
+    }
+    {
+        "nombre": "Primo",
+        "fecha": "02-10",
+        "anio": 2008
     }
 ]
