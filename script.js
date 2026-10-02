@@ -432,51 +432,61 @@ tabla.appendChild(
 * ============================================================
   */
 
-function crearBotonesWhatsApp(
-contenedor,
-cumpleaños
-) {
+function crearBotonesWhatsApp(cumpleaños) {
 
-```
-/*
- * --------------------------------------------------------
- * MENSAJE DE FELICITACIÓN
- * --------------------------------------------------------
- */
+    const contenedor = document.createElement("div");
 
-const mensaje =
-    `🎉 ¡Hoy celebramos a ${cumpleaños.nombre}! 🎂\n\n` +
-    `Que tengas un día lleno de alegría, ` +
-    `salud y muchos momentos felices. ❤️\n\n` +
-    `¡Un fuerte abrazo de toda la Familia Cuenca! ` +
-    `🎉🥳`;
+    const mensaje = `🎉 ¡Hoy celebramos a ${cumpleaños.nombre}! 🎂 Que tengas un día lleno de alegría ❤️ - Familia Cuenca`;
 
+    // Vista previa del mensaje
+    const vistaPrevia = document.createElement("div");
 
-/*
- * --------------------------------------------------------
- * BOTÓN WHATSAPP
- * --------------------------------------------------------
- */
+    vistaPrevia.style.marginTop = "10px";
+    vistaPrevia.style.padding = "12px";
+    vistaPrevia.style.background = "#f5f5f5";
+    vistaPrevia.style.border = "1px solid #ddd";
+    vistaPrevia.style.borderRadius = "8px";
+    vistaPrevia.style.textAlign = "left";
+    vistaPrevia.style.fontSize = "14px";
 
-const botonWhatsApp =
-    document.createElement("a");
+    vistaPrevia.innerHTML = `
+        <strong>💬 Mensaje que se enviará al grupo:</strong>
+        <div style="
+            margin-top:8px;
+            padding:10px;
+            background:white;
+            border-radius:6px;
+            color:#333;
+        ">
+            ${mensaje}
+        </div>
+    `;
 
-botonWhatsApp.className =
-    "btn felicitar";
+    // Botón para abrir WhatsApp
+    const botonWhatsApp = document.createElement("a");
 
-botonWhatsApp.href =
-    `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+    botonWhatsApp.href =
+        `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
 
-botonWhatsApp.target =
-    "_blank";
+    botonWhatsApp.target = "_blank";
+    botonWhatsApp.rel = "noopener";
+    botonWhatsApp.className = "btn whatsapp";
+    botonWhatsApp.textContent = "💬 Abrir WhatsApp";
 
-botonWhatsApp.rel =
-    "noopener noreferrer";
+    // Cuando se abre WhatsApp mostramos la confirmación
+    botonWhatsApp.addEventListener("click", function () {
 
-botonWhatsApp.textContent =
-    "🎉 Felicitar por WhatsApp";
+        setTimeout(() => {
+            mostrarBotonConfirmacion(cumpleaños);
+        }, 500);
 
+    });
 
+    contenedor.appendChild(vistaPrevia);
+    contenedor.appendChild(botonWhatsApp);
+
+    return contenedor;
+}
 /*
  * ----------------------------------------*
 ```
