@@ -1,492 +1,713 @@
-/*
-
-* ============================================================
-* 🎂 CALENDARIO DE CUMPLEAÑOS - FAMILIA CUENCA
-* ============================================================
-*
-* Este archivo controla:
-*
-* 1. Lectura de birthdays.json
-* 2. Detección del cumpleaños de hoy
-* 3. Ordenamiento de cumpleaños
-* 4. Resaltado del cumpleaños actual
-* 5. Generación del mensaje de WhatsApp
-* 6. Confirmación manual del envío
-* 7. Almacenamiento de la confirmación en el navegador
-*
-* IMPORTANTE:
-* Las fechas de birthdays.json deben estar en formato:
-*
-* DD-MM
-*
-* Ejemplo:
-*
-* "04-10" = 4 de octubre
-*
-* ============================================================
-  */
-
 document.addEventListener("DOMContentLoaded", iniciarCalendario);
 
-/*
 
-* ============================================================
-* FUNCIÓN PRINCIPAL
-* ============================================================
-  */
+// ============================================================
+// CONFIGURACIÓN
+// ============================================================
+
+const GRUPO_WHATSAPP =
+    "https://chat.whatsapp.com/IvI6oayIIoEJ8Wn7EWQxO0?s=cl&p=i&mlu=0";
+
+
+// ============================================================
+// FUNCIÓN PRINCIPAL
+// ============================================================
 
 function iniciarCalendario() {
 
-```
-const tabla = document.getElementById("calendario");
+    const tabla = document.getElementById("calendario");
 
-if (!tabla) {
-    console.error("No se encontró la tabla #calendario.");
-    return;
-}
+    if (!tabla) {
+        console.error("No se encontró la tabla #calendario.");
+        return;
+    }
 
-// Obtener la fecha actual usando la hora LOCAL
-// del dispositivo del usuario.
-const hoy = obtenerFechaActual();
+    const hoy = obtenerFechaActual();
 
-// Cargar cumpleaños
-fetch("birthdays.json")
-    .then(response => {
+    fetch("birthdays.json")
+        .then(response => {
 
-        if (!response.ok) {
-            throw new Error(
-                `No se pudo cargar birthdays.json. Código HTTP: ${response.status}`
-            );
-        }
-
-        return response.json();
-    })
-
-    .then(data => {
-
-        // Verificar que sea un arreglo
-        if (!Array.isArray(data)) {
-            throw new Error(
-                "birthdays.json debe contener una lista de cumpleaños."
-            );
-        }
-
-        // Limpiar filas existentes excepto encabezado
-        limpiarTabla(tabla);
-
-        // Eliminar datos inválidos
-        const cumpleañosValidos = data.filter(c => {
-
-            if (!c.nombre || !c.fecha) {
-                console.warn(
-                    "Se encontró un registro sin nombre o fecha:",
-                    c
+            if (!response.ok) {
+                throw new Error(
+                    `No se pudo cargar birthdays.json. Código HTTP: ${response.status}`
                 );
-
-                return false;
             }
 
-            if (!esFechaValida(c.fecha)) {
-                console.warn(
-                    `Fecha inválida para ${c.nombre}: ${c.fecha}`
-                );
+            return response.json();
+        })
 
-                return false;
+        .then(data => {
+
+            if (!Array.isArray(data)) {
+                throw new Error(
+                    "birthdays.json debe contener una lista de cumpleaños."
+                );
             }
 
-            return true;
-        });
+            limpiarTabla(tabla);
 
-        // Ordenar cronológicamente
-        cumpleañosValidos.sort((a, b) => {
+            const cumpleañosValidos = data.filter(cumpleaños => {
 
-            const fechaA = convertirFecha(a.fecha);
-            const fechaB = convertirFecha(b.fecha);
+                if (!cumpleaños.nombre || !cumpleaños.fecha) {
+                    console.warn(
+                        "Registro incompleto:",
+                        cumpleaños
+                    );
 
-            return fechaA.localeCompare(fechaB);
-        });
+                    return false;
+                }
 
-        // Crear las filas
-        cumpleañosValidos.forEach(c => {
+                if (!esFechaValida(cumpleaños.fecha)) {
+                    console.warn(
+                        `Fecha inválida para ${cumpleaños.nombre}: ${cumpleaños.fecha}`
+                    );
 
-            crearFilaCumpleaños(
+                    return false;
+                }
+
+                return true;
+            });
+
+
+            // ====================================================
+            // ORDENAR POR MES Y DÍA
+            // ====================================================
+
+            cumpleañosValidos.sort((a, b) => {
+
+                const fechaA = convertirFecha(a.fecha);
+                const fechaB = convertirFecha(b.fecha);
+
+                return fechaA.localeCompare(fechaB);
+            });
+
+
+            // ====================================================
+            // CREAR LAS FILAS
+            // ====================================================
+
+            cumpleañosValidos.forEach(cumpleaños => {
+
+                crearFilaCumpleaños(
+                    tabla,
+                    cumpleaños,
+                    hoy
+                );
+
+            });
+
+
+            // ====================================================
+            // REVISAR CONFIRMACIÓN
+            // ====================================================
+
+            actualizarConfirmacion(hoy);
+
+        })
+
+        .catch(error => {
+
+            console.error(
+                "Error al cargar el calendario:",
+                error
+            );
+
+            mostrarError(
                 tabla,
-                c,
-                hoy
+                error
             );
 
         });
-
-        // Revisar si existe una felicitación
-        // confirmada anteriormente.
-        actualizarConfirmacion(hoy);
-
-    })
-
-    .catch(error => {
-
-        console.error(
-            "Error al cargar el calendario:",
-            error
-        );
-
-        mostrarError(tabla);
-    });
-```
-
 }
 
-/*
 
-* ============================================================
-* OBTENER FECHA ACTUAL
-* ============================================================
-*
-* Devuelve la fecha en formato:
-*
-* MM-DD
-*
-* utilizando la hora LOCAL.
-*
-* NO utilizamos:
-*
-* new Date().toISOString()
-*
-* porque convierte la fecha a UTC y puede producir
-* problemas alrededor de la medianoche.
-  */
+// ============================================================
+// OBTENER FECHA ACTUAL
+// Formato: MM-DD
+// ============================================================
 
 function obtenerFechaActual() {
 
-```
-const ahora = new Date();
+    const ahora = new Date();
 
-const mes = String(
-    ahora.getMonth() + 1
-).padStart(2, "0");
+    const mes = String(
+        ahora.getMonth() + 1
+    ).padStart(2, "0");
 
-const dia = String(
-    ahora.getDate()
-).padStart(2, "0");
+    const dia = String(
+        ahora.getDate()
+    ).padStart(2, "0");
 
-return `${mes}-${dia}`;
-```
-
+    return `${mes}-${dia}`;
 }
 
-/*
 
-* ============================================================
-* CONVERTIR FECHA
-* ============================================================
-*
-* birthdays.json utiliza:
-*
-* DD-MM
-*
-* El sistema trabaja internamente con:
-*
-* MM-DD
-*
-* Ejemplo:
-*
-* 04-10 → 10-04
-  */
+// ============================================================
+// CONVERTIR FECHA
+//
+// birthdays.json:
+// DD-MM
+//
+// Sistema interno:
+// MM-DD
+//
+// Ejemplo:
+// 04-10 → 10-04
+// ============================================================
 
 function convertirFecha(fecha) {
 
-```
-if (typeof fecha !== "string") {
-    return "";
+    if (typeof fecha !== "string") {
+        return "";
+    }
+
+    const partes = fecha.split("-");
+
+    if (partes.length !== 2) {
+        return "";
+    }
+
+    const dia = partes[0].padStart(2, "0");
+    const mes = partes[1].padStart(2, "0");
+
+    return `${mes}-${dia}`;
 }
 
-const partes = fecha.split("-");
 
-if (partes.length !== 2) {
-    return "";
-}
-
-const dia = partes[0].padStart(2, "0");
-const mes = partes[1].padStart(2, "0");
-
-return `${mes}-${dia}`;
-```
-
-}
-
-/*
-
-* ============================================================
-* VALIDAR FECHA
-* ============================================================
-*
-* Comprueba que la fecha tenga el formato:
-*
-* DD-MM
-*
-* y que día y mes sean válidos.
-  */
+// ============================================================
+// VALIDAR FECHA
+// ============================================================
 
 function esFechaValida(fecha) {
 
-```
-if (typeof fecha !== "string") {
-    return false;
+    if (typeof fecha !== "string") {
+        return false;
+    }
+
+    const partes = fecha.split("-");
+
+    if (partes.length !== 2) {
+        return false;
+    }
+
+    const dia = parseInt(partes[0], 10);
+    const mes = parseInt(partes[1], 10);
+
+    if (isNaN(dia) || isNaN(mes)) {
+        return false;
+    }
+
+    if (mes < 1 || mes > 12) {
+        return false;
+    }
+
+    if (dia < 1 || dia > 31) {
+        return false;
+    }
+
+    return true;
 }
 
-const partes = fecha.split("-");
 
-if (partes.length !== 2) {
-    return false;
-}
-
-const dia = parseInt(partes[0], 10);
-const mes = parseInt(partes[1], 10);
-
-if (
-    isNaN(dia) ||
-    isNaN(mes)
-) {
-    return false;
-}
-
-if (
-    mes < 1 ||
-    mes > 12
-) {
-    return false;
-}
-
-if (
-    dia < 1 ||
-    dia > 31
-) {
-    return false;
-}
-
-return true;
-```
-
-}
-
-/*
-
-* ============================================================
-* LIMPIAR TABLA
-* ============================================================
-*
-* Conserva únicamente el encabezado.
-  */
+// ============================================================
+// LIMPIAR TABLA
+// Conserva únicamente el encabezado.
+// ============================================================
 
 function limpiarTabla(tabla) {
 
-```
-while (tabla.rows.length > 1) {
-    tabla.deleteRow(1);
-}
-```
-
+    while (tabla.rows.length > 1) {
+        tabla.deleteRow(1);
+    }
 }
 
-/*
 
-* ============================================================
-* CREAR FILA DE CUMPLEAÑOS
-* ============================================================
-  */
+// ============================================================
+// CREAR FILA DE CUMPLEAÑOS
+// ============================================================
 
 function crearFilaCumpleaños(
-tabla,
-cumpleaños,
-hoy
+    tabla,
+    cumpleaños,
+    hoy
 ) {
 
-```
-const fecha = convertirFecha(
-    cumpleaños.fecha
-);
+    const fecha = convertirFecha(
+        cumpleaños.fecha
+    );
 
-const esHoy = (
-    fecha === hoy
-);
+    const esHoy = fecha === hoy;
 
-const fila = document.createElement("tr");
+    const fila = document.createElement("tr");
 
 
-/*
- * --------------------------------------------------------
- * COLUMNA NOMBRE
- * --------------------------------------------------------
- */
+    // ========================================================
+    // NOMBRE
+    // ========================================================
 
-const celdaNombre =
-    document.createElement("td");
+    const celdaNombre =
+        document.createElement("td");
 
-if (esHoy) {
+    if (esHoy) {
 
-    celdaNombre.classList.add("hoy");
+        celdaNombre.classList.add("hoy");
 
-    celdaNombre.textContent =
-        `🎂 ${cumpleaños.nombre}`;
+        celdaNombre.textContent =
+            `🎂 ${cumpleaños.nombre}`;
 
-} else {
+    } else {
 
-    celdaNombre.textContent =
-        cumpleaños.nombre;
-}
+        celdaNombre.textContent =
+            cumpleaños.nombre;
+    }
 
 
-/*
- * --------------------------------------------------------
- * COLUMNA FECHA
- * --------------------------------------------------------
- */
+    // ========================================================
+    // FECHA
+    // ========================================================
 
-const celdaFecha =
-    document.createElement("td");
+    const celdaFecha =
+        document.createElement("td");
 
-if (esHoy) {
+    if (esHoy) {
 
-    celdaFecha.classList.add("hoy");
+        celdaFecha.classList.add("hoy");
 
-    celdaFecha.textContent =
-        `${cumpleaños.fecha} 🎉`;
+        celdaFecha.textContent =
+            `${cumpleaños.fecha} 🎉`;
 
-} else {
+    } else {
 
-    celdaFecha.textContent =
-        cumpleaños.fecha;
-}
+        celdaFecha.textContent =
+            cumpleaños.fecha;
+    }
 
 
-/*
- * --------------------------------------------------------
- * AÑO DE NACIMIENTO
- * --------------------------------------------------------
- */
+    // ========================================================
+    // AÑO DE NACIMIENTO
+    // ========================================================
 
-if (cumpleaños.anio) {
+    if (cumpleaños.anio) {
 
-    const textoAño =
-        document.createElement("span");
+        const textoAño =
+            document.createElement("span");
 
-    textoAño.textContent =
-        ` (${cumpleaños.anio})`;
+        textoAño.textContent =
+            ` (${cumpleaños.anio})`;
 
-    celdaFecha.appendChild(
-        textoAño
+        celdaFecha.appendChild(
+            textoAño
+        );
+    }
+
+
+    // ========================================================
+    // COLUMNA ACCIÓN
+    // ========================================================
+
+    const celdaAccion =
+        document.createElement("td");
+
+    if (esHoy) {
+
+        celdaAccion.classList.add("hoy");
+
+        const contenido =
+            crearBotonesWhatsApp(
+                cumpleaños
+            );
+
+        celdaAccion.appendChild(
+            contenido
+        );
+    }
+
+
+    // ========================================================
+    // AGREGAR CELDAS
+    // ========================================================
+
+    fila.appendChild(
+        celdaNombre
+    );
+
+    fila.appendChild(
+        celdaFecha
+    );
+
+    fila.appendChild(
+        celdaAccion
+    );
+
+    tabla.appendChild(
+        fila
     );
 }
 
 
-/*
- * --------------------------------------------------------
- * COLUMNA ACCIÓN
- * --------------------------------------------------------
- */
-
-const celdaAccion =
-    document.createElement("td");
-
-if (esHoy) {
-
-    celdaAccion.classList.add("hoy");
-
-    crearBotonesWhatsApp(
-        celdaAccion,
-        cumpleaños
-    );
-
-}
-
-
-/*
- * --------------------------------------------------------
- * AGREGAR CELDAS
- * --------------------------------------------------------
- */
-
-fila.appendChild(
-    celdaNombre
-);
-
-fila.appendChild(
-    celdaFecha
-);
-
-fila.appendChild(
-    celdaAccion
-);
-
-tabla.appendChild(
-    fila
-);
-```
-
-}
-
-/*
-
-* ============================================================
-* CREAR BOTONES DE WHATSAPP
-* ============================================================
-  */
+// ============================================================
+// CREAR VISTA PREVIA Y BOTÓN DE WHATSAPP
+// ============================================================
 
 function crearBotonesWhatsApp(cumpleaños) {
 
-    const contenedor = document.createElement("div");
+    const contenedor =
+        document.createElement("div");
 
-    const mensaje = `🎉 ¡Hoy celebramos a ${cumpleaños.nombre}! 🎂 Que tengas un día lleno de alegría ❤️ - Familia Cuenca`;
+    const mensaje =
+        `🎉 ¡Hoy celebramos a ${cumpleaños.nombre}! 🎂 Que tengas un día lleno de alegría ❤️ - Familia Cuenca`;
 
-    // Vista previa del mensaje
-    const vistaPrevia = document.createElement("div");
 
-    vistaPrevia.style.marginTop = "10px";
-    vistaPrevia.style.padding = "12px";
-    vistaPrevia.style.background = "#f5f5f5";
-    vistaPrevia.style.border = "1px solid #ddd";
-    vistaPrevia.style.borderRadius = "8px";
-    vistaPrevia.style.textAlign = "left";
-    vistaPrevia.style.fontSize = "14px";
+    // ========================================================
+    // VISTA PREVIA
+    // ========================================================
 
-    vistaPrevia.innerHTML = `
-        <strong>💬 Mensaje que se enviará al grupo:</strong>
-        <div style="
-            margin-top:8px;
-            padding:10px;
-            background:white;
-            border-radius:6px;
-            color:#333;
-        ">
-            ${mensaje}
-        </div>
-    `;
+    const titulo =
+        document.createElement("div");
 
-    // Botón para abrir WhatsApp
-    const botonWhatsApp = document.createElement("a");
+    titulo.textContent =
+        "💬 Mensaje para el grupo:";
+
+    titulo.style.fontWeight =
+        "bold";
+
+    titulo.style.marginBottom =
+        "6px";
+
+
+    const vistaPrevia =
+        document.createElement("div");
+
+    vistaPrevia.textContent =
+        mensaje;
+
+    vistaPrevia.style.background =
+        "#ffffff";
+
+    vistaPrevia.style.border =
+        "1px solid #ddd";
+
+    vistaPrevia.style.borderRadius =
+        "8px";
+
+    vistaPrevia.style.padding =
+        "10px";
+
+    vistaPrevia.style.marginBottom =
+        "8px";
+
+    vistaPrevia.style.textAlign =
+        "left";
+
+    vistaPrevia.style.fontSize =
+        "13px";
+
+
+    // ========================================================
+    // BOTÓN WHATSAPP
+    // ========================================================
+
+    const botonWhatsApp =
+        document.createElement("a");
 
     botonWhatsApp.href =
         `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
 
-    botonWhatsApp.target = "_blank";
-    botonWhatsApp.rel = "noopener";
-    botonWhatsApp.className = "btn whatsapp";
-    botonWhatsApp.textContent = "💬 Abrir WhatsApp";
+    botonWhatsApp.target =
+        "_blank";
 
-    // Cuando se abre WhatsApp mostramos la confirmación
-    botonWhatsApp.addEventListener("click", function () {
+    botonWhatsApp.rel =
+        "noopener";
 
-        setTimeout(() => {
-            mostrarBotonConfirmacion(cumpleaños);
-        }, 500);
+    botonWhatsApp.className =
+        "btn whatsapp";
 
-    });
+    botonWhatsApp.textContent =
+        "💬 Abrir WhatsApp";
 
-    contenedor.appendChild(vistaPrevia);
-    contenedor.appendChild(botonWhatsApp);
+
+    // ========================================================
+    // DESPUÉS DE ABRIR WHATSAPP
+    // ========================================================
+
+    botonWhatsApp.addEventListener(
+        "click",
+        function () {
+
+            setTimeout(
+                function () {
+
+                    mostrarBotonConfirmacion(
+                        cumpleaños
+                    );
+
+                },
+                500
+            );
+
+        }
+    );
+
+
+    contenedor.appendChild(
+        titulo
+    );
+
+    contenedor.appendChild(
+        vistaPrevia
+    );
+
+    contenedor.appendChild(
+        botonWhatsApp
+    );
 
     return contenedor;
 }
-/*
- * ----------------------------------------*
-```
+
+
+// ============================================================
+// MOSTRAR BOTÓN DE CONFIRMACIÓN
+// ============================================================
+
+function mostrarBotonConfirmacion(cumpleaños) {
+
+    const contenedor =
+        document.getElementById(
+            "mensajeConfirmacion"
+        );
+
+    if (!contenedor) {
+        return;
+    }
+
+    contenedor.style.display =
+        "block";
+
+    contenedor.innerHTML = "";
+
+
+    const texto =
+        document.createElement("div");
+
+    texto.textContent =
+        `¿Ya enviaste la felicitación de ${cumpleaños.nombre} al grupo Familia Cuenca?`;
+
+    texto.style.marginBottom =
+        "10px";
+
+
+    const boton =
+        document.createElement("button");
+
+    boton.className =
+        "btn confirmar";
+
+    boton.textContent =
+        "✅ Sí, ya la envié";
+
+
+    boton.addEventListener(
+        "click",
+        function () {
+
+            confirmarEnvio(
+                cumpleaños
+            );
+
+        }
+    );
+
+
+    contenedor.appendChild(
+        texto
+    );
+
+    contenedor.appendChild(
+        boton
+    );
+}
+
+
+// ============================================================
+// CONFIRMAR ENVÍO
+// ============================================================
+
+function confirmarEnvio(cumpleaños) {
+
+    const clave =
+        obtenerClaveConfirmacion(
+            cumpleaños
+        );
+
+    localStorage.setItem(
+        clave,
+        "true"
+    );
+
+    mostrarConfirmacionFinal(
+        cumpleaños
+    );
+}
+
+
+// ============================================================
+// MOSTRAR CONFIRMACIÓN FINAL
+// ============================================================
+
+function mostrarConfirmacionFinal(cumpleaños) {
+
+    const contenedor =
+        document.getElementById(
+            "mensajeConfirmacion"
+        );
+
+    if (!contenedor) {
+        return;
+    }
+
+    contenedor.style.display =
+        "block";
+
+    contenedor.innerHTML =
+        `✅ ¡Perfecto! La felicitación de ${cumpleaños.nombre} fue confirmada como enviada al grupo Familia Cuenca.`;
+}
+
+
+// ============================================================
+// REVISAR SI YA SE CONFIRMÓ EL ENVÍO
+// ============================================================
+
+function actualizarConfirmacion(hoy) {
+
+    const contenedor =
+        document.getElementById(
+            "mensajeConfirmacion"
+        );
+
+    if (!contenedor) {
+        return;
+    }
+
+    const filas =
+        document.querySelectorAll(
+            "#calendario tr"
+        );
+
+
+    filas.forEach(
+        function (fila, indice) {
+
+            if (indice === 0) {
+                return;
+            }
+
+            const nombreCelda =
+                fila.cells[0];
+
+            if (!nombreCelda) {
+                return;
+            }
+
+            if (!nombreCelda.classList.contains("hoy")) {
+                return;
+            }
+
+            const nombre =
+                nombreCelda.textContent
+                    .replace("🎂 ", "")
+                    .trim();
+
+
+            const cumpleaños = {
+                nombre: nombre
+            };
+
+
+            const clave =
+                obtenerClaveConfirmacion(
+                    cumpleaños
+                );
+
+
+            if (
+                localStorage.getItem(clave) === "true"
+            ) {
+
+                mostrarConfirmacionFinal(
+                    cumpleaños
+                );
+            }
+
+        }
+    );
+}
+
+
+// ============================================================
+// CLAVE PARA LOCALSTORAGE
+// ============================================================
+
+function obtenerClaveConfirmacion(cumpleaños) {
+
+    const fecha =
+        obtenerFechaActual();
+
+    return (
+        "cumpleanos_enviado_" +
+        fecha +
+        "_" +
+        cumpleaños.nombre
+    );
+}
+
+
+// ============================================================
+// MOSTRAR ERROR EN LA TABLA
+// ============================================================
+
+function mostrarError(
+    tabla,
+    error
+) {
+
+    limpiarTabla(tabla);
+
+    const fila =
+        document.createElement("tr");
+
+    const celda =
+        document.createElement("td");
+
+    celda.colSpan = 3;
+
+    celda.style.color =
+        "#c62828";
+
+    celda.style.background =
+        "#ffebee";
+
+    celda.style.padding =
+        "20px";
+
+    celda.innerHTML = `
+        <strong>⚠️ No se pudieron cargar los cumpleaños.</strong>
+        <br><br>
+        Revisa que el archivo
+        <strong>birthdays.json</strong>
+        esté en la misma carpeta que
+        <strong>index.html</strong>
+        y <strong>script.js</strong>.
+        <br><br>
+        <small>
+            ${error.message}
+        </small>
+    `;
+
+    fila.appendChild(
+        celda
+    );
+
+    tabla.appendChild(
+        fila
+    );
+}
