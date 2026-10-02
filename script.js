@@ -354,9 +354,11 @@ function crearBotonesWhatsApp(cumpleaños) {
     const contenedor =
         document.createElement("div");
 
+    //const mensaje =
+    //    `🎉 ¡Hoy celebramos a ${cumpleaños.nombre}! 🎂 Que tengas un día lleno de alegría ❤️ - Familia Cuenca`;
+    
     const mensaje =
-        `🎉 ¡Hoy celebramos a ${cumpleaños.nombre}! 🎂 Que tengas un día lleno de alegría ❤️ - Familia Cuenca`;
-
+    `🎉 ¡Hoy celebramos a ${cumpleaños.nombre}! 🎂❤️\n\nToda la Familia Cuenca te desea un día maravilloso, lleno de alegría, salud y muchos momentos felices.\n\n¡Feliz cumpleaños! 🥳🎈\n\nCon cariño,\nFamilia Cuenca`;
 
     // ========================================================
     // VISTA PREVIA
