@@ -11,13 +11,15 @@
     th { background: #ff4081; color: white; }
     td { background: #fff; }
     .hoy { background: #ffe082; font-weight: bold; }
+    .btn { background: #25D366; color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px; }
+    .btn:hover { background: #1ebe5d; }
 </style>
 </head>
 <body>
 <h1>🎂 Calendario de Cumpleaños - Familia Cuenca</h1>
-<p>Este calendario muestra las fechas de cumpleaños de nuestros familiares y resalta el día de hoy.</p>
+<p>Este calendario muestra las fechas de cumpleaños y permite enviar felicitaciones por WhatsApp.</p>
 <table id="calendario">
-    <tr><th>Nombre</th><th>Fecha</th></tr>
+    <tr><th>Nombre</th><th>Fecha</th><th>Acción</th></tr>
 </table>
 <script>
 fetch('birthdays.json')
@@ -32,8 +34,14 @@ fetch('birthdays.json')
             if (c.anio) {
                 textoFecha += " (" + c.anio + ")";
             }
+            let accion = "";
+            if (fechaInvertida === hoy) {
+                const mensaje = encodeURIComponent(`🎉 ¡Hoy celebramos a ${c.nombre}! 🎂 Que tengas un día lleno de alegría ❤️ - Familia Cuenca`);
+                const enlaceGrupo = `https://wa.me/?text=${mensaje}`;
+                accion = `<a class="btn" href="${enlaceGrupo}" target="_blank">Enviar Felicitación</a>`;
+            }
             const fila = document.createElement('tr');
-            fila.innerHTML = `<td>${c.nombre}</td><td class="${fechaInvertida === hoy ? 'hoy' : ''}">${textoFecha}</td>`;
+            fila.innerHTML = `<td>${c.nombre}</td><td class="${fechaInvertida === hoy ? 'hoy' : ''}">${textoFecha}</td><td>${accion}</td>`;
             tabla.appendChild(fila);
         });
     });
