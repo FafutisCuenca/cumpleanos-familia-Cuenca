@@ -1011,39 +1011,60 @@ function mostrarMensajeWhatsApp(
         );
 
 
+    // ========================================================
+    // MOSTRAR VISTA PREVIA DEL MENSAJE
+    // ========================================================
+
     mensaje.textContent =
         texto;
 
+
+    // Limpiar botones anteriores
 
     boton.innerHTML =
         "";
 
 
-    const botonWhatsApp =
+    // ========================================================
+    // CONTENEDOR DE BOTONES
+    // ========================================================
+
+    const contenedorBotones =
+        document.createElement("div");
+
+    contenedorBotones.style.marginTop =
+        "15px";
+
+
+    // ========================================================
+    // BOTÓN 1 - GRUPO FAMILIA CUENCA
+    // ========================================================
+
+    const botonGrupo =
         document.createElement("a");
 
 
-    botonWhatsApp.href =
+    botonGrupo.href =
         `https://wa.me/?text=${encodeURIComponent(texto)}`;
 
 
-    botonWhatsApp.target =
+    botonGrupo.target =
         "_blank";
 
 
-    botonWhatsApp.rel =
+    botonGrupo.rel =
         "noopener";
 
 
-    botonWhatsApp.className =
+    botonGrupo.className =
         "btn whatsapp";
 
 
-    botonWhatsApp.textContent =
-        "💬 Abrir WhatsApp";
+    botonGrupo.textContent =
+        "💬 Enviar al grupo Familia Cuenca";
 
 
-    botonWhatsApp.addEventListener(
+    botonGrupo.addEventListener(
         "click",
         function () {
 
@@ -1051,7 +1072,8 @@ function mostrarMensajeWhatsApp(
                 function () {
 
                     mostrarBotonConfirmacion(
-                        cumpleaños
+                        cumpleaños,
+                        "grupo"
                     );
 
                 },
@@ -1062,10 +1084,75 @@ function mostrarMensajeWhatsApp(
     );
 
 
-    boton.appendChild(
-        botonWhatsApp
+    // ========================================================
+    // BOTÓN 2 - MENSAJE PERSONAL
+    // ========================================================
+
+    const botonPersonal =
+        document.createElement("a");
+
+
+    botonPersonal.href =
+        `https://wa.me/?text=${encodeURIComponent(texto)}`;
+
+
+    botonPersonal.target =
+        "_blank";
+
+
+    botonPersonal.rel =
+        "noopener";
+
+
+    botonPersonal.className =
+        "btn felicitar";
+
+
+    botonPersonal.textContent =
+        "👤 Enviar mensaje personal";
+
+
+    botonPersonal.addEventListener(
+        "click",
+        function () {
+
+            setTimeout(
+                function () {
+
+                    mostrarBotonConfirmacion(
+                        cumpleaños,
+                        "personal"
+                    );
+
+                },
+                500
+            );
+
+        }
     );
 
+
+    // ========================================================
+    // AGREGAR BOTONES
+    // ========================================================
+
+    contenedorBotones.appendChild(
+        botonGrupo
+    );
+
+    contenedorBotones.appendChild(
+        botonPersonal
+    );
+
+
+    boton.appendChild(
+        contenedorBotones
+    );
+
+
+    // ========================================================
+    // LLEVAR USUARIO AL MENSAJE
+    // ========================================================
 
     contenedor.scrollIntoView({
         behavior: "smooth",
@@ -1073,8 +1160,6 @@ function mostrarMensajeWhatsApp(
     });
 
 }
-
-
 // ============================================================
 // MOSTRAR BOTÓN DE CONFIRMACIÓN
 // ============================================================
