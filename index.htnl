@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>🎂 Calendario de Cumpleaños - Familia Cuenca</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #f8f9fa; text-align: center; }
+    h1 { color: #ff4081; }
+    table { margin: auto; border-collapse: collapse; }
+    th, td { padding: 10px; border: 1px solid #ccc; }
+    th { background: #ff4081; color: white; }
+    td { background: #fff; }
+    .hoy { background: #ffe082; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>🎂 Calendario de Cumpleaños - Familia Cuenca</h1>
+<p>Este calendario muestra las fechas de cumpleaños de nuestros familiares y resalta el día de hoy.</p>
+<table id="calendario">
+    <tr><th>Nombre</th><th>Fecha</th></tr>
+</table>
+<script>
+fetch('birthdays.json')
+    .then(response => response.json())
+    .then(data => {
+        const hoy = new Date().toISOString().slice(5,10);
+        const tabla = document.getElementById('calendario');
+        data.forEach(c => {
+            const fecha = c.fecha.slice(5,10);
+            const fila = document.createElement('tr');
+            fila.innerHTML = `<td>${c.nombre}</td><td class="${fecha === hoy ? 'hoy' : ''}">${c.fecha}</td>`;
+            tabla.appendChild(fila);
+        });
+    });
+</script>
+</body>
+</html>
