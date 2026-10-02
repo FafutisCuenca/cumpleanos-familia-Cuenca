@@ -23,12 +23,17 @@
 fetch('birthdays.json')
     .then(response => response.json())
     .then(data => {
-        const hoy = new Date().toISOString().slice(5,10);
+        const hoy = new Date().toISOString().slice(5,10); // MM-DD
         const tabla = document.getElementById('calendario');
         data.forEach(c => {
-            const fecha = c.fecha.slice(5,10);
+            const fecha = c.fecha; // DD-MM
+            const fechaInvertida = fecha.slice(3,5) + "-" + fecha.slice(0,2); // MM-DD
+            let textoFecha = fecha;
+            if (c.anio) {
+                textoFecha += " (" + c.anio + ")";
+            }
             const fila = document.createElement('tr');
-            fila.innerHTML = `<td>${c.nombre}</td><td class="${fecha === hoy ? 'hoy' : ''}">${c.fecha}</td>`;
+            fila.innerHTML = `<td>${c.nombre}</td><td class="${fechaInvertida === hoy ? 'hoy' : ''}">${textoFecha}</td>`;
             tabla.appendChild(fila);
         });
     });
