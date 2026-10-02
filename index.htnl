@@ -4,7 +4,6 @@
 
 <head> <meta charset="UTF-8">
 
-<!-- Permite que la página se adapte correctamente a celulares -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>🎂 Calendario de Cumpleaños - Familia Cuenca</title>
@@ -24,6 +23,50 @@
 
     p {
         color: #555;
+    }
+
+    .botones {
+        margin: 20px 0;
+    }
+
+    .btn {
+        display: inline-block;
+        color: white;
+        padding: 10px 15px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        margin: 5px;
+        cursor: pointer;
+        border: none;
+        font-size: 14px;
+    }
+
+    /* Botón del grupo */
+    .whatsapp {
+        background: #25D366;
+    }
+
+    .whatsapp:hover {
+        background: #1ebe5d;
+    }
+
+    /* Botón para felicitar */
+    .felicitar {
+        background: #ff4081;
+    }
+
+    .felicitar:hover {
+        background: #e73370;
+    }
+
+    /* Botón de confirmación */
+    .confirmar {
+        background: #607D8B;
+    }
+
+    .confirmar:hover {
+        background: #455A64;
     }
 
     table {
@@ -48,25 +91,23 @@
         background: #fff;
     }
 
-    /* Resalta el cumpleaños de hoy */
+    /* Cumpleaños de hoy */
     .hoy {
         background: #ffe082 !important;
         font-weight: bold;
     }
 
-    /* Botón de WhatsApp */
-    .btn {
-        display: inline-block;
-        background: #25D366;
-        color: white;
-        padding: 8px 12px;
-        text-decoration: none;
-        border-radius: 5px;
+    /* Mensaje de confirmación */
+    #mensajeConfirmacion {
+        display: none;
+        margin: 20px auto;
+        padding: 15px;
+        max-width: 600px;
+        background: #e8f5e9;
+        border: 1px solid #81c784;
+        border-radius: 8px;
+        color: #2e7d32;
         font-weight: bold;
-    }
-
-    .btn:hover {
-        background: #1ebe5d;
     }
 
     /* Adaptación para celulares */
@@ -95,7 +136,7 @@
         }
 
         .btn {
-            padding: 7px 8px;
+            padding: 8px 10px;
             font-size: 12px;
         }
     }
@@ -112,6 +153,26 @@
     y permite enviar felicitaciones por WhatsApp.
 </p>
 
+<!-- BOTONES PRINCIPALES -->
+<div class="botones">
+
+    <!-- Acceso directo al grupo familiar -->
+    <a
+        class="btn whatsapp"
+        href="https://chat.whatsapp.com/IvI6oayIIoEJ8Wn7EWQxO0?s=cl&p=i&mlu=0"
+        target="_blank"
+        rel="noopener">
+        💬 Grupo WhatsApp
+    </a>
+
+</div>
+
+<!-- Mensaje de confirmación -->
+<div id="mensajeConfirmacion">
+    ✅ ¡Perfecto! Has confirmado que la felicitación fue enviada al grupo Familia Cuenca.
+</div>
+
+<!-- CALENDARIO -->
 <table id="calendario">
 
     <tr>
@@ -123,8 +184,8 @@
 </table>
 
 <!--
-    El funcionamiento del calendario está ahora
-    en el archivo script.js
+    Todo el funcionamiento del calendario,
+    fechas y felicitaciones está en script.js
 -->
 <script src="script.js"></script>
 
