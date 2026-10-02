@@ -1165,7 +1165,8 @@ function mostrarMensajeWhatsApp(
 // ============================================================
 
 function mostrarBotonConfirmacion(
-    cumpleaños
+    cumpleaños,
+    tipoEnvio = "grupo"
 ) {
 
     const contenedor =
@@ -1193,8 +1194,17 @@ function mostrarBotonConfirmacion(
         document.createElement("div");
 
 
-    texto.textContent =
-        `¿Ya enviaste la felicitación de ${cumpleaños.nombre} al grupo Familia Cuenca?`;
+    if (tipoEnvio === "personal") {
+
+        texto.textContent =
+            `¿Ya enviaste el mensaje personal de ${cumpleaños.nombre}?`;
+
+    } else {
+
+        texto.textContent =
+            `¿Ya enviaste la felicitación de ${cumpleaños.nombre} al grupo Familia Cuenca?`;
+
+    }
 
 
     texto.style.marginBottom =
@@ -1218,7 +1228,8 @@ function mostrarBotonConfirmacion(
         function () {
 
             confirmarEnvio(
-                cumpleaños
+                cumpleaños,
+                tipoEnvio
             );
 
         }
@@ -1241,19 +1252,19 @@ function mostrarBotonConfirmacion(
     });
 
 }
-
-
 // ============================================================
 // CONFIRMAR ENVÍO
 // ============================================================
 
 function confirmarEnvio(
-    cumpleaños
+    cumpleaños,
+    tipoEnvio = "grupo"
 ) {
 
     const clave =
         obtenerClaveConfirmacion(
-            cumpleaños
+            cumpleaños,
+            tipoEnvio
         );
 
 
@@ -1264,18 +1275,18 @@ function confirmarEnvio(
 
 
     mostrarConfirmacionFinal(
-        cumpleaños
+        cumpleaños,
+        tipoEnvio
     );
 
 }
-
-
 // ============================================================
 // MOSTRAR CONFIRMACIÓN FINAL
 // ============================================================
 
 function mostrarConfirmacionFinal(
-    cumpleaños
+    cumpleaños,
+    tipoEnvio = "grupo"
 ) {
 
     const contenedor =
@@ -1295,11 +1306,19 @@ function mostrarConfirmacionFinal(
         "block";
 
 
-    contenedor.innerHTML =
-        `✅ ¡Perfecto! La felicitación de ${cumpleaños.nombre} fue confirmada como enviada al grupo Familia Cuenca.`;
+    if (tipoEnvio === "personal") {
+
+        contenedor.innerHTML =
+            `✅ ¡Perfecto! El mensaje personal de ${cumpleaños.nombre} fue confirmado como enviado.`;
+
+    } else {
+
+        contenedor.innerHTML =
+            `✅ ¡Perfecto! La felicitación de ${cumpleaños.nombre} fue confirmada como enviada al grupo Familia Cuenca.`;
+
+    }
 
 }
-
 
 // ============================================================
 // REVISAR CONFIRMACIÓN DE HOY
@@ -1373,7 +1392,8 @@ function actualizarConfirmacionHoy() {
 // ============================================================
 
 function obtenerClaveConfirmacion(
-    cumpleaños
+    cumpleaños,
+    tipoEnvio = "grupo"
 ) {
 
     const fecha =
@@ -1382,13 +1402,14 @@ function obtenerClaveConfirmacion(
 
     return (
         "cumpleanos_enviado_" +
+        tipoEnvio +
+        "_" +
         fecha +
         "_" +
         cumpleaños.nombre
     );
 
 }
-
 
 // ============================================================
 // OBTENER FECHA ACTUAL
