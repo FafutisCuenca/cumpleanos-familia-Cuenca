@@ -156,8 +156,8 @@ function cargarCumpleaños() {
             // CALCULAR ESTADÍSTICAS
             // ====================================================
 
-            // const estadisticas =
-            //    calcularEstadisticas();
+            <* const estadisticas = *>
+            <*    calcularEstadisticas(); *>
 
             estadisticasFamilia = calcularEstadisticas();
 
@@ -2329,7 +2329,6 @@ function mostrarEstadisticas() {
     mostrarFechasCompartidas();
 }
 
-
 // ============================================================
 // ESTADÍSTICAS GENERALES
 // ============================================================
@@ -2351,7 +2350,6 @@ function mostrarEstadisticasGenerales() {
     document.getElementById("statFinados").textContent =
         estadisticasFamilia.finados;
 }
-
 
 // ============================================================
 // CUMPLEAÑOS POR MES
@@ -2398,7 +2396,6 @@ function mostrarEstadisticasPorMes() {
     });
 }
 
-
 // ============================================================
 // ESTADÍSTICAS GEOGRÁFICAS
 // ============================================================
@@ -2420,7 +2417,6 @@ function mostrarEstadisticasGeograficas() {
         estadisticasFamilia.porCiudad
     );
 }
-
 
 // ============================================================
 // LISTA GEOGRÁFICA
@@ -2461,7 +2457,6 @@ function mostrarListaGeografica(id, datos) {
             contenedor.appendChild(elemento);
         });
 }
-
 
 // ============================================================
 // MES CON MÁS CUMPLEAÑOS
@@ -2534,7 +2529,6 @@ function mostrarFechasCompartidas() {
         contenedor.appendChild(elemento);
     });
 }
-
 
 // ============================================================
 // FORMATEAR FECHA PARA ESTADÍSTICAS
