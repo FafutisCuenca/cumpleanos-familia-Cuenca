@@ -501,6 +501,132 @@ function crearCeldaDia(
 
 }
 
+function calcularEstadisticas() {
+
+    const datos = cumpleañosFamilia;
+
+    const estadisticas = {
+        total: datos.length,
+
+        mujeres: datos.filter(p => p.genero === "F").length,
+        hombres: datos.filter(p => p.genero === "M").length,
+
+        vivos: datos.filter(p => p.estatus === "Vivo").length,
+        finados: datos.filter(p => p.estatus === "Finado").length,
+
+        porMes: {},
+        porPais: {},
+        porEstado: {},
+        porCiudad: {},
+
+        fechasCompartidas: {}
+    };
+
+    // ============================================
+    // CUMPLEAÑOS POR MES
+    // ============================================
+
+    datos.forEach(persona => {
+
+        const [dia, mes] = persona.fecha.split("-");
+
+        if (!estadisticas.porMes[mes]) {
+            estadisticas.porMes[mes] = 0;
+        }
+
+        estadisticas.porMes[mes]++;
+
+    });
+
+
+    // ============================================
+    // PAÍS
+    // ============================================
+
+    datos.forEach(persona => {
+
+        if (!persona.pais) return;
+
+        if (!estadisticas.porPais[persona.pais]) {
+            estadisticas.porPais[persona.pais] = 0;
+        }
+
+        estadisticas.porPais[persona.pais]++;
+
+    });
+
+
+    // ============================================
+    // ESTADO
+    // ============================================
+
+    datos.forEach(persona => {
+
+        if (!persona.estado) return;
+
+        if (!estadisticas.porEstado[persona.estado]) {
+            estadisticas.porEstado[persona.estado] = 0;
+        }
+
+        estadisticas.porEstado[persona.estado]++;
+
+    });
+
+
+    // ============================================
+    // CIUDAD
+    // ============================================
+
+    datos.forEach(persona => {
+
+        if (!persona.ciudad) return;
+
+        if (!estadisticas.porCiudad[persona.ciudad]) {
+            estadisticas.porCiudad[persona.ciudad] = 0;
+        }
+
+        estadisticas.porCiudad[persona.ciudad]++;
+
+    });
+
+
+    // ============================================
+    // FECHAS COMPARTIDAS
+    // ============================================
+
+    datos.forEach(persona => {
+
+        if (!estadisticas.fechasCompartidas[persona.fecha]) {
+            estadisticas.fechasCompartidas[persona.fecha] = [];
+        }
+
+        estadisticas.fechasCompartidas[persona.fecha].push(persona.nombre);
+
+    });
+
+
+    return estadisticas;
+}
+
+function obtenerMesMayor(estadisticas) {
+
+    let mesMayor = null;
+    let cantidadMayor = 0;
+
+    Object.entries(estadisticas.porMes).forEach(([mes, cantidad]) => {
+
+        if (cantidad > cantidadMayor) {
+            cantidadMayor = cantidad;
+            mesMayor = mes;
+        }
+
+    });
+
+    return {
+        mes: mesMayor,
+        cantidad: cantidadMayor
+    };
+}
 
 // ============================================================
 // MOSTRAR DETALLE DE CUMPLEAÑOS
