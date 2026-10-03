@@ -275,6 +275,227 @@
             cursor: default !important;
         }
 
+/* =========================
+   INEGI CUENCA
+   ESTADÍSTICAS FAMILIARES
+   ========================= */
+
+#estadisticasFamilia {
+    width: 95%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+#estadisticasFamilia h2 {
+    margin: 0;
+    color: #ff4081;
+    font-size: 28px;
+}
+
+.subtituloINEGI {
+    margin: 5px 0 25px;
+    color: #777;
+    font-size: 15px;
+}
+
+/* TARJETAS PRINCIPALES */
+
+.tarjetasEstadisticas {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.tarjetaEstadistica {
+    padding: 18px 10px;
+    border-radius: 12px;
+    background: #fff0f5;
+    border: 1px solid #ffd1e1;
+}
+
+.tarjetaEstadistica .icono {
+    font-size: 28px;
+}
+
+.tarjetaEstadistica .numero {
+    display: block;
+    margin-top: 5px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ff4081;
+}
+
+.tarjetaEstadistica .etiqueta {
+    display: block;
+    margin-top: 3px;
+    font-size: 13px;
+    color: #555;
+}
+
+/* BLOQUES DE ESTADÍSTICAS */
+
+.bloquesEstadisticas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.bloqueEstadistica {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: left;
+}
+
+.bloqueEstadistica h3 {
+    margin-top: 0;
+    color: #ff4081;
+    font-size: 20px;
+    text-align: center;
+}
+
+/* BARRAS POR MES */
+
+.barraMes {
+    margin: 10px 0;
+}
+
+.barraMesNombre {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.barraMesFondo {
+    width: 100%;
+    height: 14px;
+    background: #eeeeee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.barraMesValor {
+    height: 100%;
+    background: #ff4081;
+    border-radius: 10px;
+}
+
+/* LISTAS GEOGRÁFICAS */
+
+.listaEstadistica {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.listaEstadistica li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 5px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.listaEstadistica li:last-child {
+    border-bottom: none;
+}
+
+.listaEstadistica .cantidad {
+    font-weight: bold;
+    color: #ff4081;
+}
+
+/* FECHAS COMPARTIDAS */
+
+.fechasCompartidas {
+    margin-top: 20px;
+}
+
+.fechaCompartida {
+    background: #fff0f5;
+    border: 1px solid #ffd1e1;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+.fechaCompartida strong {
+    color: #ff4081;
+}
+
+.personasFecha {
+    margin-top: 5px;
+    color: #555;
+    font-size: 14px;
+}
+
+/* MES CON MÁS CUMPLEAÑOS */
+
+.mesMayor {
+    margin-top: 20px;
+    padding: 18px;
+    text-align: center;
+    background: #fff8e1;
+    border: 1px solid #ffca28;
+    border-radius: 12px;
+}
+
+.mesMayor .numeroMesMayor {
+    font-size: 30px;
+    font-weight: bold;
+    color: #f57c00;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 800px) {
+
+    .tarjetasEstadisticas {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .bloquesEstadisticas {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+
+    #estadisticasFamilia {
+        width: 95%;
+        padding: 15px;
+        margin-top: 30px;
+    }
+
+    #estadisticasFamilia h2 {
+        font-size: 23px;
+    }
+
+    .tarjetasEstadisticas {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .tarjetaEstadistica {
+        padding: 14px 8px;
+    }
+
+    .tarjetaEstadistica .numero {
+        font-size: 24px;
+    }
+
+    .bloqueEstadistica {
+        padding: 15px;
+    }
+}
+        
         /* =========================
            RESPONSIVE - CELULARES
            ========================= */
