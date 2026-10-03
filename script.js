@@ -156,103 +156,92 @@ function cargarCumpleaños() {
             // CALCULAR ESTADÍSTICAS
             // ====================================================
 
-            <* const estadisticas = *>
-            <*    calcularEstadisticas(); *>
-
             estadisticasFamilia = calcularEstadisticas();
 
             mostrarEstadisticas();
             
             // ====================================================
-            // CONSOLA - INEGI CUENCA
-            // ====================================================
+// CONSOLA - INEGI CUENCA
+// ====================================================
 
-            console.log(
-                "========================================"
-            );
+console.log(
+    "========================================"
+);
 
-            console.log(
-                "        INEGI CUENCA"
-            );
+console.log(
+    "        INEGI CUENCA"
+);
 
-            console.log(
-                "  Estadísticas de la Familia Cuenca"
-            );
+console.log(
+    "  Estadísticas de la Familia Cuenca"
+);
 
-            console.log(
-                "========================================"
-            );
+console.log(
+    "========================================"
+);
 
-            console.log(
-                "Total:",
-                estadisticas.total
-            );
+console.log(
+    "Total:",
+    estadisticasFamilia.total
+);
 
-            console.log(
-                "Mujeres:",
-                estadisticas.mujeres
-            );
+console.log(
+    "Mujeres:",
+    estadisticasFamilia.mujeres
+);
 
-            console.log(
-                "Hombres:",
-                estadisticas.hombres
-            );
+console.log(
+    "Hombres:",
+    estadisticasFamilia.hombres
+);
 
-            console.log(
-                "Vivos:",
-                estadisticas.vivos
-            );
+console.log(
+    "Vivos:",
+    estadisticasFamilia.vivos
+);
 
-            console.log(
-                "Finados:",
-                estadisticas.finados
-            );
+console.log(
+    "Finados:",
+    estadisticasFamilia.finados
+);
 
-            console.log(
-                "Por mes:",
-                estadisticas.porMes
-            );
+console.log(
+    "Por mes:",
+    estadisticasFamilia.porMes
+);
 
-            console.log(
-                "Por país:",
-                estadisticas.porPais
-            );
+console.log(
+    "Por país:",
+    estadisticasFamilia.porPais
+);
 
-            console.log(
-                "Por estado:",
-                estadisticas.porEstado
-            );
+console.log(
+    "Por estado:",
+    estadisticasFamilia.porEstado
+);
 
-            console.log(
-                "Por ciudad:",
-                estadisticas.porCiudad
-            );
+console.log(
+    "Por ciudad:",
+    estadisticasFamilia.porCiudad
+);
 
-            console.log(
-                "Fechas compartidas:",
-                obtenerFechasCompartidas(
-                    estadisticas
-                )
-            );
+console.log(
+    "Fechas compartidas:",
+    obtenerFechasCompartidas(
+        estadisticasFamilia
+    )
+);
 
+console.log(
+    "Mes con más cumpleaños:",
+    obtenerMesMayor(
+        estadisticasFamilia
+    )
+);
 
-            // ====================================================
-            // MES CON MÁS CUMPLEAÑOS
-            // ====================================================
-
-            console.log(
-                "Mes con más cumpleaños:",
-                obtenerMesMayor(
-                    estadisticas
-                )
-            );
-
-
-            console.log(
-                "========================================"
-            );
-
-
+console.log(
+    "========================================"
+);
         })
 
         .catch(error => {
@@ -327,22 +316,20 @@ function calcularEstadisticas() {
         // CUMPLEAÑOS POR MES
         // ====================================================
 
-        porMes: {
-
-            "01": 0,
-            "02": 0,
-            "03": 0,
-            "04": 0,
-            "05": 0,
-            "06": 0,
-            "07": 0,
-            "08": 0,
-            "09": 0,
-            "10": 0,
-            "11": 0,
-            "12": 0
-
-        },
+        porMes: [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+],
 
 
         // ====================================================
@@ -382,16 +369,16 @@ function calcularEstadisticas() {
 
 
             const mes =
-                partes[1];
+    parseInt(partes[1], 10);
 
+if (
+    mes >= 1 &&
+    mes <= 12
+) {
 
-            if (
-                estadisticas.porMes[mes] !== undefined
-            ) {
+    estadisticas.porMes[mes - 1]++;
 
-                estadisticas.porMes[mes]++;
-
-            }
+}
 
 
             // ==================================================
