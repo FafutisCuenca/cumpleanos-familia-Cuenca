@@ -53,7 +53,7 @@
   },
   {
     "id": "CUEN-005",
-    "nombre": "Carlos Rafael Chacon Cuenca",
+    "nombre": "Carlos Rafael Chacón Cuenca",
     "fecha": "19-01",
     "mes": "Enero",
     "anio": "",
@@ -77,6 +77,7 @@
     "ciudad": "",
     "foto": ""
   },
+
   {
     "id": "CUEN-007",
     "nombre": "Yayana Cuenca Gómez",
@@ -185,7 +186,7 @@
   {
     "id": "CUEN-015",
     "nombre": "Adriana Peón",
-    "fecha": "01-03",
+    "fecha": "16-03",
     "mes": "Marzo",
     "anio": "",
     "genero": "F",
@@ -208,8 +209,21 @@
     "ciudad": "",
     "foto": ""
   },
+  {
+    "id": "CUEN-016",
+    "nombre": "Amy Chacón Cuenca",
+    "fecha": "19-03",
+    "mes": "Marzo",
+    "anio": "",
+    "genero": "F",
+    "estatus": "Vivo",
+    "pais": "USA",
+    "estado": "",
+    "ciudad": "",
+    "foto": ""
+  },
    
-{
+  {
     "id": "CUEN-017",
     "nombre": "Martha Liaño Cuenca",
     "fecha": "01-04",
@@ -220,6 +234,19 @@
     "pais": "México",
     "estado": "CDMX",
     "ciudad": "CDMX",
+    "foto": ""
+  },
+  {
+    "id": "CUEN-017",
+    "nombre": "Miguel Ángel Chacón Cuenca",
+    "fecha": "02-04",
+    "mes": "Abril",
+    "anio": "",
+    "genero": "M",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "Quintana Roo",
+    "ciudad": "Cancún",
     "foto": ""
   },
 {
@@ -261,9 +288,48 @@
     "ciudad": "Oakland",
     "foto": ""
   },
-
-  {
+{
     "id": "CUEN-021",
+    "nombre": "Renata Zoe Cuenca",
+    "fecha": "18-06",
+    "mes": "Junio",
+    "anio": "",
+    "genero": "F",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "",
+    "ciudad": "",
+    "foto": ""
+  },
+  {
+    "id": "CUEN-022",
+    "nombre": "Iván Francisco Cuenca",
+    "fecha": "22-06",
+    "mes": "Junio",
+    "anio": "",
+    "genero": "M",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "",
+    "ciudad": "",
+    "foto": ""
+  },
+  {
+    "id": "CUEN-023",
+    "nombre": "Dayan Nicole Cuenca",
+    "fecha": "26-06",
+    "mes": "Junio",
+    "anio": "",
+    "genero": "F",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "",
+    "ciudad": "",
+    "foto": ""
+  },
+  
+  {
+    "id": "CUEN-024",
     "nombre": "Teresita A. Castillo Salazar",
     "fecha": "19-07",
     "mes": "Julio",
@@ -276,7 +342,7 @@
     "foto": ""
   },
   {
-    "id": "CUEN-022",
+    "id": "CUEN-025",
     "nombre": "Alain Rodríguez Cuenca",
     "fecha": "22-07",
     "mes": "Julio",
@@ -289,7 +355,7 @@
     "foto": ""
   },
 {
-    "id": "CUEN-023",
+    "id": "CUEN-026",
     "nombre": "Carlos Cuenca Pallas",
     "fecha": "22-07",
     "mes": "Julio",
@@ -301,9 +367,49 @@
     "ciudad": "Mérida",
     "foto": ""
   },
-  
   {
-    "id": "CUEN-024",
+    "id": "CUEN-026",
+    "nombre": "Alejandro Martínez Cuenca",
+    "fecha": "22-07",
+    "mes": "Julio",
+    "anio": "",
+    "genero": "M",
+    "estatus": "Vivo",
+    "pais": "Nicaragua",
+    "estado": "",
+    "ciudad": "",
+    "foto": ""
+  },
+
+  {
+    "id": "CUEN-026",
+    "nombre": "Claudia Bermpudez del Carmen de Martínez",
+    "fecha": "22-08",
+    "mes": "Agosto",
+    "anio": "",
+    "genero": "F",
+    "estatus": "Vivo",
+    "pais": "Nicaragua",
+    "estado": "",
+    "ciudad": "",
+    "foto": ""
+  },
+{
+    "id": "CUEN-026",
+    "nombre": "Xari Ariadne Kokkinidis Liaño",
+    "fecha": "24-08",
+    "mes": "Agosto",
+    "anio": "",
+    "genero": "F",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "CDMX",
+    "ciudad": "CDMX",
+    "foto": ""
+  },
+
+  {
+    "id": "CUEN-027",
     "nombre": "Alan Saavedra Cuenca",
     "fecha": "01-09",
     "mes": "Septiembre",
@@ -316,8 +422,34 @@
     "foto": ""
   },
   {
-    "id": "CUEN-025",
-    "nombre": "L. Jorge Cuenca Fafutis",
+    "id": "CUEN-032",
+    "nombre": "Susana Cuenca Gómez",
+    "fecha": "01-09",
+    "mes": "Septiembre",
+    "anio": "",
+    "genero": "F",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "CDMX",
+    "ciudad": "CDMX",
+    "foto": ""
+  },
+  {
+    "id": "CUEN-032",
+    "nombre": "Luis José Moreno Liaño",
+    "fecha": "01-09",
+    "mes": "Septiembre",
+    "anio": "",
+    "genero": "M",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "",
+    "ciudad": "",
+    "foto": ""
+  },
+  {
+    "id": "CUEN-028",
+    "nombre": "Luis Jorge Cuenca Fafutis",
     "fecha": "04-09",
     "mes": "Septiembre",
     "anio": 1970,
@@ -329,7 +461,7 @@
     "foto": ""
   },
   {
-    "id": "CUEN-026",
+    "id": "CUEN-029",
     "nombre": "Miguel Francisco Cuenca Fafutis",
     "fecha": "04-09",
     "mes": "Septiembre",
@@ -342,7 +474,7 @@
     "foto": ""
   },
   {
-    "id": "CUEN-027",
+    "id": "CUEN-030",
     "nombre": "Mauricio Campos Cuenca",
     "fecha": "06-09",
     "mes": "Septiembre",
@@ -354,8 +486,47 @@
     "ciudad": "Toluca",
     "foto": ""
   },
+  {
+    "id": "CUEN-031",
+    "nombre": "Francisco Cuenca Cruz",
+    "fecha": "06-09",
+    "mes": "Septiembre",
+    "anio": "",
+    "genero": "M",
+    "estatus": "Finado",
+    "pais": "México",
+    "estado": "Estado de México",
+    "ciudad": "Toluca",
+    "foto": ""
+  },
+  {
+    "id": "CUEN-032",
+    "nombre": "Dennise Liaño Goes",
+    "fecha": "07-09",
+    "mes": "Septiembre",
+    "anio": "",
+    "genero": "F",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "Quintana Roo",
+    "ciudad": "Cancún",
+    "foto": ""
+  },
+  {
+    "id": "CUEN-032",
+    "nombre": "Gabriel Cuenca Gómez",
+    "fecha": "09-09",
+    "mes": "Septiembre",
+    "anio": "",
+    "genero": "M",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "",
+    "ciudad": "",
+    "foto": ""
+  },
     {
-    "id": "CUEN-028",
+    "id": "CUEN-032",
     "nombre": "Gabriel Rodríguez Cuenca",
     "fecha": "01-09",
     "mes": "Septiembre",
@@ -368,7 +539,7 @@
     "foto": ""
   },
   {
-    "id": "CUEN-029",
+    "id": "CUEN-033",
     "nombre": "Mario Mercado Jr.",
     "fecha": "19-09",
     "mes": "Septiembre",
@@ -429,6 +600,19 @@
     "genero": "M",
     "estatus": "Vivo",
     "pais": "USA",
+    "estado": "",
+    "ciudad": "",
+    "foto": ""
+  },
+  {
+    "id": "CUEN-034",
+    "nombre": "Odette Marie",
+    "fecha": "14-10",
+    "mes": "Octubre",
+    "anio": "",
+    "genero": "F",
+    "estatus": "Vivo",
+    "pais": "México",
     "estado": "",
     "ciudad": "",
     "foto": ""
@@ -602,6 +786,19 @@
     "estatus": "Vivo",
     "pais": "Perú",
     "estado": "Lima",
+    "ciudad": "",
+    "foto": ""
+  },
+  {
+    "id": "CUEN-046",
+    "nombre": "Amada Gonzalez Cuenca Cruz",
+    "fecha": "25-12",
+    "mes": "Diciembre",
+    "anio": 1939,
+    "genero": "F",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "",
     "ciudad": "",
     "foto": ""
   }
