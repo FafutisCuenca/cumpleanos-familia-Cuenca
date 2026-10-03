@@ -2484,17 +2484,13 @@ function mostrarListaGeografica(id, datos) {
 
 function mostrarMesMayor() {
 
-    const resultado =
-        obtenerMesMayor(
-            estadisticasFamilia
-        );
+    const resultado = obtenerMesMayor(estadisticasFamilia);
 
-    const elemento =
-        document.getElementById(
-            "mesMayorEstadistica"
-        );
+    const elemento = document.getElementById("mesMayorEstadistica");
 
-    if (!elemento || !resultado) return;
+    if (!elemento || !resultado) {
+        return;
+    }
 
     elemento.textContent =
         `${resultado.nombreMes} — ${resultado.cantidad}`;
