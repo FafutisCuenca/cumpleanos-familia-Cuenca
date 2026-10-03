@@ -2322,19 +2322,52 @@ function mostrarEstadisticas() {
 
 function mostrarEstadisticasGenerales() {
 
-    document.getElementById("statTotal").textContent =
+    const total =
+        document.getElementById("statTotal");
+
+    const mujeres =
+        document.getElementById("statMujeres");
+
+    const hombres =
+        document.getElementById("statHombres");
+
+    const vivos =
+        document.getElementById("statVivos");
+
+    const finados =
+        document.getElementById("statFinados");
+
+
+    if (
+        !total ||
+        !mujeres ||
+        !hombres ||
+        !vivos ||
+        !finados
+    ) {
+
+        console.warn(
+            "No se encontraron todos los elementos de estadísticas."
+        );
+
+        return;
+
+    }
+
+
+    total.textContent =
         estadisticasFamilia.total;
 
-    document.getElementById("statMujeres").textContent =
+    mujeres.textContent =
         estadisticasFamilia.mujeres;
 
-    document.getElementById("statHombres").textContent =
+    hombres.textContent =
         estadisticasFamilia.hombres;
 
-    document.getElementById("statVivos").textContent =
+    vivos.textContent =
         estadisticasFamilia.vivos;
 
-    document.getElementById("statFinados").textContent =
+    finados.textContent =
         estadisticasFamilia.finados;
 }
 
@@ -2452,10 +2485,14 @@ function mostrarListaGeografica(id, datos) {
 function mostrarMesMayor() {
 
     const resultado =
-        obtenerMesMayor();
+        obtenerMesMayor(
+            estadisticasFamilia
+        );
 
     const elemento =
-        document.getElementById("mesMayorEstadistica");
+        document.getElementById(
+            "mesMayorEstadistica"
+        );
 
     if (!elemento || !resultado) return;
 
@@ -2479,8 +2516,10 @@ function mostrarFechasCompartidas() {
 
     contenedor.innerHTML = "";
 
-    const fechas =
-        estadisticasFamilia.fechasCompartidas;
+const fechas =
+    obtenerFechasCompartidas(
+        estadisticasFamilia
+    );
 
     if (!fechas || fechas.length === 0) {
 
