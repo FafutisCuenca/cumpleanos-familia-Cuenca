@@ -288,6 +288,19 @@
     "ciudad": "Oakland",
     "foto": ""
   },
+    {
+    "id": "CUEN-020",
+    "nombre": "Juan Ricardo Cuenca Vargas",
+    "fecha": "22-05",
+    "mes": "Mayo",
+    "anio": "",
+    "genero": "M",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "CDMX",
+    "ciudad": "CDMX",
+    "foto": ""
+  },
 {
     "id": "CUEN-021",
     "nombre": "Renata Zoe Cuenca",
@@ -734,6 +747,19 @@
     "pais": "USA",
     "estado": "",
     "ciudad": "",
+    "foto": ""
+  },
+  {
+    "id": "CUEN-042",
+    "nombre": "Carlos Cuenca Figueroa",
+    "fecha": "20-11",
+    "mes": "Noviembre",
+    "anio": "",
+    "genero": "M",
+    "estatus": "Vivo",
+    "pais": "México",
+    "estado": "CDMX",
+    "ciudad": "CDMX",
     "foto": ""
   },
   {
