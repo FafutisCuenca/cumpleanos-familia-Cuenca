@@ -224,8 +224,8 @@
   {
     "id": "CUEN-018",
     "nombre": "Ricardo Alexis Cuenca",
-    "fecha": "06-05",
-    "mes": "Mayo",
+    "fecha": "06-04",
+    "mes": "Abril",
     "anio": "",
     "genero": "M",
     "estatus": "VIVO",
@@ -448,6 +448,19 @@
   },
   {
     "id": "CUEN-035",
+    "nombre": "Bruno Rodríguez Lara",
+    "fecha": "26-10",
+    "mes": "Octubre",
+    "anio": "",
+    "genero": "M",
+    "estatus": "VIVO",
+    "pais": "México",
+    "estado": "",
+    "ciudad": "",
+    "foto": ""
+  },
+  {
+    "id": "CUEN-036",
     "nombre": "Ivette Cuenca Aznar",
     "fecha": "27-10",
     "mes": "Octubre",
@@ -461,7 +474,7 @@
   },
 
     {
-    "id": "CUEN-036",
+    "id": "CUEN-037",
     "nombre": "Juan Pablo Rodríguez Cuenca",
     "fecha": "01-11",
     "mes": "Noviembre",
@@ -474,7 +487,7 @@
     "foto": ""
   },
     {
-    "id": "CUEN-037",
+    "id": "CUEN-038",
     "nombre": "Silvia Vargas Padilla",
     "fecha": "04-11",
     "mes": "Noviembre",
@@ -488,7 +501,7 @@
   },
 
   {
-    "id": "CUEN-038",
+    "id": "CUEN-039",
     "nombre": "Epsin Cuenca Gómez",
     "fecha": "05-11",
     "mes": "Noviembre",
@@ -501,7 +514,7 @@
     "foto": ""
   },
   {
-    "id": "CUEN-039",
+    "id": "CUEN-040",
     "nombre": "Marisol Carrillo",
     "fecha": "11-11",
     "mes": "Noviembre",
@@ -514,7 +527,7 @@
     "foto": ""
   },
   {
-    "id": "CUEN-040",
+    "id": "CUEN-041",
     "nombre": "Carlos Cuenca Aznar",
     "fecha": "17-11",
     "mes": "Noviembre",
@@ -527,7 +540,7 @@
     "foto": ""
   },
   {
-    "id": "CUEN-041",
+    "id": "CUEN-042",
     "nombre": "Lucero Liaño Cuenca",
     "fecha": "17-11",
     "mes": "Noviembre",
@@ -540,7 +553,7 @@
     "foto": ""
   },
   {
-    "id": "CUEN-042",
+    "id": "CUEN-043",
     "nombre": "Adal Campos Cuenca",
     "fecha": "23-11",
     "mes": "Noviembre",
@@ -553,7 +566,7 @@
     "foto": ""
   },
   {
-    "id": "CUEN-043",
+    "id": "CUEN-044",
     "nombre": "Eder Roberto Campos Cuenca",
     "fecha": "25-11",
     "mes": "Noviembre",
@@ -567,7 +580,7 @@
   },
 
   {
-    "id": "CUEN-044",
+    "id": "CUEN-045",
     "nombre": "Francesca Nuñez Gonzalez Cuenca",
     "fecha": "02-12",
     "mes": "Diciembre",
@@ -580,7 +593,7 @@
     "foto": ""
   },
   {
-    "id": "CUEN-045",
+    "id": "CUEN-046",
     "nombre": "Giancarlo Nuñez Gonzalez Cuenca",
     "fecha": "06-12",
     "mes": "Diciembre",
