@@ -628,6 +628,17 @@ function obtenerMesMayor(estadisticas) {
     };
 }
 
+function obtenerFechasCompartidas(estadisticas) {
+
+    return Object.entries(estadisticas.fechasCompartidas)
+        .filter(([fecha, personas]) => personas.length > 1)
+        .map(([fecha, personas]) => ({
+            fecha,
+            personas
+        }));
+
+}
+
 // ============================================================
 // MOSTRAR DETALLE DE CUMPLEAÑOS
 // ============================================================
@@ -1827,3 +1838,23 @@ function mostrarError(
     }
 
 }
+
+console.log("===== INEGI CUENCA =====");
+
+const estadisticas = calcularEstadisticas();
+
+console.log("Total:", estadisticas.total);
+console.log("Mujeres:", estadisticas.mujeres);
+console.log("Hombres:", estadisticas.hombres);
+console.log("Vivos:", estadisticas.vivos);
+console.log("Finados:", estadisticas.finados);
+
+console.log("Por mes:", estadisticas.porMes);
+console.log("Por país:", estadisticas.porPais);
+console.log("Por estado:", estadisticas.porEstado);
+console.log("Por ciudad:", estadisticas.porCiudad);
+
+console.log(
+    "Fechas compartidas:",
+    obtenerFechasCompartidas(estadisticas)
+)
