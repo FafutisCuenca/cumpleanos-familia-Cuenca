@@ -27,6 +27,13 @@ let fechaCalendario = new Date();
 
 let estadisticasFamilia = null;
 
+// ============================================================
+// VALIDACIÓN DE ESTATUS
+// ============================================================
+function esFinado(cumpleaños) {
+    return cumpleaños &&
+        String(cumpleaños.estatus || "").trim().toLowerCase() === "finado";
+}
 
 // ============================================================
 // NOMBRES DE LOS MESES
@@ -1270,35 +1277,20 @@ function mostrarCumpleanosDeHoy() {
         hoy.getMonth() + 1;
 
 
-    const cumpleañosHoy =
-        cumpleañosFamilia.filter(
-            cumpleaños => {
+const cumpleañosHoy = cumpleañosFamilia.filter(cumpleaños => {
+    if (!cumpleaños.fecha) return false;
 
-                const partes =
-                    cumpleaños.fecha.split("-");
+    const partes = cumpleaños.fecha.trim().split("-");
+    if (partes.length !== 2) return false;
 
+    const diaCumpleaños = parseInt(partes[0], 10);
+    const mesCumpleaños = parseInt(partes[1], 10);
 
-                const diaCumpleaños =
-                    parseInt(
-                        partes[0],
-                        10
-                    );
+    return diaCumpleaños === dia && mesCumpleaños === mes;
+});
 
-
-                const mesCumpleaños =
-                    parseInt(
-                        partes[1],
-                        10
-                    );
-
-
-                return (
-                    diaCumpleaños === dia &&
-                    mesCumpleaños === mes
-                );
-
-            }
-        );
+console.log("Fecha de hoy:", `${dia}-${mes}`);
+console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
 
 
     const contenedor =
