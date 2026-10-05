@@ -1242,7 +1242,7 @@ if (!esFinado(cumpleaños)) {
     );
 
 }
-
+        }
     );
 
 
