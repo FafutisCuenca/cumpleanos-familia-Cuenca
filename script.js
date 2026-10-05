@@ -848,14 +848,11 @@ function crearCeldaDia(
             "span"
         );
 
-
     numero.className =
         "numeroDia";
 
-
     numero.textContent =
         dia;
-
 
     celda.appendChild(
         numero
@@ -873,20 +870,17 @@ function crearCeldaDia(
                 const partes =
                     cumpleaños.fecha.split("-");
 
-
                 const diaCumpleaños =
                     parseInt(
                         partes[0],
                         10
                     );
 
-
                 const mesCumpleaños =
                     parseInt(
                         partes[1],
                         10
                     );
-
 
                 return (
                     diaCumpleaños === dia &&
@@ -895,6 +889,19 @@ function crearCeldaDia(
 
             }
         );
+
+
+    // ========================================================
+    // DETECTAR SI ES HOY
+    // ========================================================
+
+    const hoy =
+        new Date();
+
+    const esHoy =
+        hoy.getDate() === dia &&
+        hoy.getMonth() + 1 === mes &&
+        hoy.getFullYear() === año;
 
 
     // ========================================================
@@ -915,14 +922,9 @@ function crearCeldaDia(
                 "span"
             );
 
-
         indicador.className =
             "indicadorCumpleanos";
 
-
-        // ====================================================
-        // MOSTRAR PERSONAS
-        // ====================================================
 
         cumpleañosDelDia.forEach(
             cumpleaños => {
@@ -932,16 +934,12 @@ function crearCeldaDia(
                         "div"
                     );
 
-
-                // =================================================
-                // NOMBRE + INDICADOR VISUAL DE FINADO
-                // =================================================
-
                 nombre.textContent =
                     `🎂 ${cumpleaños.nombre}`;
 
+
                 if (
-                    cumpleaños.estatus === "Finado"
+                    esFinado(cumpleaños)
                 ) {
 
                     nombre.textContent +=
@@ -965,54 +963,49 @@ function crearCeldaDia(
             indicador
         );
 
-
-        // ====================================================
-        // DETECTAR SI ES HOY
-        // ====================================================
-
-        const hoy =
-            new Date();
+    }
 
 
-        const esHoy =
-            hoy.getDate() === dia &&
-            hoy.getMonth() + 1 === mes &&
-            hoy.getFullYear() === año;
+    // ========================================================
+    // MARCAR EL DÍA ACTUAL
+    // ========================================================
 
+    if (
+        esHoy
+    ) {
 
-        if (
-            esHoy
-        ) {
-
-            celda.classList.add(
-                "hoy"
-            );
-
-        }
-
-
-        // ====================================================
-        // CLICK EN EL DÍA
-        // ====================================================
-
-        celda.addEventListener(
-            "click",
-        function () {
-
-        mostrarCumpleanosSeleccionados(
-            cumpleañosDelDia,
-            esHoy
+        celda.classList.add(
+            "hoy"
         );
 
     }
-);
-    }
+
+
+    // ========================================================
+    // CLICK EN CUALQUIER DÍA
+    //
+    // IMPORTANTE:
+    // ESTÁ FUERA DEL IF DE CUMPLEAÑOS
+    // PARA PODER LIMPIAR EL PANEL AL HACER
+    // CLICK EN UN DÍA SIN INFORMACIÓN.
+    // ========================================================
+
+    celda.addEventListener(
+        "click",
+        function () {
+
+            mostrarCumpleanosSeleccionados(
+                cumpleañosDelDia,
+                esHoy
+            );
+
+        }
+    );
 
 
     return celda;
 
 }
-
 // ============================================================
 // LIMPIAR PANEL "CUMPLEAÑOS DE HOY"
 // ============================================================
