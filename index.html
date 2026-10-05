@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 
@@ -273,6 +274,197 @@
 
 
         /* =========================================================
+           PANEL CUMPLEAÑOS DE HOY
+           ========================================================= */
+
+        #cumpleanosHoy {
+            display: none;
+
+            width: 90%;
+            max-width: 800px;
+
+            margin: 30px auto;
+
+            padding: 28px 25px;
+
+            box-sizing: border-box;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff5f8 0%,
+                    #ffffff 55%,
+                    #fff8e8 100%
+                );
+
+            border: 2px solid #ffd1df;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.10);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        /* =========================================================
+           DECORACIÓN SUPERIOR
+           ========================================================= */
+
+        #cumpleanosHoy::before {
+            content: "🎈  🎂  🎉  🎁  🎈";
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 24px;
+
+            letter-spacing: 4px;
+        }
+
+
+        /* =========================================================
+           TÍTULO
+           ========================================================= */
+
+        #cumpleanosHoy h2 {
+            margin: 5px 0 20px;
+
+            color: #d6336c;
+
+            font-size: 28px;
+
+            font-weight: 800;
+        }
+
+
+        /* =========================================================
+           NOMBRE DEL CUMPLEAÑERO
+           ========================================================= */
+
+        #nombreCumpleanosHoy {
+            margin: 15px auto 20px;
+
+            padding: 14px;
+
+            background: rgba(255, 255, 255, 0.80);
+
+            border-radius: 14px;
+
+            font-size: 26px;
+
+            color: #ff4081;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================================================
+           NOMBRE INDIVIDUAL
+           ========================================================= */
+
+        #nombreCumpleanosHoy div {
+            color: #d6336c !important;
+
+            font-size: 27px !important;
+
+            font-weight: 800 !important;
+
+            line-height: 1.4;
+        }
+
+
+        /* =========================================================
+           MENSAJE DE WHATSAPP
+           ========================================================= */
+
+        #mensajeWhatsApp {
+            background: white;
+
+            border: none;
+
+            border-left: 5px solid #ff4081;
+
+            border-radius: 12px;
+
+            padding: 18px 20px;
+
+            margin: 18px auto;
+
+            max-width: 650px;
+
+            text-align: left;
+
+            white-space: pre-line;
+
+            color: #444;
+
+            line-height: 1.6;
+
+            box-shadow:
+                0 3px 12px rgba(0, 0, 0, 0.07);
+        }
+
+
+        /* =========================================================
+           VISTA PREVIA DEL MENSAJE
+           ========================================================= */
+
+        #mensajeWhatsAppVista {
+            line-height: 1.6;
+
+            white-space: pre-line;
+        }
+
+
+        /* =========================================================
+           BOTÓN WHATSAPP
+           ========================================================= */
+
+        #botonWhatsAppHoy {
+            margin-top: 20px;
+        }
+
+        #botonWhatsAppHoy .btn.whatsapp {
+            display: inline-block;
+
+            padding: 13px 25px;
+
+            margin: 5px;
+
+            background: #25D366;
+
+            color: white;
+
+            border-radius: 30px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            text-decoration: none;
+
+            box-shadow:
+                0 4px 10px rgba(0, 0, 0, 0.15);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        #botonWhatsAppHoy .btn.whatsapp:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 7px 15px rgba(0, 0, 0, 0.20);
+        }
+
+
+        /* =========================================================
            INEGI CUENCA
            ESTADÍSTICAS DE LA FAMILIA
            ========================================================= */
@@ -301,7 +493,9 @@
         }
 
 
-        /* TARJETAS PRINCIPALES */
+        /* =========================================================
+           TARJETAS PRINCIPALES
+           ========================================================= */
 
         .tarjetasEstadisticas {
             display: grid;
@@ -464,47 +658,6 @@
             margin-top: 5px;
             color: #555;
             font-size: 14px;
-        }
-
-
-        /* =========================================================
-           PANEL CUMPLEAÑOS DE HOY
-           ========================================================= */
-
-        #cumpleanosHoy {
-            display: none;
-            width: 90%;
-            max-width: 700px;
-            margin: 25px auto;
-            padding: 20px;
-            background: #fff8e1;
-            border: 2px solid #ffca28;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        #cumpleanosHoy h2 {
-            color: #f57c00;
-            margin-top: 0;
-        }
-
-        #nombreCumpleanosHoy {
-            font-size: 24px;
-            color: #ff4081;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        #mensajeWhatsApp {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px auto;
-            max-width: 600px;
-            text-align: left;
-            white-space: pre-line;
-            color: #444;
         }
 
 
@@ -678,18 +831,45 @@
                 font-size: 12px;
             }
 
-            #cumpleanosHoy,
-            #detalleCumpleanos {
-                width: 90%;
-                padding: 15px;
+            #cumpleanosHoy {
+                width: 94%;
+                padding: 22px 15px;
+                border-radius: 16px;
+            }
+
+            #cumpleanosHoy::before {
+                font-size: 19px;
+                letter-spacing: 2px;
+            }
+
+            #cumpleanosHoy h2 {
+                font-size: 22px;
             }
 
             #nombreCumpleanosHoy {
-                font-size: 20px;
+                font-size: 21px;
+                padding: 12px;
+            }
+
+            #nombreCumpleanosHoy div {
+                font-size: 22px !important;
             }
 
             #mensajeWhatsApp {
                 font-size: 13px;
+                padding: 15px;
+            }
+
+            #botonWhatsAppHoy .btn.whatsapp {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                margin: 8px 0;
+            }
+
+            #detalleCumpleanos {
+                width: 90%;
+                padding: 15px;
             }
 
             #estadisticasFamilia {
@@ -865,6 +1045,25 @@
             </tbody>
 
         </table>
+
+    </div>
+
+
+    <!-- =========================================================
+         CUMPLEAÑOS DE HOY
+         ========================================================= -->
+
+    <div id="cumpleanosHoy">
+
+        <h2>
+            🎂 ¡CUMPLEAÑOS DE HOY! 🎉
+        </h2>
+
+        <div id="nombreCumpleanosHoy"></div>
+
+        <div id="mensajeWhatsApp"></div>
+
+        <div id="botonWhatsAppHoy"></div>
 
     </div>
 
@@ -1084,25 +1283,6 @@
         </div>
 
     </section>
-
-
-    <!-- =========================================================
-         CUMPLEAÑOS DE HOY
-         ========================================================= -->
-
-    <div id="cumpleanosHoy">
-
-        <h2>
-            🎂 ¡CUMPLEAÑOS DE HOY! 🎉
-        </h2>
-
-        <div id="nombreCumpleanosHoy"></div>
-
-        <div id="mensajeWhatsApp"></div>
-
-        <div id="botonWhatsAppHoy"></div>
-
-    </div>
 
 
     <!-- =========================================================
