@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>🎂 Calendario de Cumpleaños - Familia Cuenca</title>
 
@@ -30,6 +33,87 @@
 
         p {
             color: #555;
+        }
+
+
+        /* =========================================================
+           NAVEGACIÓN — PORTAL FAMILIA CUENCA
+           ========================================================= */
+
+        .portal-navegacion {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto 25px;
+            padding: 0;
+        }
+
+        .portal-barra {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 12px 18px;
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .portal-identidad {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+        }
+
+        .portal-marca {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #ff4081;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .portal-texto {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .portal-titulo {
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .portal-subtitulo {
+            font-size: 11px;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        .portal-regreso {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 14px;
+            background: #ff4081;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: bold;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .portal-regreso:hover {
+            background: #e73370;
+            transform: translateY(-1px);
         }
 
 
@@ -464,6 +548,37 @@
 
 
         /* =========================================================
+           NAVEGACIÓN INFERIOR
+           ========================================================= */
+
+        .portal-regreso-inferior {
+            width: 95%;
+            max-width: 900px;
+            margin: 35px auto 10px;
+            padding-top: 25px;
+            border-top: 1px solid #ddd;
+        }
+
+        .portal-regreso-inferior a {
+            display: inline-block;
+            color: #ff4081;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 10px 16px;
+            border: 1px solid #ffd1e1;
+            border-radius: 7px;
+            background: white;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .portal-regreso-inferior a:hover {
+            background: #ff4081;
+            color: white;
+        }
+
+
+        /* =========================================================
            RESPONSIVE
            ========================================================= */
 
@@ -491,6 +606,37 @@
 
             p {
                 font-size: 14px;
+            }
+
+            .portal-barra {
+                padding: 10px 12px;
+            }
+
+            .portal-identidad {
+                gap: 7px;
+            }
+
+            .portal-marca {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+            }
+
+            .portal-titulo {
+                font-size: 11px;
+            }
+
+            .portal-subtitulo {
+                font-size: 9px;
+            }
+
+            .portal-regreso {
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+
+            .portal-regreso span {
+                display: none;
             }
 
             .navegacionMes {
@@ -583,10 +729,59 @@
 
 
     <!-- =========================================================
+         NAVEGACIÓN AL PORTAL PRINCIPAL
+         ========================================================= -->
+
+    <div class="portal-navegacion">
+
+        <div class="portal-barra">
+
+            <div class="portal-identidad">
+
+                <div class="portal-marca">
+                    C
+                </div>
+
+                <div class="portal-texto">
+
+                    <span class="portal-titulo">
+                        FAMILIA CUENCA
+                    </span>
+
+                    <span class="portal-subtitulo">
+                        Nuestra historia continúa
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <a
+                class="portal-regreso"
+                href="https://fafutiscuenca.github.io/Familia-Cuenca/"
+            >
+
+                🏠
+
+                <span>
+                    Volver al Portal Familia Cuenca
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
          ENCABEZADO
          ========================================================= -->
 
-    <h1>🎂 Calendario de Cumpleaños - Familia Cuenca</h1>
+    <h1>
+        🎂 Calendario de Cumpleaños - Familia Cuenca
+    </h1>
 
     <p>
         Consulta los cumpleaños de nuestra familia,
@@ -604,7 +799,8 @@
             class="btn whatsapp"
             href="https://chat.whatsapp.com/IvI6oayIIoEJ8Wn7EWQxO0?s=cl&p=i&mlu=0"
             target="_blank"
-            rel="noopener">
+            rel="noopener"
+        >
 
             💬 Grupo WhatsApp Familia Cuenca
 
@@ -621,7 +817,8 @@
 
         <button
             id="mesAnterior"
-            title="Mes anterior">
+            title="Mes anterior"
+        >
             ◀
         </button>
 
@@ -631,7 +828,8 @@
 
         <button
             id="mesSiguiente"
-            title="Mes siguiente">
+            title="Mes siguiente"
+        >
             ▶
         </button>
 
@@ -695,7 +893,8 @@
 
                 <span
                     class="numero"
-                    id="statTotal">
+                    id="statTotal"
+                >
                     0
                 </span>
 
@@ -712,7 +911,8 @@
 
                 <span
                     class="numero"
-                    id="statMujeres">
+                    id="statMujeres"
+                >
                     0
                 </span>
 
@@ -729,7 +929,8 @@
 
                 <span
                     class="numero"
-                    id="statHombres">
+                    id="statHombres"
+                >
                     0
                 </span>
 
@@ -746,7 +947,8 @@
 
                 <span
                     class="numero"
-                    id="statVivos">
+                    id="statVivos"
+                >
                     0
                 </span>
 
@@ -763,7 +965,8 @@
 
                 <span
                     class="numero"
-                    id="statFinados">
+                    id="statFinados"
+                >
                     0
                 </span>
 
@@ -811,7 +1014,8 @@
 
                 <ul
                     id="estadisticaPorPais"
-                    class="listaEstadistica">
+                    class="listaEstadistica"
+                >
                 </ul>
 
 
@@ -821,7 +1025,8 @@
 
                 <ul
                     id="estadisticaPorEstado"
-                    class="listaEstadistica">
+                    class="listaEstadistica"
+                >
                 </ul>
 
 
@@ -831,7 +1036,8 @@
 
                 <ul
                     id="estadisticaPorCiudad"
-                    class="listaEstadistica">
+                    class="listaEstadistica"
+                >
                 </ul>
 
             </div>
@@ -851,7 +1057,8 @@
 
             <div
                 id="mesMayorEstadistica"
-                class="numeroMesMayor">
+                class="numeroMesMayor"
+            >
                 -
             </div>
 
@@ -924,6 +1131,23 @@
     <div id="mensajeConfirmacion">
 
         ✅ ¡Perfecto! Has confirmado que la felicitación fue enviada al grupo Familia Cuenca.
+
+    </div>
+
+
+    <!-- =========================================================
+         REGRESO AL PORTAL — PARTE INFERIOR
+         ========================================================= -->
+
+    <div class="portal-regreso-inferior">
+
+        <a
+            href="https://fafutiscuenca.github.io/Familia-Cuenca/"
+        >
+
+            🏠 Volver al Portal Familia Cuenca
+
+        </a>
 
     </div>
 
