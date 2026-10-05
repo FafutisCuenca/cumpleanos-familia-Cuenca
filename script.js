@@ -1205,45 +1205,44 @@ function mostrarDetalleCumpleanos(
 
 
             // =================================================
-            // BOTÓN DE FELICITACIÓN
-            // =================================================
+// BOTÓN DE FELICITACIÓN
+// SOLO PARA FAMILIARES VIVOS
+// =================================================
 
-            const botonWhatsApp =
-                document.createElement(
-                    "button"
-                );
+if (!esFinado(cumpleaños)) {
 
-
-            botonWhatsApp.className =
-                "btn felicitar";
-
-
-            botonWhatsApp.textContent =
-                "💬 Preparar felicitación";
+    const botonWhatsApp =
+        document.createElement(
+            "button"
+        );
 
 
-            botonWhatsApp.addEventListener(
-                "click",
-                function () {
-
-                    mostrarMensajeWhatsApp(
-                        cumpleaños
-                    );
-
-                }
-            );
+    botonWhatsApp.className =
+        "btn felicitar";
 
 
-            bloque.appendChild(
-                botonWhatsApp
-            );
+    botonWhatsApp.textContent =
+        "💬 Preparar felicitación";
 
 
-            boton.appendChild(
-                bloque
+    botonWhatsApp.addEventListener(
+        "click",
+        function () {
+
+            mostrarMensajeWhatsApp(
+                cumpleaños
             );
 
         }
+    );
+
+
+    bloque.appendChild(
+        botonWhatsApp
+    );
+
+}
+
     );
 
 
