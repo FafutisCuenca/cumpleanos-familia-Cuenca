@@ -2044,7 +2044,16 @@ function mostrarMensajeWhatsApp(
     contenedor.style.display =
         "block";
 
+const titulo =
+    contenedor.querySelector("h2");
 
+if (titulo) {
+
+    titulo.textContent =
+        "💌 Preparar felicitación";
+
+}
+    
     // ========================================================
     // NOMBRE VISUAL
     // ========================================================
