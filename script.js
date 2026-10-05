@@ -1289,21 +1289,77 @@ function mostrarCumpleanosDeHoy() {
         hoy.getMonth() + 1;
 
 
-const cumpleañosHoy = cumpleañosFamilia.filter(cumpleaños => {
-    if (!cumpleaños.fecha) return false;
+    // ========================================================
+    // BUSCAR CUMPLEAÑOS DE HOY
+    // familia.json utiliza DD-MM
+    // ========================================================
 
-    const partes = cumpleaños.fecha.trim().split("-");
-    if (partes.length !== 2) return false;
+    const cumpleañosHoy =
+        cumpleañosFamilia.filter(
+            cumpleaños => {
 
-    const diaCumpleaños = parseInt(partes[0], 10);
-    const mesCumpleaños = parseInt(partes[1], 10);
+                if (!cumpleaños.fecha) {
+                    return false;
+                }
 
-    return diaCumpleaños === dia && mesCumpleaños === mes;
-});
 
-console.log("Fecha de hoy:", `${dia}-${mes}`);
-console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
+                const partes =
+                    cumpleaños.fecha
+                        .trim()
+                        .split("-");
 
+
+                if (
+                    partes.length !== 2
+                ) {
+
+                    return false;
+
+                }
+
+
+                const diaCumpleaños =
+                    parseInt(
+                        partes[0],
+                        10
+                    );
+
+
+                const mesCumpleaños =
+                    parseInt(
+                        partes[1],
+                        10
+                    );
+
+
+                return (
+                    diaCumpleaños === dia &&
+                    mesCumpleaños === mes
+                );
+
+            }
+        );
+
+
+    // ========================================================
+    // CONSOLA DE VERIFICACIÓN
+    // ========================================================
+
+    console.log(
+        "Fecha de hoy:",
+        `${dia}-${mes}`
+    );
+
+
+    console.log(
+        "Cumpleaños encontrados hoy:",
+        cumpleañosHoy
+    );
+
+
+    // ========================================================
+    // CONTENEDOR PRINCIPAL
+    // ========================================================
 
     const contenedor =
         document.getElementById(
@@ -1315,13 +1371,17 @@ console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
         !contenedor
     ) {
 
+        console.warn(
+            "No se encontró el contenedor cumpleanosHoy."
+        );
+
         return;
 
     }
 
 
     // ========================================================
-    // NO HAY CUMPLEAÑOS
+    // SI NO HAY CUMPLEAÑOS
     // ========================================================
 
     if (
@@ -1335,6 +1395,10 @@ console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
 
     }
 
+
+    // ========================================================
+    // MOSTRAR SECCIÓN
+    // ========================================================
 
     contenedor.style.display =
         "block";
@@ -1358,13 +1422,30 @@ console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
         );
 
 
+    if (
+        !nombre ||
+        !mensaje ||
+        !boton
+    ) {
+
+        console.warn(
+            "No se encontraron los elementos de Cumpleaños de hoy."
+        );
+
+        return;
+
+    }
+
+
+    // ========================================================
+    // LIMPIAR CONTENIDO ANTERIOR
+    // ========================================================
+
     nombre.innerHTML =
         "";
 
-
     mensaje.innerHTML =
         "";
-
 
     boton.innerHTML =
         "";
@@ -1376,6 +1457,10 @@ console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
 
     cumpleañosHoy.forEach(
         cumpleaños => {
+
+            // ==================================================
+            // BLOQUE DEL CUMPLEAÑOS
+            // ==================================================
 
             const bloque =
                 document.createElement(
@@ -1397,15 +1482,16 @@ console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
                 );
 
 
-            // ==================================================
-            // NOMBRE + INDICADOR VISUAL DE FINADO
-            // ==================================================
-
             nombrePersona.textContent =
                 `🎂 ${cumpleaños.nombre}`;
 
+
+            // ==================================================
+            // INDICADOR DE FINADO
+            // ==================================================
+
             if (
-                cumpleaños.estatus === "Finado"
+                esFinado(cumpleaños)
             ) {
 
                 nombrePersona.textContent +=
@@ -1429,13 +1515,60 @@ console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
                 "#ff4081";
 
 
+            // ==================================================
+            // IMPORTANTE
+            // EL NOMBRE SE AGREGA DIRECTAMENTE
+            // AL CONTENEDOR VISIBLE
+            // ==================================================
+
             nombre.appendChild(
                 nombrePersona
             );
 
 
             // ==================================================
-            // MENSAJE
+            // SI ESTÁ FINADO
+            // NO MOSTRAR WHATSAPP
+            // ==================================================
+
+            if (
+                esFinado(cumpleaños)
+            ) {
+
+                const memoria =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                memoria.textContent =
+                    "🕊️ En memoria de nuestro familiar";
+
+
+                memoria.style.marginTop =
+                    "8px";
+
+
+                memoria.style.color =
+                    "#777";
+
+
+                memoria.style.fontStyle =
+                    "italic";
+
+
+                nombre.appendChild(
+                    memoria
+                );
+
+
+                return;
+
+            }
+
+
+            // ==================================================
+            // MENSAJE DE FELICITACIÓN
             // ==================================================
 
             const texto =
@@ -1445,7 +1578,7 @@ console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
 
 
             // ==================================================
-            // VISTA PREVIA
+            // VISTA PREVIA DEL MENSAJE
             // ==================================================
 
             const vistaPrevia =
@@ -1456,6 +1589,10 @@ console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
 
             vistaPrevia.textContent =
                 texto;
+
+
+            vistaPrevia.style.marginTop =
+                "10px";
 
 
             vistaPrevia.id =
@@ -1520,21 +1657,6 @@ console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
                 botonWhatsApp
             );
 
-
-            bloque.appendChild(
-                nombrePersona
-            );
-
-
-            bloque.appendChild(
-                vistaPrevia
-            );
-
-
-            bloque.appendChild(
-                botonWhatsApp
-            );
-
         }
     );
 
@@ -1546,8 +1668,6 @@ console.log("Cumpleaños encontrados hoy:", cumpleañosHoy);
     actualizarConfirmacionHoy();
 
 }
-
-
 // ============================================================
 // CREAR MENSAJE DE CUMPLEAÑOS
 // ============================================================
