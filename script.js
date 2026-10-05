@@ -1,4 +1,12 @@
-document.addEventListener("DOMContentLoaded", iniciarCalendario);
+// ============================================================
+// FAMILIA CUENCA
+// CALENDARIO DE CUMPLEAÑOS Y ESTADÍSTICAS
+// ============================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    iniciarCalendario
+);
 
 
 // ============================================================
@@ -6,7 +14,7 @@ document.addEventListener("DOMContentLoaded", iniciarCalendario);
 // ============================================================
 
 const GRUPO_WHATSAPP =
-    "https://chat.whatsapp.com/IvI6oayIIoEJ8Wn7EWQxO0?s=cl&p=i&mlu=0";
+    "https://chat.whatsapp.com/";
 
 
 // ============================================================
@@ -15,9 +23,10 @@ const GRUPO_WHATSAPP =
 
 let cumpleañosFamilia = [];
 
-let fechaCalendario = new Date();
+let fechaCalendario =
+    new Date();
 
-let estadisticasFamilia = null;
+let estadisticasFamilia = {};
 
 
 // ============================================================
@@ -46,295 +55,195 @@ const nombresMeses = [
 
 function iniciarCalendario() {
 
-    const calendario =
-        document.getElementById("calendario");
-
-    if (!calendario) {
-
-        console.error(
-            "No se encontró el calendario."
-        );
-
-        return;
-    }
-
     cargarCumpleaños();
 
 }
 
 
 // ============================================================
-// CARGAR BIRTHDAYS.JSON
+// CARGAR CUMPLEAÑOS
 // ============================================================
 
-function cargarCumpleaños() {
+async function cargarCumpleaños() {
 
-    fetch("birthdays.json")
+    try {
 
-        .then(response => {
+        const respuesta =
+            await fetch("birthdays.json");
 
-            if (!response.ok) {
+        if (!respuesta.ok) {
 
-                throw new Error(
-                    `No se pudo cargar birthdays.json. Código HTTP: ${response.status}`
-                );
-
-            }
-
-            return response.json();
-
-        })
-
-        .then(data => {
-
-            if (!Array.isArray(data)) {
-
-                throw new Error(
-                    "birthdays.json debe contener una lista de cumpleaños."
-                );
-
-            }
-
-
-            // ====================================================
-            // VALIDAR REGISTROS
-            // ====================================================
-
-            cumpleañosFamilia =
-                data.filter(cumpleaños => {
-
-                    if (
-                        !cumpleaños.nombre ||
-                        !cumpleaños.fecha
-                    ) {
-
-                        console.warn(
-                            "Registro incompleto:",
-                            cumpleaños
-                        );
-
-                        return false;
-
-                    }
-
-
-                    if (
-                        !esFechaValida(
-                            cumpleaños.fecha
-                        )
-                    ) {
-
-                        console.warn(
-                            `Fecha inválida para ${cumpleaños.nombre}: ${cumpleaños.fecha}`
-                        );
-
-                        return false;
-
-                    }
-
-
-                    return true;
-
-                });
-
-
-            // ====================================================
-            // MOSTRAR CALENDARIO
-            // ====================================================
-
-            mostrarCalendario();
-
-
-            // ====================================================
-            // REVISAR CUMPLEAÑOS DE HOY
-            // ====================================================
-
-            mostrarCumpleanosDeHoy();
-
-
-            // ====================================================
-            // CALCULAR ESTADÍSTICAS
-            // ====================================================
-
-            estadisticasFamilia = calcularEstadisticas();
-
-            mostrarEstadisticas();
-            
-            // ====================================================
-// CONSOLA - INEGI CUENCA
-// ====================================================
-
-console.log(
-    "========================================"
-);
-
-console.log(
-    "        INEGI CUENCA"
-);
-
-console.log(
-    "  Estadísticas de la Familia Cuenca"
-);
-
-console.log(
-    "========================================"
-);
-
-console.log(
-    "Total:",
-    estadisticasFamilia.total
-);
-
-console.log(
-    "Mujeres:",
-    estadisticasFamilia.mujeres
-);
-
-console.log(
-    "Hombres:",
-    estadisticasFamilia.hombres
-);
-
-console.log(
-    "Vivos:",
-    estadisticasFamilia.vivos
-);
-
-console.log(
-    "Finados:",
-    estadisticasFamilia.finados
-);
-
-console.log(
-    "Por mes:",
-    estadisticasFamilia.porMes
-);
-
-console.log(
-    "Por país:",
-    estadisticasFamilia.porPais
-);
-
-console.log(
-    "Por estado:",
-    estadisticasFamilia.porEstado
-);
-
-console.log(
-    "Por ciudad:",
-    estadisticasFamilia.porCiudad
-);
-
-console.log(
-    "Fechas compartidas:",
-    obtenerFechasCompartidas(
-        estadisticasFamilia
-    )
-);
-
-console.log(
-    "Mes con más cumpleaños:",
-    obtenerMesMayor(
-        estadisticasFamilia
-    )
-);
-
-console.log(
-    "========================================"
-);
-        })
-
-        .catch(error => {
-
-            console.error(
-                "Error al cargar los cumpleaños:",
-                error
+            throw new Error(
+                "No se pudo cargar birthdays.json"
             );
 
-            mostrarError(error);
+        }
 
-        });
+        const datos =
+            await respuesta.json();
+
+
+        // --------------------------------------------------------
+        // VALIDAR INFORMACIÓN
+        // --------------------------------------------------------
+
+        cumpleañosFamilia =
+            datos.filter(
+                persona =>
+                    persona.nombre &&
+                    persona.fecha &&
+                    esFechaValida(persona.fecha)
+            );
+
+
+        // --------------------------------------------------------
+        // CALCULAR ESTADÍSTICAS
+        // --------------------------------------------------------
+
+        estadisticasFamilia =
+            calcularEstadisticas();
+
+
+        // --------------------------------------------------------
+        // MOSTRAR CALENDARIO
+        // --------------------------------------------------------
+
+        mostrarCalendario();
+
+
+        // --------------------------------------------------------
+        // MOSTRAR CUMPLEAÑOS DE HOY
+        // --------------------------------------------------------
+
+        mostrarCumpleanosDeHoy();
+
+
+        // --------------------------------------------------------
+        // MOSTRAR ESTADÍSTICAS
+        // --------------------------------------------------------
+
+        mostrarEstadisticas();
+
+
+        // --------------------------------------------------------
+        // CONSOLA
+        // --------------------------------------------------------
+
+        console.log(
+            "INEGI CUENCA:",
+            estadisticasFamilia
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error cargando cumpleaños:",
+            error
+        );
+
+        mostrarError(
+            "No fue posible cargar la información de cumpleaños."
+        );
+
+    }
 
 }
 
 
 // ============================================================
-// ESTADÍSTICAS — INEGI CUENCA
+// INDICADOR VISUAL PARA FAMILIARES FINADOS
+// ============================================================
+
+function crearIconoFinado() {
+
+    const icono =
+        document.createElement("span");
+
+    icono.textContent =
+        " 🕊️";
+
+    icono.style.marginLeft =
+        "5px";
+
+    icono.style.fontSize =
+        "16px";
+
+    icono.title =
+        "Familiar finado";
+
+    icono.setAttribute(
+        "aria-label",
+        "Familiar finado"
+    );
+
+    return icono;
+
+}
+
+
+// ============================================================
+// MOSTRAR NOMBRE SEGÚN ESTATUS
+// ============================================================
+
+function crearNombreConEstatus(cumpleaños) {
+
+    const contenedor =
+        document.createElement("span");
+
+    const nombre =
+        document.createElement("span");
+
+    nombre.textContent =
+        cumpleaños.nombre;
+
+    contenedor.appendChild(
+        nombre
+    );
+
+
+    // --------------------------------------------------------
+    // SI ESTÁ FINADO, MOSTRAR 🕊️
+    // --------------------------------------------------------
+
+    if (
+        cumpleaños.estatus === "Finado"
+    ) {
+
+        contenedor.appendChild(
+            crearIconoFinado()
+        );
+
+    }
+
+
+    return contenedor;
+
+}
+
+
+// ============================================================
+// CALCULAR ESTADÍSTICAS
 // ============================================================
 
 function calcularEstadisticas() {
 
-    const datos =
-        cumpleañosFamilia;
-
-
     const estadisticas = {
 
-        // ====================================================
-        // TOTAL
-        // ====================================================
-
         total:
-            datos.length,
+            cumpleañosFamilia.length,
 
+        mujeres: 0,
 
-        // ====================================================
-        // GÉNERO
-        // ====================================================
+        hombres: 0,
 
-        mujeres:
-            datos.filter(
-                persona =>
-                    persona.genero === "F"
-            ).length,
+        vivos: 0,
 
-        hombres:
-            datos.filter(
-                persona =>
-                    persona.genero === "M"
-            ).length,
+        finados: 0,
 
-
-        // ====================================================
-        // ESTATUS
-        // ====================================================
-
-        vivos:
-            datos.filter(
-                persona =>
-                    persona.estatus === "Vivo"
-            ).length,
-
-        finados:
-            datos.filter(
-                persona =>
-                    persona.estatus === "Finado"
-            ).length,
-
-
-        // ====================================================
-        // CUMPLEAÑOS POR MES
-        // ====================================================
-
-        porMes: [
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0
-],
-
-
-        // ====================================================
-        // GEOGRAFÍA
-        // ====================================================
+        porMes:
+            new Array(12).fill(0),
 
         porPais: {},
 
@@ -342,151 +251,200 @@ function calcularEstadisticas() {
 
         porCiudad: {},
 
-
-        // ====================================================
-        // FECHAS COMPARTIDAS
-        // ====================================================
-
-        fechasCompartidas: {}
+        fechasCompartidas: []
 
     };
 
 
-    // ========================================================
+    // --------------------------------------------------------
     // RECORRER FAMILIA
-    // ========================================================
+    // --------------------------------------------------------
 
-    datos.forEach(
+    cumpleañosFamilia.forEach(
         persona => {
 
 
-            // ==================================================
+            // ------------------------------------------------
+            // GÉNERO
+            // ------------------------------------------------
+
+            if (
+                persona.genero === "F"
+            ) {
+
+                estadisticas.mujeres++;
+
+            }
+
+            else if (
+                persona.genero === "M"
+            ) {
+
+                estadisticas.hombres++;
+
+            }
+
+
+            // ------------------------------------------------
+            // ESTATUS
+            // ------------------------------------------------
+
+            if (
+                persona.estatus === "Finado"
+            ) {
+
+                estadisticas.finados++;
+
+            }
+
+            else {
+
+                estadisticas.vivos++;
+
+            }
+
+
+            // ------------------------------------------------
             // MES
-            // ==================================================
+            // ------------------------------------------------
 
             const partes =
                 persona.fecha.split("-");
 
+            const dia =
+                parseInt(
+                    partes[0],
+                    10
+                );
 
             const mes =
-    parseInt(partes[1], 10);
+                parseInt(
+                    partes[1],
+                    10
+                );
 
-if (
-    mes >= 1 &&
-    mes <= 12
-) {
+            if (
+                mes >= 1 &&
+                mes <= 12
+            ) {
 
-    estadisticas.porMes[mes - 1]++;
+                estadisticas.porMes[
+                    mes - 1
+                ]++;
 
-}
+            }
 
 
-            // ==================================================
+            // ------------------------------------------------
             // PAÍS
-            // ==================================================
+            // ------------------------------------------------
+
+            const pais =
+                persona.pais ||
+                "No especificado";
 
             if (
-                persona.pais
+                !estadisticas.porPais[pais]
             ) {
 
-                if (
-                    !estadisticas.porPais[
-                        persona.pais
-                    ]
-                ) {
-
-                    estadisticas.porPais[
-                        persona.pais
-                    ] = 0;
-
-                }
-
-
-                estadisticas.porPais[
-                    persona.pais
-                ]++;
+                estadisticas.porPais[pais] =
+                    0;
 
             }
 
+            estadisticas.porPais[pais]++;
 
-            // ==================================================
+
+            // ------------------------------------------------
             // ESTADO
-            // ==================================================
+            // ------------------------------------------------
+
+            const estado =
+                persona.estado ||
+                "No especificado";
 
             if (
-                persona.estado
+                !estadisticas.porEstado[estado]
             ) {
 
-                if (
-                    !estadisticas.porEstado[
-                        persona.estado
-                    ]
-                ) {
-
-                    estadisticas.porEstado[
-                        persona.estado
-                    ] = 0;
-
-                }
-
-
-                estadisticas.porEstado[
-                    persona.estado
-                ]++;
+                estadisticas.porEstado[estado] =
+                    0;
 
             }
 
+            estadisticas.porEstado[estado]++;
 
-            // ==================================================
+
+            // ------------------------------------------------
             // CIUDAD
-            // ==================================================
+            // ------------------------------------------------
+
+            const ciudad =
+                persona.ciudad ||
+                "No especificada";
 
             if (
-                persona.ciudad
+                !estadisticas.porCiudad[ciudad]
             ) {
 
-                if (
-                    !estadisticas.porCiudad[
-                        persona.ciudad
-                    ]
-                ) {
-
-                    estadisticas.porCiudad[
-                        persona.ciudad
-                    ] = 0;
-
-                }
-
-
-                estadisticas.porCiudad[
-                    persona.ciudad
-                ]++;
+                estadisticas.porCiudad[ciudad] =
+                    0;
 
             }
 
+            estadisticas.porCiudad[ciudad]++;
 
-            // ==================================================
-            // FECHAS COMPARTIDAS
-            // ==================================================
+        }
+    );
+
+
+    // ========================================================
+    // FECHAS COMPARTIDAS
+    // ========================================================
+
+    const fechas = {};
+
+
+    cumpleañosFamilia.forEach(
+        persona => {
 
             if (
-                !estadisticas.fechasCompartidas[
-                    persona.fecha
-                ]
+                !fechas[persona.fecha]
             ) {
 
-                estadisticas.fechasCompartidas[
-                    persona.fecha
-                ] = [];
+                fechas[persona.fecha] =
+                    [];
 
             }
 
-
-            estadisticas.fechasCompartidas[
-                persona.fecha
-            ].push(
-                persona.nombre
+            fechas[persona.fecha].push(
+                persona
             );
+
+        }
+    );
+
+
+    Object.keys(fechas).forEach(
+        fecha => {
+
+            if (
+                fechas[fecha].length > 1
+            ) {
+
+                estadisticas
+                    .fechasCompartidas
+                    .push({
+
+                        fecha:
+                            fecha,
+
+                        personas:
+                            fechas[fecha]
+
+                    });
+
+            }
 
         }
     );
@@ -501,50 +459,52 @@ if (
 // OBTENER MES CON MÁS CUMPLEAÑOS
 // ============================================================
 
-function obtenerMesMayor(
-    estadisticas
-) {
+function obtenerMesMayor() {
 
-    let mesMayor = null;
+    if (
+        !estadisticasFamilia.porMes
+    ) {
 
-    let cantidadMayor = 0;
+        return null;
+
+    }
 
 
-    Object.entries(
-        estadisticas.porMes
-    ).forEach(
-        ([mes, cantidad]) => {
+    let mayor =
+        0;
 
-            if (
-                cantidad > cantidadMayor
-            ) {
+    let indice =
+        0;
 
-                cantidadMayor =
-                    cantidad;
 
-                mesMayor =
-                    mes;
+    estadisticasFamilia
+        .porMes
+        .forEach(
+            (cantidad, i) => {
+
+                if (
+                    cantidad > mayor
+                ) {
+
+                    mayor =
+                        cantidad;
+
+                    indice =
+                        i;
+
+                }
 
             }
-
-        }
-    );
+        );
 
 
     return {
 
         mes:
-            mesMayor,
-
-        nombreMes:
-            mesMayor
-                ? nombresMeses[
-                    parseInt(mesMayor, 10) - 1
-                  ]
-                : "",
+            nombresMeses[indice],
 
         cantidad:
-            cantidadMayor
+            mayor
 
     };
 
@@ -555,58 +515,32 @@ function obtenerMesMayor(
 // OBTENER FECHAS COMPARTIDAS
 // ============================================================
 
-function obtenerFechasCompartidas(
-    estadisticas
-) {
+function obtenerFechasCompartidas() {
 
-    return Object.entries(
-        estadisticas.fechasCompartidas
-    )
-
-        .filter(
-            ([fecha, personas]) =>
-                personas.length > 1
-        )
-
-        .map(
-            ([fecha, personas]) => ({
-
-                fecha:
-                    fecha,
-
-                personas:
-                    personas
-
-            })
-        );
+    return
+        estadisticasFamilia
+            .fechasCompartidas ||
+        [];
 
 }
 
 
 // ============================================================
-// MOSTRAR CALENDARIO DEL MES
+// MOSTRAR CALENDARIO
 // ============================================================
 
 function mostrarCalendario() {
 
-    const cuerpo =
+    const calendario =
         document.getElementById(
-            "cuerpoCalendario"
-        );
-
-    const titulo =
-        document.getElementById(
-            "mesActual"
+            "calendario"
         );
 
 
-    if (
-        !cuerpo ||
-        !titulo
-    ) {
+    if (!calendario) {
 
-        console.error(
-            "No se encontraron los elementos del calendario."
+        console.warn(
+            "No existe el elemento #calendario"
         );
 
         return;
@@ -614,11 +548,7 @@ function mostrarCalendario() {
     }
 
 
-    // ========================================================
-    // LIMPIAR CALENDARIO
-    // ========================================================
-
-    cuerpo.innerHTML =
+    calendario.innerHTML =
         "";
 
 
@@ -629,17 +559,27 @@ function mostrarCalendario() {
         fechaCalendario.getMonth();
 
 
-    // ========================================================
-    // TÍTULO
-    // ========================================================
+    // --------------------------------------------------------
+    // TÍTULO DEL MES
+    // --------------------------------------------------------
 
-    titulo.textContent =
-        `${nombresMeses[mes]} ${año}`;
+    const tituloMes =
+        document.getElementById(
+            "mesActual"
+        );
 
 
-    // ========================================================
+    if (tituloMes) {
+
+        tituloMes.textContent =
+            `${nombresMeses[mes]} ${año}`;
+
+    }
+
+
+    // --------------------------------------------------------
     // PRIMER DÍA
-    // ========================================================
+    // --------------------------------------------------------
 
     const primerDia =
         new Date(
@@ -649,9 +589,9 @@ function mostrarCalendario() {
         );
 
 
-    // ========================================================
-    // ÚLTIMO DÍA
-    // ========================================================
+    // --------------------------------------------------------
+    // NÚMERO DE DÍAS
+    // --------------------------------------------------------
 
     const ultimoDia =
         new Date(
@@ -665,65 +605,51 @@ function mostrarCalendario() {
         ultimoDia.getDate();
 
 
-    // ========================================================
+    // --------------------------------------------------------
     // DÍA DE LA SEMANA
-    //
-    // JavaScript:
-    // Domingo = 0
-    // Lunes = 1
-    //
-    // Nosotros:
-    // Lunes = 0
-    // Domingo = 6
-    // ========================================================
+    // --------------------------------------------------------
 
-    let primerDiaSemana =
+    let diaSemana =
         primerDia.getDay();
 
 
-    primerDiaSemana =
-        primerDiaSemana === 0
+    // Convertir domingo = 0
+    // a lunes = 0
+
+    diaSemana =
+        diaSemana === 0
             ? 6
-            : primerDiaSemana - 1;
+            : diaSemana - 1;
 
 
-    let fila =
-        document.createElement(
-            "tr"
-        );
-
-
-    // ========================================================
+    // --------------------------------------------------------
     // ESPACIOS ANTES DEL PRIMER DÍA
-    // ========================================================
+    // --------------------------------------------------------
 
     for (
         let i = 0;
-        i < primerDiaSemana;
+        i < diaSemana;
         i++
     ) {
 
-        const celda =
+        const espacio =
             document.createElement(
-                "td"
+                "div"
             );
 
+        espacio.className =
+            "dia vacio";
 
-        celda.classList.add(
-            "diaVacio"
-        );
-
-
-        fila.appendChild(
-            celda
+        calendario.appendChild(
+            espacio
         );
 
     }
 
 
-    // ========================================================
+    // --------------------------------------------------------
     // CREAR DÍAS
-    // ========================================================
+    // --------------------------------------------------------
 
     for (
         let dia = 1;
@@ -734,71 +660,12 @@ function mostrarCalendario() {
         const celda =
             crearCeldaDia(
                 dia,
-                mes + 1,
+                mes,
                 año
             );
 
-
-        fila.appendChild(
+        calendario.appendChild(
             celda
-        );
-
-
-        // ====================================================
-        // CERRAR FILA CADA DOMINGO
-        // ====================================================
-
-        if (
-            (primerDiaSemana + dia) % 7 === 0
-        ) {
-
-            cuerpo.appendChild(
-                fila
-            );
-
-
-            fila =
-                document.createElement(
-                    "tr"
-                );
-
-        }
-
-    }
-
-
-    // ========================================================
-    // COMPLETAR ÚLTIMA FILA
-    // ========================================================
-
-    if (
-        fila.children.length > 0
-    ) {
-
-        while (
-            fila.children.length < 7
-        ) {
-
-            const celda =
-                document.createElement(
-                    "td"
-                );
-
-
-            celda.classList.add(
-                "diaVacio"
-            );
-
-
-            fila.appendChild(
-                celda
-            );
-
-        }
-
-
-        cuerpo.appendChild(
-            fila
         );
 
     }
@@ -807,7 +674,7 @@ function mostrarCalendario() {
 
 
 // ============================================================
-// CREAR CELDA DE UN DÍA
+// CREAR CELDA DEL DÍA
 // ============================================================
 
 function crearCeldaDia(
@@ -818,74 +685,70 @@ function crearCeldaDia(
 
     const celda =
         document.createElement(
-            "td"
+            "div"
         );
 
+    celda.className =
+        "dia";
 
-    // ========================================================
+
+    // --------------------------------------------------------
     // NÚMERO DEL DÍA
-    // ========================================================
+    // --------------------------------------------------------
 
     const numero =
         document.createElement(
-            "span"
+            "div"
         );
-
 
     numero.className =
         "numeroDia";
 
-
     numero.textContent =
         dia;
-
 
     celda.appendChild(
         numero
     );
 
 
-    // ========================================================
+    // --------------------------------------------------------
+    // FECHA EN FORMATO DD-MM
+    // --------------------------------------------------------
+
+    const diaTexto =
+        String(dia).padStart(
+            2,
+            "0"
+        );
+
+    const mesTexto =
+        String(mes + 1).padStart(
+            2,
+            "0"
+        );
+
+    const fecha =
+        `${diaTexto}-${mesTexto}`;
+
+
+    // --------------------------------------------------------
     // BUSCAR CUMPLEAÑOS
-    // ========================================================
+    // --------------------------------------------------------
 
-    const cumpleañosDelDia =
+    const cumpleaños =
         cumpleañosFamilia.filter(
-            cumpleaños => {
-
-                const partes =
-                    cumpleaños.fecha.split("-");
-
-
-                const diaCumpleaños =
-                    parseInt(
-                        partes[0],
-                        10
-                    );
-
-
-                const mesCumpleaños =
-                    parseInt(
-                        partes[1],
-                        10
-                    );
-
-
-                return (
-                    diaCumpleaños === dia &&
-                    mesCumpleaños === mes
-                );
-
-            }
+            persona =>
+                persona.fecha === fecha
         );
 
 
-    // ========================================================
-    // SI HAY CUMPLEAÑOS
-    // ========================================================
+    // --------------------------------------------------------
+    // MOSTRAR CUMPLEAÑOS
+    // --------------------------------------------------------
 
     if (
-        cumpleañosDelDia.length > 0
+        cumpleaños.length > 0
     ) {
 
         celda.classList.add(
@@ -895,20 +758,15 @@ function crearCeldaDia(
 
         const indicador =
             document.createElement(
-                "span"
+                "div"
             );
-
 
         indicador.className =
             "indicadorCumpleanos";
 
 
-        // ====================================================
-        // MOSTRAR PERSONAS
-        // ====================================================
-
-        cumpleañosDelDia.forEach(
-            cumpleaños => {
+        cumpleaños.forEach(
+            cumpleañosPersona => {
 
                 const nombre =
                     document.createElement(
@@ -916,8 +774,33 @@ function crearCeldaDia(
                     );
 
 
-                nombre.textContent =
-                    `🎂 ${cumpleaños.nombre}`;
+                // ------------------------------------------------
+                // ICONO DE CUMPLEAÑOS
+                // ------------------------------------------------
+
+                const iconoCumpleanos =
+                    document.createElement(
+                        "span"
+                    );
+
+                iconoCumpleanos.textContent =
+                    "🎂 ";
+
+
+                nombre.appendChild(
+                    iconoCumpleanos
+                );
+
+
+                // ------------------------------------------------
+                // NOMBRE + 🕊️ SI CORRESPONDE
+                // ------------------------------------------------
+
+                nombre.appendChild(
+                    crearNombreConEstatus(
+                        cumpleañosPersona
+                    )
+                );
 
 
                 indicador.appendChild(
@@ -933,45 +816,46 @@ function crearCeldaDia(
         );
 
 
-        // ====================================================
-        // DETECTAR SI ES HOY
-        // ====================================================
+        // --------------------------------------------------------
+        // CLICK EN DÍA
+        // --------------------------------------------------------
 
-        const hoy =
-            new Date();
-
-
-        const esHoy =
-            hoy.getDate() === dia &&
-            hoy.getMonth() + 1 === mes &&
-            hoy.getFullYear() === año;
-
-
-        if (
-            esHoy
-        ) {
-
-            celda.classList.add(
-                "hoy"
-            );
-
-        }
-
-
-        // ====================================================
-        // CLICK EN EL DÍA
-        // ====================================================
+        celda.style.cursor =
+            "pointer";
 
         celda.addEventListener(
             "click",
-            function () {
+            () => {
 
                 mostrarDetalleCumpleanos(
-                    cumpleañosDelDia,
-                    esHoy
+                    cumpleaños,
+                    dia,
+                    mes,
+                    año
                 );
 
             }
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // MARCAR HOY
+    // --------------------------------------------------------
+
+    const hoy =
+        new Date();
+
+
+    if (
+        dia === hoy.getDate() &&
+        mes === hoy.getMonth() &&
+        año === hoy.getFullYear()
+    ) {
+
+        celda.classList.add(
+            "hoy"
         );
 
     }
@@ -987,8 +871,10 @@ function crearCeldaDia(
 // ============================================================
 
 function mostrarDetalleCumpleanos(
-    cumpleañosDelDia,
-    esHoy = false
+    cumpleaños,
+    dia,
+    mes,
+    año
 ) {
 
     const contenedor =
@@ -996,103 +882,33 @@ function mostrarDetalleCumpleanos(
             "detalleCumpleanos"
         );
 
-    const nombre =
-        document.getElementById(
-            "detalleNombre"
-        );
 
-    const fecha =
-        document.getElementById(
-            "detalleFecha"
-        );
-
-    const boton =
-        document.getElementById(
-            "detalleBoton"
-        );
-
-
-    if (
-        !contenedor ||
-        !nombre ||
-        !fecha ||
-        !boton
-    ) {
+    if (!contenedor) {
 
         return;
 
     }
 
 
-    contenedor.style.display =
-        "block";
-
-
-    nombre.innerHTML =
-        "";
-
-    boton.innerHTML =
+    contenedor.innerHTML =
         "";
 
 
-    // ========================================================
-    // TÍTULO
-    // ========================================================
+    const titulo =
+        document.createElement(
+            "h3"
+        );
 
-    if (
-        esHoy
-    ) {
+    titulo.textContent =
+        `🎉 Cumpleaños del ${dia} de ${nombresMeses[mes]}`;
 
-        nombre.innerHTML =
-            "<strong>🎂 ¡Cumpleaños de hoy!</strong>";
-
-    } else {
-
-        nombre.innerHTML =
-            "<strong>🎉 Cumpleaños de este día</strong>";
-
-    }
+    contenedor.appendChild(
+        titulo
+    );
 
 
-    // ========================================================
-    // FECHA
-    // ========================================================
-
-    fecha.textContent =
-        "Personas que cumplen años:";
-
-
-    fecha.style.margin =
-        "10px 0";
-
-
-    // ========================================================
-    // MOSTRAR PERSONAS
-    // ========================================================
-
-    cumpleañosDelDia.forEach(
-        cumpleaños => {
-
-            const bloque =
-                document.createElement(
-                    "div"
-                );
-
-
-            bloque.style.margin =
-                "12px 0";
-
-
-            bloque.style.padding =
-                "10px";
-
-
-            bloque.style.background =
-                "#fff0f5";
-
-
-            bloque.style.borderRadius =
-                "8px";
+    cumpleaños.forEach(
+        persona => {
 
 
             const nombrePersona =
@@ -1101,111 +917,105 @@ function mostrarDetalleCumpleanos(
                 );
 
 
-            nombrePersona.textContent =
-                `🎂 ${cumpleaños.nombre}`;
+            // ------------------------------------------------
+            // ICONO 🎂
+            // ------------------------------------------------
+
+            const iconoCumpleanos =
+                document.createElement(
+                    "span"
+                );
+
+            iconoCumpleanos.textContent =
+                "🎂 ";
+
+
+            nombrePersona.appendChild(
+                iconoCumpleanos
+            );
+
+
+            // ------------------------------------------------
+            // NOMBRE + 🕊️
+            // ------------------------------------------------
+
+            nombrePersona.appendChild(
+                crearNombreConEstatus(
+                    persona
+                )
+            );
 
 
             nombrePersona.style.fontWeight =
                 "bold";
 
-
             nombrePersona.style.color =
                 "#ff4081";
-
 
             nombrePersona.style.fontSize =
                 "18px";
 
 
-            bloque.appendChild(
+            contenedor.appendChild(
                 nombrePersona
             );
 
 
-            // =================================================
-            // AÑO
-            // =================================================
+            // ------------------------------------------------
+            // AÑO DE NACIMIENTO
+            // ------------------------------------------------
 
             if (
-                cumpleaños.anio
+                persona.anio
             ) {
 
-                const año =
+                const añoNacimiento =
                     document.createElement(
                         "div"
                     );
 
+                añoNacimiento.textContent =
+                    `Año de nacimiento: ${persona.anio}`;
 
-                año.textContent =
-                    `Año de nacimiento: ${cumpleaños.anio}`;
+                añoNacimiento.style.marginBottom =
+                    "10px";
 
-
-                año.style.fontSize =
-                    "13px";
-
-
-                año.style.color =
-                    "#666";
-
-
-                bloque.appendChild(
-                    año
+                contenedor.appendChild(
+                    añoNacimiento
                 );
 
             }
 
 
-            // =================================================
-            // BOTÓN DE FELICITACIÓN
-            // =================================================
+            // ------------------------------------------------
+            // BOTÓN WHATSAPP
+            // ------------------------------------------------
 
-            const botonWhatsApp =
+            const boton =
                 document.createElement(
                     "button"
                 );
 
+            boton.textContent =
+                "📲 Enviar felicitación";
 
-            botonWhatsApp.className =
-                "btn felicitar";
-
-
-            botonWhatsApp.textContent =
-                "💬 Preparar felicitación";
-
-
-            botonWhatsApp.addEventListener(
-                "click",
-                function () {
+            boton.onclick =
+                () => {
 
                     mostrarMensajeWhatsApp(
-                        cumpleaños
+                        persona
                     );
 
-                }
+                };
+
+
+            contenedor.appendChild(
+                boton
             );
 
-
-            bloque.appendChild(
-                botonWhatsApp
-            );
-
-
-            boton.appendChild(
-                bloque
-            );
 
         }
     );
-
-
-    // ========================================================
-    // LLEVAR USUARIO AL DETALLE
-    // ========================================================
-
-    contenedor.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
 
 }
 
@@ -1216,120 +1026,74 @@ function mostrarDetalleCumpleanos(
 
 function mostrarCumpleanosDeHoy() {
 
-    const hoy =
-        new Date();
-
-
-    const dia =
-        hoy.getDate();
-
-
-    const mes =
-        hoy.getMonth() + 1;
-
-
-    const cumpleañosHoy =
-        cumpleañosFamilia.filter(
-            cumpleaños => {
-
-                const partes =
-                    cumpleaños.fecha.split("-");
-
-
-                const diaCumpleaños =
-                    parseInt(
-                        partes[0],
-                        10
-                    );
-
-
-                const mesCumpleaños =
-                    parseInt(
-                        partes[1],
-                        10
-                    );
-
-
-                return (
-                    diaCumpleaños === dia &&
-                    mesCumpleaños === mes
-                );
-
-            }
-        );
-
-
     const contenedor =
         document.getElementById(
             "cumpleanosHoy"
         );
 
 
-    if (
-        !contenedor
-    ) {
+    if (!contenedor) {
 
         return;
 
     }
 
 
-    // ========================================================
-    // NO HAY CUMPLEAÑOS
-    // ========================================================
+    contenedor.innerHTML =
+        "";
+
+
+    const hoy =
+        new Date();
+
+
+    const fechaHoy =
+        `${String(
+            hoy.getDate()
+        ).padStart(2, "0")}-${String(
+            hoy.getMonth() + 1
+        ).padStart(2, "0")}`;
+
+
+    const cumpleañosHoy =
+        cumpleañosFamilia.filter(
+            persona =>
+                persona.fecha === fechaHoy
+        );
+
 
     if (
         cumpleañosHoy.length === 0
     ) {
 
-        contenedor.style.display =
-            "none";
+        contenedor.innerHTML =
+            "<p>No tenemos cumpleaños registrados para hoy.</p>";
+
+        actualizarConfirmacionHoy(
+            []
+        );
 
         return;
 
     }
 
 
-    contenedor.style.display =
-        "block";
-
-
-    const nombre =
-        document.getElementById(
-            "nombreCumpleanosHoy"
+    const titulo =
+        document.createElement(
+            "h2"
         );
 
+    titulo.textContent =
+        "🎂 ¡Cumpleaños de hoy!";
 
-    const mensaje =
-        document.getElementById(
-            "mensajeWhatsApp"
-        );
+    contenedor.appendChild(
+        titulo
+    );
 
-
-    const boton =
-        document.getElementById(
-            "botonWhatsAppHoy"
-        );
-
-
-    nombre.innerHTML =
-        "";
-
-
-    mensaje.innerHTML =
-        "";
-
-
-    boton.innerHTML =
-        "";
-
-
-    // ========================================================
-    // MOSTRAR CADA CUMPLEAÑOS DE HOY
-    // ========================================================
 
     cumpleañosHoy.forEach(
         cumpleaños => {
+
 
             const bloque =
                 document.createElement(
@@ -1337,151 +1101,140 @@ function mostrarCumpleanosDeHoy() {
                 );
 
 
-            bloque.style.marginBottom =
-                "25px";
-
-
-            // ==================================================
-            // NOMBRE
-            // ==================================================
-
             const nombrePersona =
                 document.createElement(
                     "div"
                 );
 
 
-            nombrePersona.textContent =
-                `🎂 ${cumpleaños.nombre}`;
+            // ------------------------------------------------
+            // ICONO 🎂
+            // ------------------------------------------------
+
+            const iconoCumpleanos =
+                document.createElement(
+                    "span"
+                );
+
+            iconoCumpleanos.textContent =
+                "🎂 ";
+
+
+            nombrePersona.appendChild(
+                iconoCumpleanos
+            );
+
+
+            // ------------------------------------------------
+            // NOMBRE + 🕊️
+            // ------------------------------------------------
+
+            nombrePersona.appendChild(
+                crearNombreConEstatus(
+                    cumpleaños
+                )
+            );
 
 
             nombrePersona.style.fontSize =
                 "24px";
 
-
             nombrePersona.style.fontWeight =
                 "bold";
-
 
             nombrePersona.style.color =
                 "#ff4081";
 
 
-            nombre.appendChild(
+            bloque.appendChild(
                 nombrePersona
             );
 
 
-            // ==================================================
+            // ------------------------------------------------
             // MENSAJE
-            // ==================================================
+            // ------------------------------------------------
 
-            const texto =
+            const mensaje =
                 crearMensajeCumpleanos(
                     cumpleaños
                 );
 
 
-            // ==================================================
-            // VISTA PREVIA
-            // ==================================================
+            const texto =
+                document.createElement(
+                    "p"
+                );
 
-            const vistaPrevia =
+            texto.textContent =
+                mensaje;
+
+
+            bloque.appendChild(
+                texto
+            );
+
+
+            // ------------------------------------------------
+            // PREVISUALIZACIÓN
+            // ------------------------------------------------
+
+            const preview =
                 document.createElement(
                     "div"
                 );
 
+            preview.className =
+                "previewMensaje";
 
-            vistaPrevia.textContent =
-                texto;
-
-
-            vistaPrevia.id =
-                "mensajeWhatsAppVista";
+            preview.textContent =
+                mensaje;
 
 
-            mensaje.appendChild(
-                vistaPrevia
+            bloque.appendChild(
+                preview
             );
 
 
-            // ==================================================
+            // ------------------------------------------------
             // BOTÓN WHATSAPP
-            // ==================================================
+            // ------------------------------------------------
 
-            const botonWhatsApp =
+            const boton =
                 document.createElement(
-                    "a"
+                    "button"
                 );
 
-
-            botonWhatsApp.href =
-                `https://wa.me/?text=${encodeURIComponent(texto)}`;
-
-
-            botonWhatsApp.target =
-                "_blank";
+            boton.textContent =
+                "📲 Enviar felicitación por WhatsApp";
 
 
-            botonWhatsApp.rel =
-                "noopener";
+            boton.onclick =
+                () => {
 
-
-            botonWhatsApp.className =
-                "btn whatsapp";
-
-
-            botonWhatsApp.textContent =
-                "💬 Abrir WhatsApp";
-
-
-            botonWhatsApp.addEventListener(
-                "click",
-                function () {
-
-                    setTimeout(
-                        function () {
-
-                            mostrarBotonConfirmacion(
-                                cumpleaños
-                            );
-
-                        },
-                        500
+                    mostrarMensajeWhatsApp(
+                        cumpleaños
                     );
 
-                }
-            );
-
-
-            boton.appendChild(
-                botonWhatsApp
-            );
+                };
 
 
             bloque.appendChild(
-                nombrePersona
+                boton
             );
 
 
-            bloque.appendChild(
-                vistaPrevia
-            );
-
-
-            bloque.appendChild(
-                botonWhatsApp
+            contenedor.appendChild(
+                bloque
             );
 
         }
     );
 
 
-    // ========================================================
-    // VERIFICAR CONFIRMACIÓN
-    // ========================================================
-
-    actualizarConfirmacionHoy();
+    actualizarConfirmacionHoy(
+        cumpleañosHoy
+    );
 
 }
 
@@ -1516,203 +1269,149 @@ function mostrarMensajeWhatsApp(
 
     const contenedor =
         document.getElementById(
-            "cumpleanosHoy"
-        );
-
-
-    const nombre =
-        document.getElementById(
-            "nombreCumpleanosHoy"
-        );
-
-
-    const mensaje =
-        document.getElementById(
             "mensajeWhatsApp"
         );
 
 
-    const boton =
-        document.getElementById(
-            "botonWhatsAppHoy"
-        );
-
-
-    if (
-        !contenedor ||
-        !nombre ||
-        !mensaje ||
-        !boton
-    ) {
+    if (!contenedor) {
 
         return;
 
     }
 
 
-    contenedor.style.display =
-        "block";
-
-
-    nombre.innerHTML =
-        `🎂 ${cumpleaños.nombre}`;
-
-
-    const texto =
-        crearMensajeCumpleanos(
-            cumpleaños
-        );
-
-
-    mensaje.textContent =
-        texto;
-
-
-    boton.innerHTML =
+    contenedor.innerHTML =
         "";
 
 
-    // ========================================================
-    // CONTENEDOR DE BOTONES
-    // ========================================================
+    // --------------------------------------------------------
+    // NOMBRE VISUAL
+    // --------------------------------------------------------
 
-    const contenedorBotones =
+    const nombre =
         document.createElement(
             "div"
         );
 
 
-    contenedorBotones.style.marginTop =
-        "15px";
-
-
-    // ========================================================
-    // BOTÓN GRUPO
-    // ========================================================
-
-    const botonGrupo =
+    const nombreTitulo =
         document.createElement(
-            "a"
+            "div"
         );
 
 
-    botonGrupo.href =
-        `https://wa.me/?text=${encodeURIComponent(texto)}`;
+    const iconoCumpleanos =
+        document.createElement(
+            "span"
+        );
+
+    iconoCumpleanos.textContent =
+        "🎂 ";
 
 
-    botonGrupo.target =
-        "_blank";
-
-
-    botonGrupo.rel =
-        "noopener";
-
-
-    botonGrupo.className =
-        "btn whatsapp";
-
-
-    botonGrupo.textContent =
-        "💬 Enviar al grupo Familia Cuenca";
-
-
-    botonGrupo.addEventListener(
-        "click",
-        function () {
-
-            setTimeout(
-                function () {
-
-                    mostrarBotonConfirmacion(
-                        cumpleaños,
-                        "grupo"
-                    );
-
-                },
-                500
-            );
-
-        }
+    nombreTitulo.appendChild(
+        iconoCumpleanos
     );
 
 
-    // ========================================================
-    // BOTÓN PERSONAL
-    // ========================================================
+    nombreTitulo.appendChild(
+        crearNombreConEstatus(
+            cumpleaños
+        )
+    );
 
-    const botonPersonal =
-        document.createElement(
-            "a"
+
+    nombre.appendChild(
+        nombreTitulo
+    );
+
+
+    nombre.style.fontSize =
+        "22px";
+
+    nombre.style.fontWeight =
+        "bold";
+
+    nombre.style.color =
+        "#ff4081";
+
+
+    contenedor.appendChild(
+        nombre
+    );
+
+
+    // --------------------------------------------------------
+    // MENSAJE
+    // --------------------------------------------------------
+
+    const mensaje =
+        crearMensajeCumpleanos(
+            cumpleaños
         );
 
 
-    botonPersonal.href =
-        `https://wa.me/?text=${encodeURIComponent(texto)}`;
+    const texto =
+        document.createElement(
+            "textarea"
+        );
+
+    texto.value =
+        mensaje;
+
+    texto.readOnly =
+        true;
+
+    texto.style.width =
+        "100%";
+
+    texto.style.minHeight =
+        "180px";
 
 
-    botonPersonal.target =
-        "_blank";
+    contenedor.appendChild(
+        texto
+    );
 
 
-    botonPersonal.rel =
-        "noopener";
+    // --------------------------------------------------------
+    // BOTÓN
+    // --------------------------------------------------------
+
+    const boton =
+        document.createElement(
+            "button"
+        );
+
+    boton.textContent =
+        "📲 Abrir WhatsApp";
 
 
-    botonPersonal.className =
-        "btn felicitar";
+    boton.onclick =
+        () => {
 
+            const url =
+                "https://wa.me/?text=" +
+                encodeURIComponent(
+                    mensaje
+                );
 
-    botonPersonal.textContent =
-        "👤 Enviar mensaje personal";
-
-
-    botonPersonal.addEventListener(
-        "click",
-        function () {
-
-            setTimeout(
-                function () {
-
-                    mostrarBotonConfirmacion(
-                        cumpleaños,
-                        "personal"
-                    );
-
-                },
-                500
+            window.open(
+                url,
+                "_blank"
             );
 
-        }
+        };
+
+
+    contenedor.appendChild(
+        boton
     );
 
 
-    // ========================================================
-    // AGREGAR BOTONES
-    // ========================================================
-
-    contenedorBotones.appendChild(
-        botonGrupo
+    mostrarBotonConfirmacion(
+        cumpleaños
     );
-
-
-    contenedorBotones.appendChild(
-        botonPersonal
-    );
-
-
-    boton.appendChild(
-        contenedorBotones
-    );
-
-
-    // ========================================================
-    // SCROLL
-    // ========================================================
-
-    contenedor.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
 
 }
 
@@ -1722,56 +1421,24 @@ function mostrarMensajeWhatsApp(
 // ============================================================
 
 function mostrarBotonConfirmacion(
-    cumpleaños,
-    tipoEnvio = "grupo"
+    cumpleaños
 ) {
 
     const contenedor =
         document.getElementById(
-            "mensajeConfirmacion"
+            "confirmacionCumpleanos"
         );
 
 
-    if (
-        !contenedor
-    ) {
+    if (!contenedor) {
 
         return;
 
     }
 
 
-    contenedor.style.display =
-        "block";
-
-
     contenedor.innerHTML =
         "";
-
-
-    const texto =
-        document.createElement(
-            "div"
-        );
-
-
-    if (
-        tipoEnvio === "personal"
-    ) {
-
-        texto.textContent =
-            `¿Ya enviaste el mensaje personal de ${cumpleaños.nombre}?`;
-
-    } else {
-
-        texto.textContent =
-            `¿Ya enviaste la felicitación de ${cumpleaños.nombre} al grupo Familia Cuenca?`;
-
-    }
-
-
-    texto.style.marginBottom =
-        "10px";
 
 
     const boton =
@@ -1779,42 +1446,23 @@ function mostrarBotonConfirmacion(
             "button"
         );
 
-
-    boton.className =
-        "btn confirmar";
-
-
     boton.textContent =
-        "✅ Sí, ya la envié";
+        "✅ Marcar felicitación como enviada";
 
 
-    boton.addEventListener(
-        "click",
-        function () {
+    boton.onclick =
+        () => {
 
             confirmarEnvio(
-                cumpleaños,
-                tipoEnvio
+                cumpleaños
             );
 
-        }
-    );
-
-
-    contenedor.appendChild(
-        texto
-    );
+        };
 
 
     contenedor.appendChild(
         boton
     );
-
-
-    contenedor.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
 
 }
 
@@ -1824,14 +1472,12 @@ function mostrarBotonConfirmacion(
 // ============================================================
 
 function confirmarEnvio(
-    cumpleaños,
-    tipoEnvio = "grupo"
+    cumpleaños
 ) {
 
     const clave =
         obtenerClaveConfirmacion(
-            cumpleaños,
-            tipoEnvio
+            cumpleaños
         );
 
 
@@ -1842,8 +1488,7 @@ function confirmarEnvio(
 
 
     mostrarConfirmacionFinal(
-        cumpleaños,
-        tipoEnvio
+        cumpleaños
     );
 
 }
@@ -1854,112 +1499,103 @@ function confirmarEnvio(
 // ============================================================
 
 function mostrarConfirmacionFinal(
-    cumpleaños,
-    tipoEnvio = "grupo"
+    cumpleaños
 ) {
 
     const contenedor =
         document.getElementById(
-            "mensajeConfirmacion"
+            "confirmacionCumpleanos"
         );
 
 
-    if (
-        !contenedor
-    ) {
+    if (!contenedor) {
 
         return;
 
     }
 
 
-    contenedor.style.display =
-        "block";
+    contenedor.innerHTML =
+        "";
 
 
-    if (
-        tipoEnvio === "personal"
-    ) {
+    const mensaje =
+        document.createElement(
+            "p"
+        );
 
-        contenedor.innerHTML =
-            `✅ ¡Perfecto! El mensaje personal de ${cumpleaños.nombre} fue confirmado como enviado.`;
+    mensaje.textContent =
+        `✅ Felicitación registrada para ${cumpleaños.nombre}.`;
 
-    } else {
+    mensaje.style.color =
+        "green";
 
-        contenedor.innerHTML =
-            `✅ ¡Perfecto! La felicitación de ${cumpleaños.nombre} fue confirmada como enviada al grupo Familia Cuenca.`;
+    mensaje.style.fontWeight =
+        "bold";
 
-    }
+
+    contenedor.appendChild(
+        mensaje
+    );
 
 }
 
 
 // ============================================================
-// REVISAR CONFIRMACIÓN DE HOY
+// ACTUALIZAR CONFIRMACIÓN DE HOY
 // ============================================================
 
-function actualizarConfirmacionHoy() {
+function actualizarConfirmacionHoy(
+    cumpleaños
+) {
 
-    const hoy =
-        new Date();
-
-
-    const dia =
-        String(
-            hoy.getDate()
-        ).padStart(
-            2,
-            "0"
+    const contenedor =
+        document.getElementById(
+            "confirmacionesHoy"
         );
 
 
-    const mes =
-        String(
-            hoy.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
+    if (!contenedor) {
+
+        return;
+
+    }
 
 
-    const fecha =
-        `${mes}-${dia}`;
+    contenedor.innerHTML =
+        "";
 
 
-    const cumpleañosHoy =
-        cumpleañosFamilia.filter(
-            cumpleaños => {
-
-                return (
-                    convertirFecha(
-                        cumpleaños.fecha
-                    ) === fecha
-                );
-
-            }
-        );
-
-
-    cumpleañosHoy.forEach(
-        cumpleaños => {
+    cumpleaños.forEach(
+        persona => {
 
             const clave =
                 obtenerClaveConfirmacion(
-                    cumpleaños
+                    persona
                 );
 
 
-            if (
+            const enviado =
                 localStorage.getItem(
                     clave
-                ) === "true"
-            ) {
-
-                mostrarConfirmacionFinal(
-                    cumpleaños
                 );
 
-            }
+
+            const elemento =
+                document.createElement(
+                    "div"
+                );
+
+
+            elemento.textContent =
+                enviado === "true"
+                    ? `✅ ${persona.nombre}`
+                    : `⏳ ${persona.nombre}`;
+
+
+            contenedor.appendChild(
+                elemento
+            );
 
         }
     );
@@ -1968,86 +1604,44 @@ function actualizarConfirmacionHoy() {
 
 
 // ============================================================
-// CLAVE PARA LOCALSTORAGE
+// CLAVE DE CONFIRMACIÓN
 // ============================================================
 
 function obtenerClaveConfirmacion(
-    cumpleaños,
-    tipoEnvio = "grupo"
+    cumpleaños
 ) {
 
-    const fecha =
-        obtenerFechaActual();
-
-
-    return (
-        "cumpleanos_enviado_" +
-        tipoEnvio +
-        "_" +
-        fecha +
-        "_" +
-        cumpleaños.nombre
-    );
+    return `cumpleanos_enviado_${cumpleaños.fecha}_${cumpleaños.nombre}`;
 
 }
 
 
 // ============================================================
 // OBTENER FECHA ACTUAL
-// FORMATO: MM-DD
 // ============================================================
 
 function obtenerFechaActual() {
 
-    const ahora =
+    const hoy =
         new Date();
 
 
-    const mes =
-        String(
-            ahora.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const dia =
-        String(
-            ahora.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return `${mes}-${dia}`;
+    return `${String(
+        hoy.getDate()
+    ).padStart(2, "0")}-${String(
+        hoy.getMonth() + 1
+    ).padStart(2, "0")}`;
 
 }
 
 
 // ============================================================
 // CONVERTIR FECHA
-//
-// birthdays.json:
-// DD-MM
-//
-// Sistema interno:
-// MM-DD
 // ============================================================
 
 function convertirFecha(
     fecha
 ) {
-
-    if (
-        typeof fecha !== "string"
-    ) {
-
-        return "";
-
-    }
-
 
     const partes =
         fecha.split("-");
@@ -2057,26 +1651,26 @@ function convertirFecha(
         partes.length !== 2
     ) {
 
-        return "";
+        return null;
 
     }
 
 
-    const dia =
-        partes[0].padStart(
-            2,
-            "0"
-        );
+    return {
 
+        dia:
+            parseInt(
+                partes[0],
+                10
+            ),
 
-    const mes =
-        partes[1].padStart(
-            2,
-            "0"
-        );
+        mes:
+            parseInt(
+                partes[1],
+                10
+            ) - 1
 
-
-    return `${mes}-${dia}`;
+    };
 
 }
 
@@ -2116,7 +1710,6 @@ function esFechaValida(
             partes[0],
             10
         );
-
 
     const mes =
         parseInt(
@@ -2161,12 +1754,13 @@ function esFechaValida(
 
 
 // ============================================================
-// BOTONES PARA CAMBIAR DE MES
+// BOTONES DE CAMBIO DE MES
 // ============================================================
 
 document.addEventListener(
     "DOMContentLoaded",
-    function () {
+    () => {
+
 
         const botonAnterior =
             document.getElementById(
@@ -2186,12 +1780,11 @@ document.addEventListener(
 
             botonAnterior.addEventListener(
                 "click",
-                function () {
+                () => {
 
                     fechaCalendario.setMonth(
                         fechaCalendario.getMonth() - 1
                     );
-
 
                     mostrarCalendario();
 
@@ -2207,12 +1800,11 @@ document.addEventListener(
 
             botonSiguiente.addEventListener(
                 "click",
-                function () {
+                () => {
 
                     fechaCalendario.setMonth(
                         fechaCalendario.getMonth() + 1
                     );
-
 
                     mostrarCalendario();
 
@@ -2230,80 +1822,58 @@ document.addEventListener(
 // ============================================================
 
 function mostrarError(
-    error
+    mensaje
 ) {
 
-    const calendario =
+    const contenedor =
         document.getElementById(
             "calendario"
         );
 
 
-    if (
-        !calendario
-    ) {
+    if (!contenedor) {
 
         return;
 
     }
 
 
-    const cuerpo =
-        document.getElementById(
-            "cuerpoCalendario"
+    contenedor.innerHTML =
+        "";
+
+
+    const error =
+        document.createElement(
+            "div"
         );
 
 
-    if (
-        cuerpo
-    ) {
+    error.textContent =
+        mensaje;
 
-        cuerpo.innerHTML = `
-            <tr>
-                <td
-                    colspan="7"
-                    style="
-                        color:#c62828;
-                        background:#ffebee;
-                        padding:20px;
-                    "
-                >
-                    <strong>
-                        ⚠️ No se pudieron cargar los cumpleaños.
-                    </strong>
 
-                    <br><br>
+    error.style.color =
+        "red";
 
-                    Revisa que el archivo
-                    <strong>birthdays.json</strong>
-                    esté en la misma carpeta que
-                    <strong>index.html</strong>
-                    y
-                    <strong>script.js</strong>.
+    error.style.padding =
+        "20px";
 
-                    <br><br>
+    error.style.textAlign =
+        "center";
 
-                    <small>
-                        ${error.message}
-                    </small>
-                </td>
-            </tr>
-        `;
 
-    }
+    contenedor.appendChild(
+        error
+    );
 
 }
 
+
 // ============================================================
-// MOSTRAR ESTADÍSTICAS EN LA PÁGINA
+// MOSTRAR ESTADÍSTICAS
 // ============================================================
 
 function mostrarEstadisticas() {
-
-    if (!estadisticasFamilia) {
-        console.warn("No existen estadísticas para mostrar.");
-        return;
-    }
 
     mostrarEstadisticasGenerales();
 
@@ -2314,7 +1884,9 @@ function mostrarEstadisticas() {
     mostrarMesMayor();
 
     mostrarFechasCompartidas();
+
 }
+
 
 // ============================================================
 // ESTADÍSTICAS GENERALES
@@ -2323,98 +1895,124 @@ function mostrarEstadisticas() {
 function mostrarEstadisticasGenerales() {
 
     const total =
-        document.getElementById("statTotal");
+        document.getElementById(
+            "totalFamilia"
+        );
 
     const mujeres =
-        document.getElementById("statMujeres");
+        document.getElementById(
+            "totalMujeres"
+        );
 
     const hombres =
-        document.getElementById("statHombres");
+        document.getElementById(
+            "totalHombres"
+        );
 
     const vivos =
-        document.getElementById("statVivos");
+        document.getElementById(
+            "totalVivos"
+        );
 
     const finados =
-        document.getElementById("statFinados");
-
-
-    if (
-        !total ||
-        !mujeres ||
-        !hombres ||
-        !vivos ||
-        !finados
-    ) {
-
-        console.warn(
-            "No se encontraron todos los elementos de estadísticas."
+        document.getElementById(
+            "totalFinados"
         );
+
+
+    if (total) {
+
+        total.textContent =
+            estadisticasFamilia.total;
+
+    }
+
+
+    if (mujeres) {
+
+        mujeres.textContent =
+            estadisticasFamilia.mujeres;
+
+    }
+
+
+    if (hombres) {
+
+        hombres.textContent =
+            estadisticasFamilia.hombres;
+
+    }
+
+
+    if (vivos) {
+
+        vivos.textContent =
+            estadisticasFamilia.vivos;
+
+    }
+
+
+    if (finados) {
+
+        finados.textContent =
+            estadisticasFamilia.finados;
+
+    }
+
+}
+
+
+// ============================================================
+// ESTADÍSTICAS POR MES
+// ============================================================
+
+function mostrarEstadisticasPorMes() {
+
+    const contenedor =
+        document.getElementById(
+            "estadisticasMes"
+        );
+
+
+    if (!contenedor) {
 
         return;
 
     }
 
 
-    total.textContent =
-        estadisticasFamilia.total;
+    contenedor.innerHTML =
+        "";
 
-    mujeres.textContent =
-        estadisticasFamilia.mujeres;
 
-    hombres.textContent =
-        estadisticasFamilia.hombres;
+    estadisticasFamilia
+        .porMes
+        .forEach(
+            (cantidad, indice) => {
 
-    vivos.textContent =
-        estadisticasFamilia.vivos;
+                const elemento =
+                    document.createElement(
+                        "div"
+                    );
 
-    finados.textContent =
-        estadisticasFamilia.finados;
+
+                elemento.className =
+                    "estadisticaMes";
+
+
+                elemento.innerHTML =
+                    `<strong>${nombresMeses[indice]}</strong>: ${cantidad}`;
+
+
+                contenedor.appendChild(
+                    elemento
+                );
+
+            }
+        );
+
 }
 
-// ============================================================
-// CUMPLEAÑOS POR MES
-// ============================================================
-
-function mostrarEstadisticasPorMes() {
-
-    const contenedor =
-        document.getElementById("estadisticaPorMes");
-
-    if (!contenedor) return;
-
-    contenedor.innerHTML = "";
-
-    const maximo =
-        Math.max(...estadisticasFamilia.porMes);
-
-    estadisticasFamilia.porMes.forEach((cantidad, indice) => {
-
-        const porcentaje =
-            maximo > 0
-                ? (cantidad / maximo) * 100
-                : 0;
-
-        const fila = document.createElement("div");
-
-        fila.className = "barraMes";
-
-        fila.innerHTML = `
-            <div class="barraMesNombre">
-                <span>${nombresMeses[indice]}</span>
-                <strong>${cantidad}</strong>
-            </div>
-
-            <div class="barraMesFondo">
-                <div
-                    class="barraMesValor"
-                    style="width:${porcentaje}%">
-                </div>
-            </div>
-        `;
-
-        contenedor.appendChild(fila);
-    });
-}
 
 // ============================================================
 // ESTADÍSTICAS GEOGRÁFICAS
@@ -2423,146 +2021,258 @@ function mostrarEstadisticasPorMes() {
 function mostrarEstadisticasGeograficas() {
 
     mostrarListaGeografica(
-        "estadisticaPorPais",
+        "estadisticasPais",
         estadisticasFamilia.porPais
     );
 
+
     mostrarListaGeografica(
-        "estadisticaPorEstado",
+        "estadisticasEstado",
         estadisticasFamilia.porEstado
     );
 
+
     mostrarListaGeografica(
-        "estadisticaPorCiudad",
+        "estadisticasCiudad",
         estadisticasFamilia.porCiudad
     );
+
 }
 
+
 // ============================================================
-// LISTA GEOGRÁFICA
+// MOSTRAR LISTA GEOGRÁFICA
 // ============================================================
 
-function mostrarListaGeografica(id, datos) {
+function mostrarListaGeografica(
+    id,
+    datos
+) {
 
     const contenedor =
-        document.getElementById(id);
+        document.getElementById(
+            id
+        );
 
-    if (!contenedor) return;
 
-    contenedor.innerHTML = "";
-
-    const entradas =
-        Object.entries(datos);
-
-    if (entradas.length === 0) {
-
-        contenedor.innerHTML =
-            "<li>Sin información disponible</li>";
+    if (!contenedor) {
 
         return;
+
     }
 
-    entradas
-        .sort((a, b) => b[1] - a[1])
-        .forEach(([nombre, cantidad]) => {
+
+    contenedor.innerHTML =
+        "";
+
+
+    const ordenado =
+        Object.entries(
+            datos
+        ).sort(
+            (a, b) =>
+                b[1] - a[1]
+        );
+
+
+    ordenado.forEach(
+        ([nombre, cantidad]) => {
 
             const elemento =
-                document.createElement("li");
+                document.createElement(
+                    "div"
+                );
 
-            elemento.innerHTML = `
-                <span>${nombre}</span>
-                <span class="cantidad">${cantidad}</span>
-            `;
 
-            contenedor.appendChild(elemento);
-        });
+            elemento.innerHTML =
+                `<strong>${nombre}</strong>: ${cantidad}`;
+
+
+            contenedor.appendChild(
+                elemento
+            );
+
+        }
+    );
+
 }
 
+
 // ============================================================
-// MES CON MÁS CUMPLEAÑOS
+// MOSTRAR MES MAYOR
 // ============================================================
 
 function mostrarMesMayor() {
 
-    const resultado = obtenerMesMayor(estadisticasFamilia);
+    const contenedor =
+        document.getElementById(
+            "mesMayor"
+        );
 
-    const elemento = document.getElementById("mesMayorEstadistica");
 
-    if (!elemento || !resultado) {
+    if (!contenedor) {
+
         return;
+
     }
 
-    elemento.textContent =
-        `${resultado.nombreMes} — ${resultado.cantidad}`;
+
+    const resultado =
+        obtenerMesMayor();
+
+
+    if (!resultado) {
+
+        contenedor.textContent =
+            "Sin información.";
+
+        return;
+
+    }
+
+
+    contenedor.innerHTML =
+        `🎂 <strong>${resultado.mes}</strong> es el mes con más cumpleaños, con <strong>${resultado.cantidad}</strong> familiares.`;
+
 }
 
 
 // ============================================================
-// FECHAS COMPARTIDAS
+// MOSTRAR FECHAS COMPARTIDAS
 // ============================================================
 
 function mostrarFechasCompartidas() {
 
     const contenedor =
         document.getElementById(
-            "estadisticaFechasCompartidas"
+            "fechasCompartidas"
         );
 
-    if (!contenedor) return;
 
-    contenedor.innerHTML = "";
-
-const fechas =
-    obtenerFechasCompartidas(
-        estadisticasFamilia
-    );
-
-    if (!fechas || fechas.length === 0) {
-
-        contenedor.innerHTML =
-            "<p>No hay fechas compartidas.</p>";
+    if (!contenedor) {
 
         return;
+
     }
 
-    fechas.forEach(fecha => {
 
-        const elemento =
-            document.createElement("div");
+    contenedor.innerHTML =
+        "";
 
-        elemento.className =
-            "fechaCompartida";
 
-        const personas =
-            cumpleañosFamilia.filter(
-                persona => persona.fecha === fecha.fecha
+    const fechas =
+        estadisticasFamilia
+            .fechasCompartidas;
+
+
+    if (
+        !fechas ||
+        fechas.length === 0
+    ) {
+
+        contenedor.innerHTML =
+            "<p>No hay fechas de cumpleaños compartidas.</p>";
+
+        return;
+
+    }
+
+
+    fechas.forEach(
+        fecha => {
+
+            const elemento =
+                document.createElement(
+                    "div"
+                );
+
+
+            const personas =
+                cumpleañosFamilia.filter(
+                    persona =>
+                        persona.fecha === fecha.fecha
+                );
+
+
+            elemento.innerHTML = `
+                <strong>
+                    ${formatearFechaEstadistica(fecha.fecha)}
+                </strong>
+
+                <div class="personasFecha">
+                    ${personas
+                        .map(
+                            persona => {
+
+                                const icono =
+                                    persona.estatus === "Finado"
+                                        ? " 🕊️"
+                                        : "";
+
+                                return `👤 ${persona.nombre}${icono}`;
+
+                            }
+                        )
+                        .join("<br>")}
+                </div>
+            `;
+
+
+            contenedor.appendChild(
+                elemento
             );
 
-        elemento.innerHTML = `
-            <strong>${formatearFechaEstadistica(fecha.fecha)}</strong>
+        }
+    );
 
-            <div class="personasFecha">
-                ${personas
-                    .map(persona => `👤 ${persona.nombre}`)
-                    .join("<br>")}
-            </div>
-        `;
-
-        contenedor.appendChild(elemento);
-    });
 }
+
 
 // ============================================================
 // FORMATEAR FECHA PARA ESTADÍSTICAS
 // ============================================================
 
-function formatearFechaEstadistica(fecha) {
+function formatearFechaEstadistica(
+    fecha
+) {
 
-    const partes = fecha.split("-");
+    const partes =
+        fecha.split("-");
 
-    const dia = parseInt(partes[0], 10);
 
-    const mes = parseInt(partes[1], 10) - 1;
+    if (
+        partes.length !== 2
+    ) {
 
-    return `${dia} de ${nombresMeses[mes]}`;
+        return fecha;
+
+    }
+
+
+    const dia =
+        parseInt(
+            partes[0],
+            10
+        );
+
+
+    const mes =
+        parseInt(
+            partes[1],
+            10
+        );
+
+
+    if (
+        mes < 1 ||
+        mes > 12
+    ) {
+
+        return fecha;
+
+    }
+
+
+    return `${dia} de ${nombresMeses[mes - 1]}`;
+
 }
