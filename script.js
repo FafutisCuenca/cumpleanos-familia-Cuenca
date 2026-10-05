@@ -1014,6 +1014,53 @@ function crearCeldaDia(
 
 }
 
+// ============================================================
+// LIMPIAR PANEL "CUMPLEAÑOS DE HOY"
+// ============================================================
+
+function limpiarCumpleanosHoy() {
+
+    const panel =
+        document.getElementById(
+            "cumpleanosHoy"
+        );
+
+    const nombre =
+        document.getElementById(
+            "nombreCumpleanosHoy"
+        );
+
+    const mensaje =
+        document.getElementById(
+            "mensajeWhatsApp"
+        );
+
+    const boton =
+        document.getElementById(
+            "botonWhatsAppHoy"
+        );
+
+
+    if (nombre) {
+        nombre.innerHTML = "";
+    }
+
+
+    if (mensaje) {
+        mensaje.innerHTML = "";
+    }
+
+
+    if (boton) {
+        boton.innerHTML = "";
+    }
+
+
+    if (panel) {
+        panel.style.display = "none";
+    }
+
+}
 
 // ============================================================
 // MOSTRAR DETALLE DE CUMPLEAÑOS
@@ -1056,7 +1103,17 @@ function mostrarDetalleCumpleanos(
 
     }
 
+    // ========================================================
+    // SI ESTAMOS CONSULTANDO OTRO DÍA,
+    // LIMPIAR EL PANEL "CUMPLEAÑOS DE HOY"
+    // ========================================================
 
+    if (!esHoy) {
+
+        limpiarCumpleanosHoy();
+
+    }
+    
     contenedor.style.display =
         "block";
 
