@@ -41,6 +41,64 @@ const nombresMeses = [
 
 
 // ============================================================
+// FUNCIÓN VISUAL PARA MOSTRAR EL NOMBRE
+// CON 🕊️ CUANDO EL FAMILIAR ES FINADO
+// ============================================================
+
+function crearNombreConIconoFinado(cumpleaños) {
+
+    const contenedor =
+        document.createElement("span");
+
+    const nombre =
+        document.createElement("span");
+
+    nombre.textContent =
+        cumpleaños.nombre;
+
+    contenedor.appendChild(
+        nombre
+    );
+
+
+    // --------------------------------------------------------
+    // SI EL ESTATUS ES FINADO, AGREGAR 🕊️
+    // --------------------------------------------------------
+
+    if (
+        cumpleaños.estatus === "Finado"
+    ) {
+
+        const icono =
+            document.createElement("span");
+
+        icono.textContent =
+            " 🕊️";
+
+        icono.style.marginLeft =
+            "4px";
+
+        icono.title =
+            "Familiar finado";
+
+        icono.setAttribute(
+            "aria-label",
+            "Familiar finado"
+        );
+
+        contenedor.appendChild(
+            icono
+        );
+
+    }
+
+
+    return contenedor;
+
+}
+
+
+// ============================================================
 // INICIAR CALENDARIO
 // ============================================================
 
@@ -159,89 +217,91 @@ function cargarCumpleaños() {
             estadisticasFamilia = calcularEstadisticas();
 
             mostrarEstadisticas();
-            
+
+
             // ====================================================
-// CONSOLA - INEGI CUENCA
-// ====================================================
+            // CONSOLA - INEGI CUENCA
+            // ====================================================
 
-console.log(
-    "========================================"
-);
+            console.log(
+                "========================================"
+            );
 
-console.log(
-    "        INEGI CUENCA"
-);
+            console.log(
+                "        INEGI CUENCA"
+            );
 
-console.log(
-    "  Estadísticas de la Familia Cuenca"
-);
+            console.log(
+                "  Estadísticas de la Familia Cuenca"
+            );
 
-console.log(
-    "========================================"
-);
+            console.log(
+                "========================================"
+            );
 
-console.log(
-    "Total:",
-    estadisticasFamilia.total
-);
+            console.log(
+                "Total:",
+                estadisticasFamilia.total
+            );
 
-console.log(
-    "Mujeres:",
-    estadisticasFamilia.mujeres
-);
+            console.log(
+                "Mujeres:",
+                estadisticasFamilia.mujeres
+            );
 
-console.log(
-    "Hombres:",
-    estadisticasFamilia.hombres
-);
+            console.log(
+                "Hombres:",
+                estadisticasFamilia.hombres
+            );
 
-console.log(
-    "Vivos:",
-    estadisticasFamilia.vivos
-);
+            console.log(
+                "Vivos:",
+                estadisticasFamilia.vivos
+            );
 
-console.log(
-    "Finados:",
-    estadisticasFamilia.finados
-);
+            console.log(
+                "Finados:",
+                estadisticasFamilia.finados
+            );
 
-console.log(
-    "Por mes:",
-    estadisticasFamilia.porMes
-);
+            console.log(
+                "Por mes:",
+                estadisticasFamilia.porMes
+            );
 
-console.log(
-    "Por país:",
-    estadisticasFamilia.porPais
-);
+            console.log(
+                "Por país:",
+                estadisticasFamilia.porPais
+            );
 
-console.log(
-    "Por estado:",
-    estadisticasFamilia.porEstado
-);
+            console.log(
+                "Por estado:",
+                estadisticasFamilia.porEstado
+            );
 
-console.log(
-    "Por ciudad:",
-    estadisticasFamilia.porCiudad
-);
+            console.log(
+                "Por ciudad:",
+                estadisticasFamilia.porCiudad
+            );
 
-console.log(
-    "Fechas compartidas:",
-    obtenerFechasCompartidas(
-        estadisticasFamilia
-    )
-);
+            console.log(
+                "Fechas compartidas:",
+                obtenerFechasCompartidas(
+                    estadisticasFamilia
+                )
+            );
 
-console.log(
-    "Mes con más cumpleaños:",
-    obtenerMesMayor(
-        estadisticasFamilia
-    )
-);
+            console.log(
+                "Mes con más cumpleaños:",
+                obtenerMesMayor(
+                    estadisticasFamilia
+                )
+            );
 
-console.log(
-    "========================================"
-);
+            console.log(
+                "========================================"
+            );
+
         })
 
         .catch(error => {
@@ -317,19 +377,19 @@ function calcularEstadisticas() {
         // ====================================================
 
         porMes: [
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0
-],
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
 
 
         // ====================================================
@@ -369,16 +429,17 @@ function calcularEstadisticas() {
 
 
             const mes =
-    parseInt(partes[1], 10);
+                parseInt(partes[1], 10);
 
-if (
-    mes >= 1 &&
-    mes <= 12
-) {
 
-    estadisticas.porMes[mes - 1]++;
+            if (
+                mes >= 1 &&
+                mes <= 12
+            ) {
 
-}
+                estadisticas.porMes[mes - 1]++;
+
+            }
 
 
             // ==================================================
@@ -916,8 +977,29 @@ function crearCeldaDia(
                     );
 
 
-                nombre.textContent =
-                    `🎂 ${cumpleaños.nombre}`;
+                // ------------------------------------------------
+                // 🎂 + NOMBRE + 🕊️ SI ES FINADO
+                // ------------------------------------------------
+
+                const iconoCumpleanos =
+                    document.createElement(
+                        "span"
+                    );
+
+                iconoCumpleanos.textContent =
+                    "🎂 ";
+
+
+                nombre.appendChild(
+                    iconoCumpleanos
+                );
+
+
+                nombre.appendChild(
+                    crearNombreConIconoFinado(
+                        cumpleaños
+                    )
+                );
 
 
                 indicador.appendChild(
@@ -1101,8 +1183,29 @@ function mostrarDetalleCumpleanos(
                 );
 
 
-            nombrePersona.textContent =
-                `🎂 ${cumpleaños.nombre}`;
+            // ------------------------------------------------
+            // 🎂 + NOMBRE + 🕊️
+            // ------------------------------------------------
+
+            const iconoCumpleanos =
+                document.createElement(
+                    "span"
+                );
+
+            iconoCumpleanos.textContent =
+                "🎂 ";
+
+
+            nombrePersona.appendChild(
+                iconoCumpleanos
+            );
+
+
+            nombrePersona.appendChild(
+                crearNombreConIconoFinado(
+                    cumpleaños
+                )
+            );
 
 
             nombrePersona.style.fontWeight =
@@ -1351,8 +1454,29 @@ function mostrarCumpleanosDeHoy() {
                 );
 
 
-            nombrePersona.textContent =
-                `🎂 ${cumpleaños.nombre}`;
+            // ------------------------------------------------
+            // 🎂 + NOMBRE + 🕊️
+            // ------------------------------------------------
+
+            const iconoCumpleanos =
+                document.createElement(
+                    "span"
+                );
+
+            iconoCumpleanos.textContent =
+                "🎂 ";
+
+
+            nombrePersona.appendChild(
+                iconoCumpleanos
+            );
+
+
+            nombrePersona.appendChild(
+                crearNombreConIconoFinado(
+                    cumpleaños
+                )
+            );
 
 
             nombrePersona.style.fontSize =
@@ -1554,8 +1678,37 @@ function mostrarMensajeWhatsApp(
         "block";
 
 
+    // --------------------------------------------------------
+    // NOMBRE VISUAL
+    // --------------------------------------------------------
+
     nombre.innerHTML =
-        `🎂 ${cumpleaños.nombre}`;
+        "";
+
+
+    const nombreVisual =
+        document.createElement(
+            "span"
+        );
+
+
+    nombreVisual.appendChild(
+        document.createTextNode(
+            "🎂 "
+        )
+    );
+
+
+    nombreVisual.appendChild(
+        crearNombreConIconoFinado(
+            cumpleaños
+        )
+    );
+
+
+    nombre.appendChild(
+        nombreVisual
+    );
 
 
     const texto =
@@ -1563,6 +1716,10 @@ function mostrarMensajeWhatsApp(
             cumpleaños
         );
 
+
+    // --------------------------------------------------------
+    // MENSAJE
+    // --------------------------------------------------------
 
     mensaje.textContent =
         texto;
@@ -2294,6 +2451,7 @@ function mostrarError(
 
 }
 
+
 // ============================================================
 // MOSTRAR ESTADÍSTICAS EN LA PÁGINA
 // ============================================================
@@ -2301,9 +2459,15 @@ function mostrarError(
 function mostrarEstadisticas() {
 
     if (!estadisticasFamilia) {
-        console.warn("No existen estadísticas para mostrar.");
+
+        console.warn(
+            "No existen estadísticas para mostrar."
+        );
+
         return;
+
     }
+
 
     mostrarEstadisticasGenerales();
 
@@ -2314,7 +2478,9 @@ function mostrarEstadisticas() {
     mostrarMesMayor();
 
     mostrarFechasCompartidas();
+
 }
+
 
 // ============================================================
 // ESTADÍSTICAS GENERALES
@@ -2323,19 +2489,29 @@ function mostrarEstadisticas() {
 function mostrarEstadisticasGenerales() {
 
     const total =
-        document.getElementById("statTotal");
+        document.getElementById(
+            "statTotal"
+        );
 
     const mujeres =
-        document.getElementById("statMujeres");
+        document.getElementById(
+            "statMujeres"
+        );
 
     const hombres =
-        document.getElementById("statHombres");
+        document.getElementById(
+            "statHombres"
+        );
 
     const vivos =
-        document.getElementById("statVivos");
+        document.getElementById(
+            "statVivos"
+        );
 
     const finados =
-        document.getElementById("statFinados");
+        document.getElementById(
+            "statFinados"
+        );
 
 
     if (
@@ -2369,7 +2545,9 @@ function mostrarEstadisticasGenerales() {
 
     finados.textContent =
         estadisticasFamilia.finados;
+
 }
+
 
 // ============================================================
 // CUMPLEAÑOS POR MES
@@ -2378,43 +2556,67 @@ function mostrarEstadisticasGenerales() {
 function mostrarEstadisticasPorMes() {
 
     const contenedor =
-        document.getElementById("estadisticaPorMes");
+        document.getElementById(
+            "estadisticaPorMes"
+        );
+
 
     if (!contenedor) return;
 
-    contenedor.innerHTML = "";
+
+    contenedor.innerHTML =
+        "";
+
 
     const maximo =
-        Math.max(...estadisticasFamilia.porMes);
+        Math.max(
+            ...estadisticasFamilia.porMes
+        );
 
-    estadisticasFamilia.porMes.forEach((cantidad, indice) => {
 
-        const porcentaje =
-            maximo > 0
-                ? (cantidad / maximo) * 100
-                : 0;
+    estadisticasFamilia.porMes.forEach(
+        (cantidad, indice) => {
 
-        const fila = document.createElement("div");
+            const porcentaje =
+                maximo > 0
+                    ? (cantidad / maximo) * 100
+                    : 0;
 
-        fila.className = "barraMes";
 
-        fila.innerHTML = `
-            <div class="barraMesNombre">
-                <span>${nombresMeses[indice]}</span>
-                <strong>${cantidad}</strong>
-            </div>
+            const fila =
+                document.createElement(
+                    "div"
+                );
 
-            <div class="barraMesFondo">
-                <div
-                    class="barraMesValor"
-                    style="width:${porcentaje}%">
+
+            fila.className =
+                "barraMes";
+
+
+            fila.innerHTML = `
+                <div class="barraMesNombre">
+                    <span>${nombresMeses[indice]}</span>
+                    <strong>${cantidad}</strong>
                 </div>
-            </div>
-        `;
 
-        contenedor.appendChild(fila);
-    });
+                <div class="barraMesFondo">
+                    <div
+                        class="barraMesValor"
+                        style="width:${porcentaje}%">
+                    </div>
+                </div>
+            `;
+
+
+            contenedor.appendChild(
+                fila
+            );
+
+        }
+    );
+
 }
+
 
 // ============================================================
 // ESTADÍSTICAS GEOGRÁFICAS
@@ -2427,56 +2629,88 @@ function mostrarEstadisticasGeograficas() {
         estadisticasFamilia.porPais
     );
 
+
     mostrarListaGeografica(
         "estadisticaPorEstado",
         estadisticasFamilia.porEstado
     );
 
+
     mostrarListaGeografica(
         "estadisticaPorCiudad",
         estadisticasFamilia.porCiudad
     );
+
 }
+
 
 // ============================================================
 // LISTA GEOGRÁFICA
 // ============================================================
 
-function mostrarListaGeografica(id, datos) {
+function mostrarListaGeografica(
+    id,
+    datos
+) {
 
     const contenedor =
-        document.getElementById(id);
+        document.getElementById(
+            id
+        );
+
 
     if (!contenedor) return;
 
-    contenedor.innerHTML = "";
+
+    contenedor.innerHTML =
+        "";
+
 
     const entradas =
         Object.entries(datos);
 
-    if (entradas.length === 0) {
+
+    if (
+        entradas.length === 0
+    ) {
 
         contenedor.innerHTML =
             "<li>Sin información disponible</li>";
 
         return;
+
     }
 
+
     entradas
-        .sort((a, b) => b[1] - a[1])
-        .forEach(([nombre, cantidad]) => {
+        .sort(
+            (a, b) =>
+                b[1] - a[1]
+        )
+        .forEach(
+            ([nombre, cantidad]) => {
 
-            const elemento =
-                document.createElement("li");
+                const elemento =
+                    document.createElement(
+                        "li"
+                    );
 
-            elemento.innerHTML = `
-                <span>${nombre}</span>
-                <span class="cantidad">${cantidad}</span>
-            `;
 
-            contenedor.appendChild(elemento);
-        });
+                elemento.innerHTML = `
+                    <span>${nombre}</span>
+                    <span class="cantidad">${cantidad}</span>
+                `;
+
+
+                contenedor.appendChild(
+                    elemento
+                );
+
+            }
+        );
+
 }
+
 
 // ============================================================
 // MES CON MÁS CUMPLEAÑOS
@@ -2484,16 +2718,31 @@ function mostrarListaGeografica(id, datos) {
 
 function mostrarMesMayor() {
 
-    const resultado = obtenerMesMayor(estadisticasFamilia);
+    const resultado =
+        obtenerMesMayor(
+            estadisticasFamilia
+        );
 
-    const elemento = document.getElementById("mesMayorEstadistica");
 
-    if (!elemento || !resultado) {
+    const elemento =
+        document.getElementById(
+            "mesMayorEstadistica"
+        );
+
+
+    if (
+        !elemento ||
+        !resultado
+    ) {
+
         return;
+
     }
+
 
     elemento.textContent =
         `${resultado.nombreMes} — ${resultado.cantidad}`;
+
 }
 
 
@@ -2508,61 +2757,170 @@ function mostrarFechasCompartidas() {
             "estadisticaFechasCompartidas"
         );
 
+
     if (!contenedor) return;
 
-    contenedor.innerHTML = "";
 
-const fechas =
-    obtenerFechasCompartidas(
-        estadisticasFamilia
-    );
+    contenedor.innerHTML =
+        "";
 
-    if (!fechas || fechas.length === 0) {
+
+    const fechas =
+        obtenerFechasCompartidas(
+            estadisticasFamilia
+        );
+
+
+    if (
+        !fechas ||
+        fechas.length === 0
+    ) {
 
         contenedor.innerHTML =
             "<p>No hay fechas compartidas.</p>";
 
         return;
+
     }
 
-    fechas.forEach(fecha => {
 
-        const elemento =
-            document.createElement("div");
+    fechas.forEach(
+        fecha => {
 
-        elemento.className =
-            "fechaCompartida";
+            const elemento =
+                document.createElement(
+                    "div"
+                );
 
-        const personas =
-            cumpleañosFamilia.filter(
-                persona => persona.fecha === fecha.fecha
+
+            elemento.className =
+                "fechaCompartida";
+
+
+            const personas =
+                cumpleañosFamilia.filter(
+                    persona =>
+                        persona.fecha === fecha.fecha
+                );
+
+
+            // =================================================
+            // CONSTRUIR LA LISTA DE PERSONAS
+            // =================================================
+
+            const listaPersonas =
+                document.createElement(
+                    "div"
+                );
+
+
+            listaPersonas.className =
+                "personasFecha";
+
+
+            personas.forEach(
+                persona => {
+
+                    const personaElemento =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    // 👤
+                    const iconoPersona =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    iconoPersona.textContent =
+                        "👤 ";
+
+
+                    personaElemento.appendChild(
+                        iconoPersona
+                    );
+
+
+                    // NOMBRE + 🕊️ SI ES FINADO
+                    personaElemento.appendChild(
+                        crearNombreConIconoFinado(
+                            persona
+                        )
+                    );
+
+
+                    listaPersonas.appendChild(
+                        personaElemento
+                    );
+
+                }
             );
 
-        elemento.innerHTML = `
-            <strong>${formatearFechaEstadistica(fecha.fecha)}</strong>
 
-            <div class="personasFecha">
-                ${personas
-                    .map(persona => `👤 ${persona.nombre}`)
-                    .join("<br>")}
-            </div>
-        `;
+            // =================================================
+            // FECHA
+            // =================================================
 
-        contenedor.appendChild(elemento);
-    });
+            const tituloFecha =
+                document.createElement(
+                    "strong"
+                );
+
+
+            tituloFecha.textContent =
+                formatearFechaEstadistica(
+                    fecha.fecha
+                );
+
+
+            elemento.appendChild(
+                tituloFecha
+            );
+
+
+            elemento.appendChild(
+                listaPersonas
+            );
+
+
+            contenedor.appendChild(
+                elemento
+            );
+
+        }
+    );
+
 }
+
 
 // ============================================================
 // FORMATEAR FECHA PARA ESTADÍSTICAS
 // ============================================================
 
-function formatearFechaEstadistica(fecha) {
+function formatearFechaEstadistica(
+    fecha
+) {
 
-    const partes = fecha.split("-");
+    const partes =
+        fecha.split("-");
 
-    const dia = parseInt(partes[0], 10);
 
-    const mes = parseInt(partes[1], 10) - 1;
+    const dia =
+        parseInt(
+            partes[0],
+            10
+        );
+
+
+    const mes =
+        parseInt(
+            partes[1],
+            10
+        ) - 1;
+
 
     return `${dia} de ${nombresMeses[mes]}`;
+
 }
