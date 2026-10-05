@@ -997,16 +997,15 @@ function crearCeldaDia(
 
         celda.addEventListener(
             "click",
-            function () {
+        function () {
 
-                mostrarDetalleCumpleanos(
-                    cumpleañosDelDia,
-                    esHoy
-                );
-
-            }
+        mostrarCumpleanosSeleccionados(
+            cumpleañosDelDia,
+            esHoy
         );
 
+    }
+);
     }
 
 
