@@ -1141,8 +1141,9 @@ function mostrarDetalleCumpleanos(
             nombrePersona.textContent =
                 `🎂 ${cumpleaños.nombre}`;
 
+
             if (
-                cumpleaños.estatus === "Finado"
+                esFinado(cumpleaños)
             ) {
 
                 nombrePersona.textContent +=
@@ -1205,43 +1206,56 @@ function mostrarDetalleCumpleanos(
 
 
             // =================================================
-// BOTÓN DE FELICITACIÓN
-// SOLO PARA FAMILIARES VIVOS
-// =================================================
+            // BOTÓN DE FELICITACIÓN
+            // SOLO PARA FAMILIARES VIVOS
+            // =================================================
 
-if (!esFinado(cumpleaños)) {
+            if (
+                !esFinado(cumpleaños)
+            ) {
 
-    const botonWhatsApp =
-        document.createElement(
-            "button"
-        );
-
-
-    botonWhatsApp.className =
-        "btn felicitar";
+                const botonWhatsApp =
+                    document.createElement(
+                        "button"
+                    );
 
 
-    botonWhatsApp.textContent =
-        "💬 Preparar felicitación";
+                botonWhatsApp.className =
+                    "btn felicitar";
 
 
-    botonWhatsApp.addEventListener(
-        "click",
-        function () {
+                botonWhatsApp.textContent =
+                    "💬 Preparar felicitación";
 
-            mostrarMensajeWhatsApp(
-                cumpleaños
+
+                botonWhatsApp.addEventListener(
+                    "click",
+                    function () {
+
+                        mostrarMensajeWhatsApp(
+                            cumpleaños
+                        );
+
+                    }
+                );
+
+
+                bloque.appendChild(
+                    botonWhatsApp
+                );
+
+            }
+
+
+            // =================================================
+            // AGREGAR EL BLOQUE AL CONTENEDOR
+            // IMPORTANTE: ESTÁ FUERA DEL IF
+            // =================================================
+
+            boton.appendChild(
+                bloque
             );
 
-        }
-    );
-
-
-    bloque.appendChild(
-        botonWhatsApp
-    );
-
-}
         }
     );
 
@@ -1256,7 +1270,6 @@ if (!esFinado(cumpleaños)) {
     });
 
 }
-
 
 // ============================================================
 // MOSTRAR CUMPLEAÑOS DE HOY
