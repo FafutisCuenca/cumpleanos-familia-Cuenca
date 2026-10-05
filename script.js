@@ -1006,6 +1006,261 @@ function crearCeldaDia(
     return celda;
 
 }
+
+// ============================================================
+// MOSTRAR CUMPLEAÑOS SELECCIONADOS DEL CALENDARIO
+// ============================================================
+
+function mostrarCumpleanosSeleccionados(
+    cumpleañosDelDia,
+    esHoy = false
+) {
+
+    const panel =
+        document.getElementById(
+            "cumpleanosHoy"
+        );
+
+    const nombre =
+        document.getElementById(
+            "nombreCumpleanosHoy"
+        );
+
+    const mensaje =
+        document.getElementById(
+            "mensajeWhatsApp"
+        );
+
+    const boton =
+        document.getElementById(
+            "botonWhatsAppHoy"
+        );
+
+
+    if (
+        !panel ||
+        !nombre ||
+        !mensaje ||
+        !boton
+    ) {
+
+        return;
+
+    }
+
+
+    // ========================================================
+    // LIMPIAR TODO LO ANTERIOR
+    // ========================================================
+
+    nombre.innerHTML =
+        "";
+
+    mensaje.innerHTML =
+        "";
+
+    boton.innerHTML =
+        "";
+
+
+    // ========================================================
+    // SI NO HAY CUMPLEAÑOS
+    // ========================================================
+
+    if (
+        cumpleañosDelDia.length === 0
+    ) {
+
+        panel.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    // ========================================================
+    // MOSTRAR PANEL
+    // ========================================================
+
+    panel.style.display =
+        "block";
+
+
+    // ========================================================
+    // CAMBIAR TÍTULO
+    // ========================================================
+
+    const titulo =
+        panel.querySelector("h2");
+
+
+    if (titulo) {
+
+        titulo.textContent =
+            esHoy
+                ? "🎂 ¡CUMPLEAÑOS DE HOY! 🎉"
+                : "🎉 ¡CUMPLEAÑOS DE ESTE DÍA! 🎂";
+
+    }
+
+
+    // ========================================================
+    // MOSTRAR PERSONAS
+    // ========================================================
+
+    cumpleañosDelDia.forEach(
+        cumpleaños => {
+
+            const bloque =
+                document.createElement(
+                    "div"
+                );
+
+
+            bloque.style.marginBottom =
+                "25px";
+
+
+            const nombrePersona =
+                document.createElement(
+                    "div"
+                );
+
+
+            nombrePersona.textContent =
+                `🎂 ${cumpleaños.nombre}`;
+
+
+            nombrePersona.style.fontSize =
+                "24px";
+
+
+            nombrePersona.style.fontWeight =
+                "bold";
+
+
+            nombrePersona.style.color =
+                "#ff4081";
+
+
+            if (
+                esFinado(cumpleaños)
+            ) {
+
+                nombrePersona.textContent +=
+                    " 🕊️";
+
+                nombrePersona.title =
+                    "Familiar finado";
+
+            }
+
+
+            bloque.appendChild(
+                nombrePersona
+            );
+
+
+            // ==================================================
+            // FAMILIAR FINADO
+            // ==================================================
+
+            if (
+                esFinado(cumpleaños)
+            ) {
+
+                const memoria =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                memoria.textContent =
+                    "🕊️ En memoria de nuestro familiar";
+
+
+                memoria.style.marginTop =
+                    "8px";
+
+
+                memoria.style.color =
+                    "#777";
+
+
+                memoria.style.fontStyle =
+                    "italic";
+
+
+                bloque.appendChild(
+                    memoria
+                );
+
+
+                nombre.appendChild(
+                    bloque
+                );
+
+
+                return;
+
+            }
+
+
+            // ==================================================
+            // BOTÓN PREPARAR FELICITACIÓN
+            // ==================================================
+
+            const botonFelicitar =
+                document.createElement(
+                    "button"
+                );
+
+
+            botonFelicitar.className =
+                "btn felicitar";
+
+
+            botonFelicitar.textContent =
+                "💬 Preparar felicitación";
+
+
+            botonFelicitar.addEventListener(
+                "click",
+                function () {
+
+                    mostrarMensajeWhatsApp(
+                        cumpleaños
+                    );
+
+                }
+            );
+
+
+            bloque.appendChild(
+                botonFelicitar
+            );
+
+
+            nombre.appendChild(
+                bloque
+            );
+
+        }
+    );
+
+
+    // ========================================================
+    // SCROLL AL PANEL
+    // ========================================================
+
+    panel.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
 // ============================================================
 // LIMPIAR PANEL "CUMPLEAÑOS DE HOY"
 // ============================================================
