@@ -2795,20 +2795,114 @@ function mostrarEstadisticasPorMes() {
 
 function mostrarEstadisticasGeograficas() {
 
-    mostrarListaGeografica(
-        "estadisticaPorPais",
-        estadisticasFamilia.porPais
-    );
+    const contenedor =
+        document.getElementById("estadisticaPorPais");
 
-    mostrarListaGeografica(
-        "estadisticaPorEstado",
-        estadisticasFamilia.porEstado
-    );
+    if (!contenedor) return;
 
-    mostrarListaGeografica(
-        "estadisticaPorCiudad",
-        estadisticasFamilia.porCiudad
-    );
+    // Ocultar la antigua lista de estados.
+    const listaEstado =
+        document.getElementById("estadisticaPorEstado");
+
+    if (listaEstado) {
+        const titulo = listaEstado.previousElementSibling;
+
+        listaEstado.style.display = "none";
+
+        if (titulo && titulo.tagName === "H4") {
+            titulo.style.display = "none";
+        }
+    }
+
+    contenedor.innerHTML = "";
+
+    const geografia = estadisticasFamilia.geografia || {};
+    const paises = Object.entries(geografia)
+        .sort((a, b) => b[1].total - a[1].total);
+
+    if (paises.length === 0) {
+        contenedor.innerHTML =
+            "<li>Sin información geográfica disponible</li>";
+        return;
+    }
+
+    paises.forEach(([pais, datosPais]) => {
+
+        const filaPais = document.createElement("li");
+
+        filaPais.style.display = "block";
+        filaPais.style.padding = "10px 5px";
+        filaPais.style.borderBottom = "1px solid #eeeeee";
+
+        const encabezado = document.createElement("div");
+
+        encabezado.style.display = "flex";
+        encabezado.style.justifyContent = "space-between";
+        encabezado.style.fontWeight = "bold";
+        encabezado.style.color = "#333";
+
+        const nombrePais = document.createElement("span");
+        nombrePais.textContent = `🌎 ${pais}`;
+
+        const totalPais = document.createElement("span");
+        totalPais.className = "cantidad";
+        totalPais.textContent = datosPais.total;
+
+        encabezado.append(nombrePais, totalPais);
+        filaPais.appendChild(encabezado);
+
+        const listaCiudades = document.createElement("div");
+
+        listaCiudades.style.marginLeft = "22px";
+        listaCiudades.style.marginTop = "7px";
+
+        const ciudades = Object.entries(datosPais.ciudades)
+            .sort((a, b) => b[1] - a[1]);
+
+        ciudades.forEach(([ciudad, cantidad]) => {
+
+            const filaCiudad = document.createElement("div");
+
+            filaCiudad.style.display = "flex";
+            filaCiudad.style.justifyContent = "space-between";
+            filaCiudad.style.gap = "10px";
+            filaCiudad.style.padding = "5px 0";
+            filaCiudad.style.fontSize = "13px";
+            filaCiudad.style.color = "#555";
+
+            const nombreCiudad = document.createElement("span");
+            nombreCiudad.textContent = `↳ ${ciudad}`;
+
+            const totalCiudad = document.createElement("span");
+            totalCiudad.textContent = cantidad;
+            totalCiudad.style.fontWeight = "bold";
+
+            filaCiudad.append(nombreCiudad, totalCiudad);
+            listaCiudades.appendChild(filaCiudad);
+        });
+
+        filaPais.appendChild(listaCiudades);
+        contenedor.appendChild(filaPais);
+    });
+
+    // Total general de los registros contabilizados.
+    const totalGeneral = document.createElement("li");
+
+    totalGeneral.style.display = "flex";
+    totalGeneral.style.justifyContent = "space-between";
+    totalGeneral.style.padding = "12px 5px";
+    totalGeneral.style.fontWeight = "bold";
+    totalGeneral.style.borderTop = "2px solid #ddd";
+
+    const etiquetaTotal = document.createElement("span");
+    etiquetaTotal.textContent = "Total de familiares";
+
+    const numeroTotal = document.createElement("span");
+    numeroTotal.className = "cantidad";
+    numeroTotal.textContent = estadisticasFamilia.total;
+
+    totalGeneral.append(etiquetaTotal, numeroTotal);
+    contenedor.appendChild(totalGeneral);
 }
 
 
