@@ -518,54 +518,32 @@ function calcularEstadisticas() {
 // OBTENER MES CON MÁS CUMPLEAÑOS
 // ============================================================
 
-function obtenerMesMayor(
-    estadisticas
-) {
+function obtenerMesMayor(estadisticas) {
 
-    let mesMayor = null;
-
+    let indiceMesMayor = -1;
     let cantidadMayor = 0;
 
+    estadisticas.porMes.forEach((cantidad, indice) => {
 
-    Object.entries(
-        estadisticas.porMes
-    ).forEach(
-        ([mes, cantidad]) => {
-
-            if (
-                cantidad > cantidadMayor
-            ) {
-
-                cantidadMayor =
-                    cantidad;
-
-                mesMayor =
-                    mes;
-
-            }
-
+        if (cantidad > cantidadMayor) {
+            cantidadMayor = cantidad;
+            indiceMesMayor = indice;
         }
-    );
 
+    });
 
-    return {
+   return {
 
-        mes:
-            mesMayor,
+        mes: indiceMesMayor,
 
         nombreMes:
-            mesMayor
-                ? nombresMeses[
-                    parseInt(mesMayor, 10) - 1
-                  ]
+            indiceMesMayor >= 0
+                ? nombresMeses[indiceMesMayor]
                 : "",
 
-        cantidad:
-            cantidadMayor
+        cantidad: cantidadMayor
 
     };
-
-}
 
 
 // ============================================================
