@@ -281,77 +281,29 @@ function cargarCumpleaños() {
 
 function calcularEstadisticas() {
 
-    const datos =
-        cumpleañosFamilia;
-
+    const datos = cumpleañosFamilia;
 
     const estadisticas = {
+        total: datos.length,
 
-        // ====================================================
-        // TOTAL
-        // ====================================================
+        mujeres: datos.filter(
+            persona =>
+                String(persona.genero || "").trim().toUpperCase() === "F"
+        ).length,
 
-        total:
-            datos.length,
+        hombres: datos.filter(
+            persona =>
+                String(persona.genero || "").trim().toUpperCase() === "M"
+        ).length,
 
+        vivos: datos.filter(
+            persona =>
+                String(persona.estatus || "").trim().toLowerCase() === "vivo"
+        ).length,
 
-        // ====================================================
-        // GÉNERO
-        // ====================================================
+        finados: datos.filter(esFinado).length,
 
-        mujeres:
-            datos.filter(
-                persona =>
-                    persona.genero === "F"
-            ).length,
-
-        hombres:
-            datos.filter(
-                persona =>
-                    persona.genero === "M"
-            ).length,
-
-
-        // ====================================================
-        // ESTATUS
-        // ====================================================
-
-        vivos:
-            datos.filter(
-                persona =>
-                    persona.estatus === "Vivo"
-            ).length,
-
-        finados:
-            datos.filter(
-                persona =>
-                    persona.estatus === "Finado"
-            ).length,
-
-
-        // ====================================================
-        // CUMPLEAÑOS POR MES
-        // ====================================================
-
-        porMes: [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        ],
-
-
-        // ====================================================
-        // GEOGRAFÍA
-        // ====================================================
+        porMes: Array(12).fill(0),
 
         porPais: {},
 
@@ -359,161 +311,86 @@ function calcularEstadisticas() {
 
         porCiudad: {},
 
-
-        // ====================================================
-        // FECHAS COMPARTIDAS
-        // ====================================================
+        geografia: {},
 
         fechasCompartidas: {}
-
     };
 
+    datos.forEach(persona => {
 
-    // ========================================================
-    // RECORRER FAMILIA
-    // ========================================================
+        // ================================================
+        // CUMPLEAÑOS POR MES: formato DD-MM
+        // ================================================
 
-    datos.forEach(
-        persona => {
+        const partes = String(persona.fecha || "").split("-");
+        const mes = parseInt(partes[1], 10);
 
-
-            // ==================================================
-            // MES
-            // ==================================================
-
-            const partes =
-                persona.fecha.split("-");
-
-
-            const mes =
-                parseInt(partes[1], 10);
-
-            if (
-                mes >= 1 &&
-                mes <= 12
-            ) {
-
-                estadisticas.porMes[mes - 1]++;
-
-            }
-
-
-            // ==================================================
-            // PAÍS
-            // ==================================================
-
-            if (
-                persona.pais
-            ) {
-
-                if (
-                    !estadisticas.porPais[
-                        persona.pais
-                    ]
-                ) {
-
-                    estadisticas.porPais[
-                        persona.pais
-                    ] = 0;
-
-                }
-
-
-                estadisticas.porPais[
-                    persona.pais
-                ]++;
-
-            }
-
-
-            // ==================================================
-            // ESTADO
-            // ==================================================
-
-            if (
-                persona.estado
-            ) {
-
-                if (
-                    !estadisticas.porEstado[
-                        persona.estado
-                    ]
-                ) {
-
-                    estadisticas.porEstado[
-                        persona.estado
-                    ] = 0;
-
-                }
-
-
-                estadisticas.porEstado[
-                    persona.estado
-                ]++;
-
-            }
-
-
-            // ==================================================
-            // CIUDAD
-            // ==================================================
-
-            if (
-                persona.ciudad
-            ) {
-
-                if (
-                    !estadisticas.porCiudad[
-                        persona.ciudad
-                    ]
-                ) {
-
-                    estadisticas.porCiudad[
-                        persona.ciudad
-                    ] = 0;
-
-                }
-
-
-                estadisticas.porCiudad[
-                    persona.ciudad
-                ]++;
-
-            }
-
-
-            // ==================================================
-            // FECHAS COMPARTIDAS
-            // ==================================================
-
-            if (
-                !estadisticas.fechasCompartidas[
-                    persona.fecha
-                ]
-            ) {
-
-                estadisticas.fechasCompartidas[
-                    persona.fecha
-                ] = [];
-
-            }
-
-
-            estadisticas.fechasCompartidas[
-                persona.fecha
-            ].push(
-                persona.nombre
-            );
-
+        if (mes >= 1 && mes <= 12) {
+            estadisticas.porMes[mes - 1]++;
         }
-    );
 
+        // ================================================
+        // NORMALIZAR PAÍS Y CIUDAD
+        // ================================================
+
+        const pais =
+            String(persona.pais || "").trim() ||
+            "País no especificado";
+
+        const ciudad =
+            String(persona.ciudad || "").trim() ||
+            "Ciudad no especificada";
+
+        // ================================================
+        // AGRUPACIÓN JERÁRQUICA: PAÍS > CIUDAD
+        // Cada registro se cuenta una sola vez.
+        // ================================================
+
+        if (!estadisticas.geografia[pais]) {
+            estadisticas.geografia[pais] = {
+                total: 0,
+                ciudades: {}
+            };
+        }
+
+        estadisticas.geografia[pais].total++;
+
+        estadisticas.geografia[pais].ciudades[ciudad] =
+            (estadisticas.geografia[pais].ciudades[ciudad] || 0) + 1;
+
+        // ================================================
+        // CONSERVAR ESTADÍSTICAS EXISTENTES
+        // ================================================
+
+        estadisticas.porPais[pais] =
+            (estadisticas.porPais[pais] || 0) + 1;
+
+        if (persona.estado) {
+            const estado = String(persona.estado).trim();
+            estadisticas.porEstado[estado] =
+                (estadisticas.porEstado[estado] || 0) + 1;
+        }
+
+        if (persona.ciudad) {
+            estadisticas.porCiudad[ciudad] =
+                (estadisticas.porCiudad[ciudad] || 0) + 1;
+        }
+
+        // ================================================
+        // FECHAS COMPARTIDAS
+        // ================================================
+
+        const fecha = persona.fecha;
+
+        if (!estadisticas.fechasCompartidas[fecha]) {
+            estadisticas.fechasCompartidas[fecha] = [];
+        }
+
+        estadisticas.fechasCompartidas[fecha].push(persona.nombre);
+    });
 
     return estadisticas;
-
 }
-
-
 // ============================================================
 // OBTENER MES CON MÁS CUMPLEAÑOS
 // ============================================================
