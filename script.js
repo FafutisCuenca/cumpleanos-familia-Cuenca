@@ -532,7 +532,7 @@ function obtenerMesMayor(estadisticas) {
 
     });
 
-   return {
+    return {
 
         mes: indiceMesMayor,
 
@@ -545,6 +545,7 @@ function obtenerMesMayor(estadisticas) {
 
     };
 
+}
 
 // ============================================================
 // OBTENER FECHAS COMPARTIDAS
