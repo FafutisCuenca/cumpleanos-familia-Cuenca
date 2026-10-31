@@ -3047,16 +3047,35 @@ function formatearFechaEstadistica(fecha) {
 // LISTA ANUAL / MENSUAL Y EXPORTACIONES
 // ============================================================
 
+
 function inicializarListaCumpleanos() {
     const tipo = document.getElementById("tipoListaCumpleanos");
     const mes = document.getElementById("mesListaCumpleanos");
 
     if (!tipo || !mes) return;
 
-    mes.value = String(new Date().getMonth());
+    const botones = [
+        document.getElementById("descargarListaTXT"),
+        document.getElementById("descargarListaPDF"),
+        document.getElementById("compartirListaWhatsApp"),
+        document.getElementById("prepararListaCorreo")
+    ].filter(Boolean);
+
+    // Estado inicial: todavía no se ha elegido una opción
+    tipo.value = "";
+    mes.disabled = true;
+
+    botones.forEach(boton => {
+        boton.disabled = true;
+    });
 
     tipo.addEventListener("change", () => {
         mes.disabled = tipo.value !== "mensual";
+
+        botones.forEach(boton => {
+            boton.disabled = !tipo.value;
+        });
+
         renderizarListaCumpleanos();
     });
 
@@ -3074,7 +3093,12 @@ function inicializarListaCumpleanos() {
     document.getElementById("prepararListaCorreo")
         ?.addEventListener("click", prepararListaCorreo);
 
-    renderizarListaCumpleanos();
+    const cont = document.getElementById("contenidoListaCumpleanos");
+
+    if (cont) {
+        cont.innerHTML =
+            "<p>Selecciona una opción para consultar los cumpleaños de la familia.</p>";
+    }
 }
 
 function obtenerCumpleanosLista() {
