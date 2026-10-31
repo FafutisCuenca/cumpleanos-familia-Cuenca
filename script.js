@@ -1,32 +1,20 @@
 document.addEventListener("DOMContentLoaded", iniciarCalendario);
-
-
 // ============================================================
 // CONFIGURACIÓN
 // ============================================================
-
 const GRUPO_WHATSAPP =
     "https://chat.whatsapp.com/IvI6oayIIoEJ8Wn7EWQxO0?s=cl&p=i&mlu=0";
-
-
 // ============================================================
 // FUENTE MAESTRA DE DATOS
 // ============================================================
-
 const FUENTE_FAMILIA =
     "https://fafutiscuenca.github.io/Familia-Cuenca/data/familia.json";
-
-
 // ============================================================
 // VARIABLES GLOBALES
 // ============================================================
-
 let cumpleañosFamilia = [];
-
 let fechaCalendario = new Date();
-
 let estadisticasFamilia = null;
-
 // ============================================================
 // VALIDACIÓN DE ESTATUS
 // ============================================================
@@ -34,7 +22,6 @@ function esFinado(cumpleaños) {
     return cumpleaños &&
         String(cumpleaños.estatus || "").trim().toLowerCase() === "finado";
 }
-
 // ============================================================
 // NOMBRES DE LOS MESES
 // ============================================================
@@ -3316,5 +3303,36 @@ function prepararListaCorreo() {
         `mailto:?subject=${asunto}&body=${cuerpo}`;
 }
 
+
+function limpiarListaCumpleanos() {
+    const tipo = document.getElementById("tipoListaCumpleanos");
+    const mes = document.getElementById("mesListaCumpleanos");
+    const cont = document.getElementById("contenidoListaCumpleanos");
+
+    if (tipo) {
+        tipo.value = "";
+    }
+
+    if (mes) {
+        mes.disabled = true;
+    }
+
+    if (cont) {
+        cont.innerHTML =
+            "<p>Selecciona una opción para consultar los cumpleaños de la familia.</p>";
+    }
+
+    [
+        "descargarListaTXT",
+        "descargarListaPDF",
+        "compartirListaWhatsApp",
+        "prepararListaCorreo"
+    ].forEach(id => {
+        const boton = document.getElementById(id);
+        if (boton) {
+            boton.disabled = true;
+        }
+    });
+}
 
 
