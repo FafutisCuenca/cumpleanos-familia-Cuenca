@@ -2513,12 +2513,8 @@ function esFechaValida(
         return false;
 
     }
-
-
     return true;
-
 }
-
 
 // ============================================================
 // BOTONES PARA CAMBIAR DE MES
@@ -2527,18 +2523,15 @@ function esFechaValida(
 document.addEventListener(
     "DOMContentLoaded",
     function () {
-
         const botonAnterior =
             document.getElementById(
                 "mesAnterior"
             );
 
-
         const botonSiguiente =
             document.getElementById(
                 "mesSiguiente"
             );
-
 
         if (
             botonAnterior
@@ -2552,7 +2545,7 @@ document.addEventListener(
                         fechaCalendario.getMonth() - 1
                     );
 
-
+limpiarListaCumpleanos();
                     mostrarCalendario();
 
                 }
@@ -2573,7 +2566,7 @@ document.addEventListener(
                         fechaCalendario.getMonth() + 1
                     );
 
-
+limpiarListaCumpleanos();
                     mostrarCalendario();
 
                 }
