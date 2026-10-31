@@ -175,6 +175,7 @@ function cargarCumpleaños() {
 
             mostrarEstadisticas();
 
+            inicializarListaCumpleanos();
 
             // ====================================================
             // CONSOLA - INEGI CUENCA
@@ -3040,3 +3041,240 @@ function formatearFechaEstadistica(fecha) {
 
     return `${dia} de ${nombresMeses[mes]}`;
 }
+
+
+// ============================================================
+// LISTA ANUAL / MENSUAL Y EXPORTACIONES
+// ============================================================
+
+function inicializarListaCumpleanos() {
+    const tipo = document.getElementById("tipoListaCumpleanos");
+    const mes = document.getElementById("mesListaCumpleanos");
+
+    if (!tipo || !mes) return;
+
+    mes.value = String(new Date().getMonth());
+
+    tipo.addEventListener("change", () => {
+        mes.disabled = tipo.value !== "mensual";
+        renderizarListaCumpleanos();
+    });
+
+    mes.addEventListener("change", renderizarListaCumpleanos);
+
+    document.getElementById("descargarListaTXT")
+        ?.addEventListener("click", descargarListaTXT);
+
+    document.getElementById("descargarListaPDF")
+        ?.addEventListener("click", descargarListaPDF);
+
+    document.getElementById("compartirListaWhatsApp")
+        ?.addEventListener("click", compartirListaWhatsApp);
+
+    document.getElementById("prepararListaCorreo")
+        ?.addEventListener("click", prepararListaCorreo);
+
+    renderizarListaCumpleanos();
+}
+
+function obtenerCumpleanosLista() {
+    const tipo = document.getElementById("tipoListaCumpleanos")?.value || "anual";
+
+    const mesSeleccionado =
+        Number(document.getElementById("mesListaCumpleanos")?.value || 0) + 1;
+
+    return cumpleañosFamilia.filter(p => {
+        const partes = String(p.fecha).split("-");
+        const mes = Number(partes[1]);
+
+        return tipo === "anual" || mes === mesSeleccionado;
+
+    }).sort((a, b) => {
+        const [da, ma] = a.fecha.split("-").map(Number);
+        const [db, mb] = b.fecha.split("-").map(Number);
+
+        return ma - mb ||
+            da - db ||
+            String(a.nombre).localeCompare(String(b.nombre), "es");
+    });
+}
+
+function construirGruposLista() {
+    const personas = obtenerCumpleanosLista();
+    const grupos = [];
+
+    personas.forEach(p => {
+        const [dia, mes] = p.fecha.split("-").map(Number);
+        const clave = `${mes}-${dia}`;
+
+        let grupo = grupos.find(g => g.clave === clave);
+
+        if (!grupo) {
+            grupo = {
+                clave,
+                dia,
+                mes,
+                personas: []
+            };
+
+            grupos.push(grupo);
+        }
+
+        grupo.personas.push(p);
+    });
+
+    return grupos;
+}
+
+function textoPersonaLista(p) {
+    return `${p.nombre}${esFinado(p) ? " 🕊️" : ""}`;
+}
+
+function textoFechaLista(g) {
+    return `${g.dia} de ${nombresMeses[g.mes - 1]}`;
+}
+
+function renderizarListaCumpleanos() {
+    const cont = document.getElementById("contenidoListaCumpleanos");
+
+    if (!cont) return;
+
+    const grupos = construirGruposLista();
+
+    if (!grupos.length) {
+        cont.textContent =
+            "No hay cumpleaños registrados para este periodo.";
+        return;
+    }
+
+    const porMes = new Map();
+
+    grupos.forEach(g => {
+        if (!porMes.has(g.mes)) {
+            porMes.set(g.mes, []);
+        }
+
+        porMes.get(g.mes).push(g);
+    });
+
+    cont.innerHTML = "";
+
+    porMes.forEach((fechas, mes) => {
+        const bloque = document.createElement("div");
+        bloque.className = "grupoMesLista";
+
+        const titulo = document.createElement("h3");
+        titulo.textContent = nombresMeses[mes - 1];
+
+        bloque.appendChild(titulo);
+
+        fechas.forEach(g => {
+            const fecha = document.createElement("div");
+            fecha.className = "fechaLista";
+
+            const encabezado = document.createElement("strong");
+            encabezado.textContent = textoFechaLista(g);
+
+            fecha.appendChild(encabezado);
+
+            const ul = document.createElement("ul");
+
+            g.personas.forEach(p => {
+                const li = document.createElement("li");
+                li.textContent = textoPersonaLista(p);
+                ul.appendChild(li);
+            });
+
+            fecha.appendChild(ul);
+            bloque.appendChild(fecha);
+        });
+
+        cont.appendChild(bloque);
+    });
+}
+
+function generarTextoLista() {
+    const tipo =
+        document.getElementById("tipoListaCumpleanos")?.value || "anual";
+
+    const mes =
+        Number(document.getElementById("mesListaCumpleanos")?.value || 0);
+
+    const titulo = tipo === "anual"
+        ? "LISTA ANUAL DE CUMPLEAÑOS — FAMILIA CUENCA"
+        : `CUMPLEAÑOS DE ${nombresMeses[mes].toUpperCase()} — FAMILIA CUENCA`;
+
+    const lineas = [
+        titulo,
+        "",
+        "🕊️ identifica a familiares finados",
+        ""
+    ];
+
+    let mesActual = 0;
+
+    construirGruposLista().forEach(g => {
+        if (g.mes !== mesActual) {
+            mesActual = g.mes;
+            lineas.push(nombresMeses[g.mes - 1].toUpperCase());
+        }
+
+        lineas.push(
+            `${textoFechaLista(g)}: ${g.personas.map(textoPersonaLista).join(", ")}`
+        );
+    });
+
+    lineas.push(
+        "",
+        `Total de familiares: ${obtenerCumpleanosLista().length}`
+    );
+
+    return lineas.join("\n");
+}
+
+function descargarListaTXT() {
+    const blob = new Blob(
+        ["\uFEFF" + generarTextoLista()],
+        { type: "text/plain;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "cumpleanos-familia-cuenca.txt";
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+function descargarListaPDF() {
+    document.body.classList.add("imprimirLista");
+
+    window.print();
+
+    setTimeout(() => {
+        document.body.classList.remove("imprimirLista");
+    }, 700);
+}
+
+function compartirListaWhatsApp() {
+    const url =
+        "https://wa.me/?text=" + encodeURIComponent(generarTextoLista());
+
+    window.open(url, "_blank", "noopener");
+}
+
+function prepararListaCorreo() {
+    const asunto =
+        encodeURIComponent("Lista de cumpleaños — Familia Cuenca");
+
+    const cuerpo =
+        encodeURIComponent(generarTextoLista());
+
+    window.location.href =
+        `mailto:?subject=${asunto}&body=${cuerpo}`;
+}
+
+
+
