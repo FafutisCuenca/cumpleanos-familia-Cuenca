@@ -3102,7 +3102,9 @@ function inicializarListaCumpleanos() {
 }
 
 function obtenerCumpleanosLista() {
-    const tipo = document.getElementById("tipoListaCumpleanos")?.value || "anual";
+    const tipo = document.getElementById("tipoListaCumpleanos")?.value || "";
+
+    if (!tipo) return [];
 
     const mesSeleccionado =
         Number(document.getElementById("mesListaCumpleanos")?.value || 0) + 1;
