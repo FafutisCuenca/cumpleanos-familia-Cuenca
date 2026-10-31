@@ -925,6 +925,153 @@
           body.imprimirLista .fechaLista { background: white; border: 1px solid #ddd; }
         }
 
+/* =========================================================
+   LISTA DE CUMPLEAÑOS: DISEÑO WEB EN DOS COLUMNAS
+   ========================================================= */
+
+#contenidoListaCumpleanos .grupoMesLista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 24px;
+    align-items: start;
+}
+
+#contenidoListaCumpleanos .grupoMesLista h3 {
+    grid-column: 1 / -1;
+    margin: 18px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #d8e4dc;
+}
+
+#contenidoListaCumpleanos .fechaLista {
+    min-width: 0;
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+#contenidoListaCumpleanos .fechaLista ul {
+    margin: 5px 0 0;
+    padding-left: 20px;
+}
+
+#contenidoListaCumpleanos .fechaLista li {
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   IMPRESIÓN: LISTA CONTINUA Y COMPACTA PARA PDF
+   ========================================================= */
+
+@media print {
+
+    @page {
+        size: auto;
+        margin: 12mm;
+    }
+
+    body.imprimirLista {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+    }
+
+    /* Ocultar el resto de la página sin conservar su espacio */
+    body.imprimirLista * {
+        visibility: hidden !important;
+    }
+
+    body.imprimirLista #listaCumpleanos,
+    body.imprimirLista #listaCumpleanos * {
+        visibility: visible !important;
+    }
+
+    /* Sacar la lista del flujo original de la página */
+    body.imprimirLista #listaCumpleanos {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: white !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Ocultar controles y botones */
+    body.imprimirLista .controlesLista,
+    body.imprimirLista .accionesLista,
+    body.imprimirLista .notaPDF {
+        display: none !important;
+    }
+
+    /* Cada mes comienza como un bloque compacto */
+    body.imprimirLista #contenidoListaCumpleanos .grupoMesLista {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body.imprimirLista #contenidoListaCumpleanos .grupoMesLista h3 {
+        margin: 12px 0 5px !important;
+        padding-bottom: 3px !important;
+        border-bottom: 1px solid #999 !important;
+        font-size: 13pt !important;
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+
+    /* Fecha y nombres en formato continuo */
+    body.imprimirLista #contenidoListaCumpleanos .fechaLista {
+        display: block !important;
+        margin: 0 !important;
+        padding: 3px 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        background: white !important;
+        font-size: 10.5pt !important;
+        line-height: 1.4 !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    body.imprimirLista #contenidoListaCumpleanos .fechaLista strong::after {
+        content: " — ";
+    }
+
+    body.imprimirLista #contenidoListaCumpleanos .fechaLista ul {
+        display: inline !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+
+    body.imprimirLista #contenidoListaCumpleanos .fechaLista li {
+        display: inline !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body.imprimirLista #contenidoListaCumpleanos .fechaLista li:not(:last-child)::after {
+        content: ", ";
+    }
+}
+
+        
+/* En teléfonos se utiliza una sola columna */
+@media screen and (max-width: 600px) {
+    #contenidoListaCumpleanos .grupoMesLista {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 8px;
+    }
+}
+
+        
     </style>
 
 </head>
