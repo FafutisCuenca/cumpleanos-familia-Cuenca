@@ -3160,11 +3160,22 @@ function textoFechaLista(g) {
     return `${g.dia} de ${nombresMeses[g.mes - 1]}`;
 }
 
+
 function renderizarListaCumpleanos() {
     const cont = document.getElementById("contenidoListaCumpleanos");
 
     if (!cont) return;
 
+    // Verificar que el usuario haya seleccionado una opción
+    const tipo = document.getElementById("tipoListaCumpleanos")?.value;
+
+    if (!tipo) {
+        cont.innerHTML =
+            "<p>Selecciona una opción para consultar los cumpleaños de la familia.</p>";
+        return;
+    }
+
+    // Obtener los grupos de cumpleaños según la selección
     const grupos = construirGruposLista();
 
     if (!grupos.length) {
@@ -3173,6 +3184,7 @@ function renderizarListaCumpleanos() {
         return;
     }
 
+    // Agrupar las fechas por mes
     const porMes = new Map();
 
     grupos.forEach(g => {
@@ -3183,8 +3195,10 @@ function renderizarListaCumpleanos() {
         porMes.get(g.mes).push(g);
     });
 
+    // Limpiar el contenido anterior
     cont.innerHTML = "";
 
+    // Construir la lista
     porMes.forEach((fechas, mes) => {
         const bloque = document.createElement("div");
         bloque.className = "grupoMesLista";
