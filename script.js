@@ -1816,27 +1816,61 @@ function mostrarCumpleanosDeHoy() {
     actualizarConfirmacionHoy();
 
 }
+
+
 // ============================================================
-// CREAR MENSAJE DE CUMPLEAÑOS
+// MENSAJES DISPONIBLES PARA FELICITACIONES DE CUMPLEAÑOS
 // ============================================================
 
-function crearMensajeCumpleanos(
-    cumpleaños
-) {
+const mensajesCumpleanos = {
 
-    // ========================================================
-    // IMPORTANTE:
-    // NO SE AGREGA 🕊️ AL MENSAJE DE WHATSAPP.
-    // ========================================================
-
-    return `🎉 ¡Hoy celebramos a ${cumpleaños.nombre}! 🎂❤️
+    tradicional: (cumpleaños) => `🎉 ¡Hoy celebramos a ${cumpleaños.nombre}! 🎂❤️
 
 Toda la Familia Cuenca te desea un día maravilloso, lleno de alegría, salud y muchos momentos felices.
 
 ¡Feliz cumpleaños! 🥳🎈
 
 Con cariño,
-Familia Cuenca`;
+Familia Cuenca`,
+
+    cariñoso: (cumpleaños) => `❤️ ¡Muchas felicidades, ${cumpleaños.nombre}!
+
+En este día tan especial queremos desearte mucha salud, alegría y momentos inolvidables.
+
+Que nunca falten los motivos para sonreír y compartir con quienes te quieren.
+
+¡Te mandamos un abrazo enorme!
+
+Con cariño,
+Familia Cuenca`,
+
+    divertido: (cumpleaños) => `🥳 ¡Hoy es tu día, ${cumpleaños.nombre}!
+
+Que vengan muchos regalos, pastel, abrazos, buenos momentos y, por supuesto, ¡muchos años más para seguir celebrando juntos!
+
+¡Pásala increíble! 🎂🎈
+
+Con cariño,
+Familia Cuenca`
+
+};
+
+
+// ============================================================
+// GENERAR MENSAJE SELECCIONADO
+// ============================================================
+
+function crearMensajeCumpleanos(cumpleaños, tipo = "tradicional") {
+
+    // No agregar 🕊️ a los mensajes de WhatsApp.
+
+    const generarMensaje = mensajesCumpleanos[tipo];
+
+    if (!generarMensaje) {
+        return mensajesCumpleanos.tradicional(cumpleaños);
+    }
+
+    return generarMensaje(cumpleaños);
 
 }
 
