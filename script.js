@@ -1601,241 +1601,208 @@ function crearMensajeCumpleanos(cumpleaños, tipo = "tradicional") {
 }
 
 
+
 // ============================================================
 // MOSTRAR MENSAJE DE WHATSAPP
+// SELECTOR DE TRES ALTERNATIVAS
 // ============================================================
 
-function mostrarMensajeWhatsApp(
-    cumpleaños
-) {
+function mostrarMensajeWhatsApp(cumpleaños) {
 
-    const contenedor =
-        document.getElementById(
-            "cumpleanosHoy"
-        );
+    const contenedor = document.getElementById("cumpleanosHoy");
+    const nombre = document.getElementById("nombreCumpleanosHoy");
+    const mensaje = document.getElementById("mensajeWhatsApp");
+    const boton = document.getElementById("botonWhatsAppHoy");
 
-
-    const nombre =
-        document.getElementById(
-            "nombreCumpleanosHoy"
-        );
-
-
-    const mensaje =
-        document.getElementById(
-            "mensajeWhatsApp"
-        );
-
-
-    const boton =
-        document.getElementById(
-            "botonWhatsAppHoy"
-        );
-
-
-    if (
-        !contenedor ||
-        !nombre ||
-        !mensaje ||
-        !boton
-    ) {
-
+    // Verificar elementos necesarios.
+    if (!contenedor || !nombre || !mensaje || !boton) {
+        console.error("No se encontraron los elementos para preparar la felicitación.");
         return;
-
     }
 
-
-    contenedor.style.display =
-        "block";
-
-const titulo =
-    contenedor.querySelector("h2");
-
-if (titulo) {
-
-    titulo.textContent =
-        "💌 Preparar felicitación";
-
-}
-    
-    // ========================================================
-    // NOMBRE VISUAL
-    // ========================================================
-
-    nombre.innerHTML =
-        `🎂 ${cumpleaños.nombre}`;
-
-    if (
-        cumpleaños.estatus === "Finado"
-    ) {
-
-        nombre.innerHTML +=
-            " 🕊️";
-
-        nombre.title =
-            "Familiar finado";
-
+    // No permitir felicitaciones a familiares finados.
+    if (esFinado(cumpleaños)) {
+        return;
     }
 
+    contenedor.style.display = "block";
 
-    const texto =
-        crearMensajeCumpleanos(
-            cumpleaños
-        );
+    // Actualizar título.
+    const titulo = contenedor.querySelector("h2");
 
+    if (titulo) {
+        titulo.textContent = "💌 Preparar felicitación";
+    }
 
-    mensaje.textContent =
-        texto;
+    // Limpiar contenido anterior.
+    nombre.innerHTML = "";
+    mensaje.innerHTML = "";
+    boton.innerHTML = "";
 
+    // Mostrar nombre.
+    nombre.textContent = `🎂 ${cumpleaños.nombre}`;
 
-    boton.innerHTML =
-        "";
+    // ========================================================
+    // SELECTOR DE MENSAJES
+    // ========================================================
 
+    const etiqueta = document.createElement("label");
+
+    etiqueta.textContent = "Selecciona el mensaje que deseas enviar:";
+    etiqueta.style.display = "block";
+    etiqueta.style.fontWeight = "bold";
+    etiqueta.style.marginTop = "15px";
+    etiqueta.style.marginBottom = "8px";
+
+    const selector = document.createElement("select");
+
+    selector.id = "selectorMensajeCumpleanos";
+    selector.style.width = "100%";
+    selector.style.maxWidth = "450px";
+    selector.style.padding = "10px";
+    selector.style.borderRadius = "8px";
+    selector.style.fontSize = "15px";
+
+    const opciones = [
+        {
+            valor: "tradicional",
+            texto: "🎉 Mensaje tradicional"
+        },
+        {
+            valor: "cariñoso",
+            texto: "❤️ Mensaje cariñoso"
+        },
+        {
+            valor: "divertido",
+            texto: "🥳 Mensaje divertido"
+        }
+    ];
+
+    opciones.forEach(opcion => {
+
+        const elemento = document.createElement("option");
+
+        elemento.value = opcion.valor;
+        elemento.textContent = opcion.texto;
+
+        selector.appendChild(elemento);
+
+    });
+
+    selector.value = "tradicional";
+
+    mensaje.appendChild(etiqueta);
+    mensaje.appendChild(selector);
+
+    // ========================================================
+    // VISTA PREVIA
+    // ========================================================
+
+    const tituloVista = document.createElement("h3");
+
+    tituloVista.textContent = "Vista previa del mensaje";
+    tituloVista.style.marginTop = "18px";
+
+    const vistaPrevia = document.createElement("div");
+
+    vistaPrevia.id = "mensajeWhatsAppVista";
+    vistaPrevia.style.whiteSpace = "pre-line";
+    vistaPrevia.style.padding = "15px";
+    vistaPrevia.style.marginTop = "10px";
+    vistaPrevia.style.background = "#fff0f5";
+    vistaPrevia.style.borderRadius = "10px";
+    vistaPrevia.style.lineHeight = "1.6";
+
+    mensaje.appendChild(tituloVista);
+    mensaje.appendChild(vistaPrevia);
 
     // ========================================================
     // CONTENEDOR DE BOTONES
     // ========================================================
 
-    const contenedorBotones =
-        document.createElement(
-            "div"
+    const contenedorBotones = document.createElement("div");
+
+    contenedorBotones.style.display = "flex";
+    contenedorBotones.style.flexWrap = "wrap";
+    contenedorBotones.style.gap = "10px";
+    contenedorBotones.style.marginTop = "18px";
+
+    // ========================================================
+    // CREAR BOTONES DE WHATSAPP
+    // ========================================================
+
+    function crearBotonWhatsApp(tipoEnvio, textoBoton, clase) {
+
+        const enlace = document.createElement("a");
+
+        enlace.target = "_blank";
+        enlace.rel = "noopener";
+        enlace.className = clase;
+        enlace.textContent = textoBoton;
+
+        enlace.addEventListener("click", function () {
+
+            mostrarBotonConfirmacion(cumpleaños, tipoEnvio);
+
+        });
+
+        contenedorBotones.appendChild(enlace);
+
+        return enlace;
+    }
+
+    const botonGrupo = crearBotonWhatsApp(
+        "grupo",
+        "💬 Enviar al grupo Familia Cuenca",
+        "btn whatsapp"
+    );
+
+    const botonPersonal = crearBotonWhatsApp(
+        "personal",
+        "👤 Enviar mensaje personal",
+        "btn felicitar"
+    );
+
+    // ========================================================
+    // ACTUALIZAR MENSAJE Y ENLACES
+    // ========================================================
+
+    function actualizarMensaje() {
+
+        const tipoSeleccionado = selector.value;
+
+        const texto = crearMensajeCumpleanos(
+            cumpleaños,
+            tipoSeleccionado
         );
 
+        // Actualizar vista previa.
+        vistaPrevia.textContent = texto;
 
-    contenedorBotones.style.marginTop =
-        "15px";
+        // Preparar enlace de WhatsApp.
+        const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
 
+        botonGrupo.href = url;
+        botonPersonal.href = url;
 
-    // ========================================================
-    // BOTÓN GRUPO
-    // ========================================================
+    }
 
-    const botonGrupo =
-        document.createElement(
-            "a"
-        );
+    // Actualizar al cambiar la selección.
+    selector.addEventListener("change", actualizarMensaje);
 
+    // Mostrar inicialmente el mensaje tradicional.
+    actualizarMensaje();
 
-    botonGrupo.href =
-        `https://wa.me/?text=${encodeURIComponent(texto)}`;
+    // Agregar botones.
+    boton.appendChild(contenedorBotones);
 
-
-    botonGrupo.target =
-        "_blank";
-
-
-    botonGrupo.rel =
-        "noopener";
-
-
-    botonGrupo.className =
-        "btn whatsapp";
-
-
-    botonGrupo.textContent =
-        "💬 Enviar al grupo Familia Cuenca";
-
-
-    botonGrupo.addEventListener(
-        "click",
-        function () {
-
-            setTimeout(
-                function () {
-
-                    mostrarBotonConfirmacion(
-                        cumpleaños,
-                        "grupo"
-                    );
-
-                },
-                500
-            );
-
-        }
-    );
-
-
-    // ========================================================
-    // BOTÓN PERSONAL
-    // ========================================================
-
-    const botonPersonal =
-        document.createElement(
-            "a"
-        );
-
-
-    botonPersonal.href =
-        `https://wa.me/?text=${encodeURIComponent(texto)}`;
-
-
-    botonPersonal.target =
-        "_blank";
-
-
-    botonPersonal.rel =
-        "noopener";
-
-
-    botonPersonal.className =
-        "btn felicitar";
-
-
-    botonPersonal.textContent =
-        "👤 Enviar mensaje personal";
-
-
-    botonPersonal.addEventListener(
-        "click",
-        function () {
-
-            setTimeout(
-                function () {
-
-                    mostrarBotonConfirmacion(
-                        cumpleaños,
-                        "personal"
-                    );
-
-                },
-                500
-            );
-
-        }
-    );
-
-
-    // ========================================================
-    // AGREGAR BOTONES
-    // ========================================================
-
-    contenedorBotones.appendChild(
-        botonGrupo
-    );
-
-
-    contenedorBotones.appendChild(
-        botonPersonal
-    );
-
-
-    boton.appendChild(
-        contenedorBotones
-    );
-
-
-    // ========================================================
-    // SCROLL
-    // ========================================================
-
+    // Desplazarse hasta la felicitación.
     contenedor.scrollIntoView({
         behavior: "smooth",
         block: "center"
     });
 
 }
-
 
 // ============================================================
 // MOSTRAR BOTÓN DE CONFIRMACIÓN
